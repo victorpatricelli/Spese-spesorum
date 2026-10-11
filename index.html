@@ -1115,6 +1115,7 @@ $("brok").onclick = e => {
   broker = b.dataset.b;
   [...$("brok").children].forEach(c=>c.classList.toggle("on",c.dataset.b===broker));
   $("brokhint").textContent = "";
+  paint();                                  // aggiorna subito il testo del pulsante
 };
 
 function renderVoci(){
