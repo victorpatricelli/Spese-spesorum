@@ -366,6 +366,21 @@
   .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
   .toast.bad .ms{color:#FFB4AB}
 
+  /* ── avviso budget: sopra lo snackbar, resta più a lungo ── */
+  .avviso{position:fixed;left:50%;bottom:168px;transform:translateX(-50%) translateY(16px);
+    width:calc(100% - 32px);max-width:528px;padding:14px 16px;border-radius:16px;z-index:201;
+    opacity:0;pointer-events:none;box-shadow:var(--e3);display:flex;gap:12px;align-items:flex-start;
+    transition:opacity .2s var(--ease),transform .3s var(--ease-emph);font-size:14px;line-height:20px}
+  .avviso.on{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+  .avviso.warn{background:var(--warn-c);color:var(--on-warn-c)}
+  .avviso.bad{background:var(--error-c);color:var(--on-error-c)}
+  .avviso .ms{font-size:22px;flex:none;margin-top:-1px}
+  .avviso b{display:block;font-size:15px;margin-bottom:2px}
+  .avviso .x{margin-left:auto;background:none;border:0;color:inherit;padding:0 0 0 8px;cursor:pointer;opacity:.7}
+  .opz{display:flex;align-items:center;gap:12px;margin-top:14px;font-size:14px;cursor:pointer}
+  .opz input{width:20px;height:20px;accent-color:var(--primary);flex:none}
+  .opz small{display:block;opacity:.7;font-size:12px;line-height:16px}
+
   /* ── dialog M3 ── */
   .scrim{position:fixed;inset:0;background:var(--scrim);z-index:300;display:flex;
     align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;
@@ -686,6 +701,8 @@
   <button data-v="buy"><span class="pill rip"><span class="ms">shopping_bag</span></span><span class="t">Acquisto</span></button>
 </div></nav>
 
+<div class="avviso" id="avviso" role="alert"><span class="ms f" id="avvIco">warning</span>
+  <div id="avvTxt"></div><button class="x" id="avvX" aria-label="Chiudi"><span class="ms">close</span></button></div>
 <div class="toast" id="toast"><span class="ms f">check_circle</span><span id="toasttxt"></span></div>
 
 <!-- collegamento al foglio: URL /exec e PIN, salvati solo su questo telefono -->
@@ -699,6 +716,10 @@
   <div class="field" style="margin-top:12px"><span class="ms">pin</span>
     <input type="password" id="cfgPin" inputmode="numeric" placeholder="PIN" autocomplete="off"></div>
   <div id="cfgErr"></div>
+  <label class="opz"><input type="checkbox" id="optVibra">
+    <span>Vibrazione<small>Ai tasti, al salvataggio e quando sfori un budget</small></span></label>
+  <label class="opz"><input type="checkbox" id="optNotif">
+    <span>Notifiche di sistema<small>Quando superi il budget di una categoria o del mese</small></span></label>
   <div class="azioni"><button class="btn text rip" id="cfgNo">Chiudi</button>
     <button class="btn fill rip" id="cfgSi">Prova e salva</button></div>
 </div></div>
@@ -793,6 +814,110 @@ document.getElementById("cfgSi").onclick = async () => {
   }
 };
 document.getElementById("brand").onclick = () => apriImpostazioni();
+
+/* ══════════ vibrazione e avvisi di budget ══════════ */
+const CHIAVE_PREF = "spese:pref", CHIAVE_BUDGET = "spese:budget";
+let pref = (() => { try { return Object.assign({vibra:true, notif:false}, JSON.parse(localStorage.getItem(CHIAVE_PREF))); }
+                    catch(e){ return {vibra:true, notif:false}; } })();
+function salvaPref(){ try{ localStorage.setItem(CHIAVE_PREF, JSON.stringify(pref)); }catch(e){} }
+
+const VIBRAZIONI = {
+  tap:    8,                       // tasto del tastierino
+  rotella:6,                       // scatto delle rotelle giorno/mese
+  invio:  [12, 40, 12],            // spesa messa in coda
+  ok:     25,                      // il foglio ha confermato
+  warn:   [60, 90, 60],            // vicino al budget (80%)
+  sforato:[160, 80, 160, 80, 260], // budget superato
+  errore: [220]
+};
+function vibra(tipo){
+  if(!pref.vibra || !navigator.vibrate) return;
+  try{ navigator.vibrate(VIBRAZIONI[tipo] || 20); }catch(e){}
+}
+
+/* budget del mese: preso dal riepilogo e ricordato sul telefono, così l'avviso
+   funziona anche senza aprire la scheda Mese */
+let budgetMese = (() => { try { return JSON.parse(localStorage.getItem(CHIAVE_BUDGET)) || null; } catch(e){ return null; } })();
+function ricordaBudget(b){
+  if(!b) return;
+  budgetMese = { b: b, quando: Date.now() };
+  try{ localStorage.setItem(CHIAVE_BUDGET, JSON.stringify(budgetMese)); }catch(e){}
+}
+function aggiornaBudgetInSottofondo(){
+  if(budgetMese && Date.now() - budgetMese.quando < 6*3600*1000) return;   // fresco: max 6 ore
+  const n = new Date();
+  api("riepilogoMese", [n.getMonth()+1, n.getFullYear()], cfg.url && cfg.pin ? cfg : null)
+    .then(r => { if(r && r.budget) ricordaBudget(r.budget); })
+    .catch(() => {});
+}
+
+/* Confronta il totale prima e dopo la spesa: avvisa solo quando si attraversa
+   una soglia (80% o 100%), non a ogni spesa successiva. */
+function controllaBudget(res, importo){
+  const b = budgetMese && budgetMese.b;
+  if(!b || !res || !res.totali) return;
+  const righe = [];
+  const prova = (nome, dopo, etichetta) => {
+    const tetto = Number(b[nome]);
+    if(!(tetto > 0)) return;
+    const prima = dopo - importo;
+    if(prima < tetto && dopo >= tetto)
+      righe.push({ grave:true, nome:etichetta,
+        testo: etichetta + ": " + eur0(dopo) + " su " + eur0(tetto) + " (+" + eur0(dopo - tetto) + ")" });
+    else if(prima < tetto*0.8 && dopo >= tetto*0.8)
+      righe.push({ grave:false, nome:etichetta,
+        testo: etichetta + ": " + Math.round(dopo/tetto*100) + "% del budget · restano " + eur0(tetto - dopo) });
+  };
+  if(res.primary) prova(res.primary, Number(res.totali.perCategoria[res.primary]) || 0, res.primary);
+  prova("TOTALE", Number(res.totali.totale) || 0, "Mese");
+  if(!righe.length) return;
+
+  const grave = righe.some(r => r.grave);
+  const titolo = grave ? "Budget superato" : "Budget quasi finito";
+  mostraAvviso(titolo, righe.map(r => r.testo), grave);
+  vibra(grave ? "sforato" : "warn");
+  if(grave) notificaSistema(titolo, righe.filter(r => r.grave).map(r => r.testo).join("\n"),
+                            "budget-" + righe.filter(r => r.grave).map(r => r.nome).join("-"));
+}
+
+let tAvv;
+function mostraAvviso(titolo, righe, grave){
+  const a = document.getElementById("avviso");
+  document.getElementById("avvIco").textContent = grave ? "error" : "warning";
+  document.getElementById("avvTxt").innerHTML = "<b>" + esc(titolo) + "</b>" + righe.map(esc).join("<br>");
+  a.classList.toggle("bad", grave); a.classList.toggle("warn", !grave); a.classList.add("on");
+  clearTimeout(tAvv); tAvv = setTimeout(() => a.classList.remove("on"), grave ? 9000 : 6000);
+}
+document.getElementById("avvX").onclick = () => document.getElementById("avviso").classList.remove("on");
+
+function notificaSistema(titolo, testo, tag){
+  if(!pref.notif || !("Notification" in window) || Notification.permission !== "granted") return;
+  if(!("serviceWorker" in navigator)) return;
+  navigator.serviceWorker.ready.then(reg => reg.showNotification(titolo, {
+    body: testo, tag: tag, renotify: true, icon: "icon-192.png", badge: "icon-192.png",
+    vibrate: pref.vibra ? VIBRAZIONI.sforato : undefined, data: { url: "./" }
+  })).catch(() => {});
+}
+
+/* interruttori nelle impostazioni (si salvano subito) */
+(function(){
+  const v = document.getElementById("optVibra"), n = document.getElementById("optNotif");
+  const sincronizza = () => {
+    v.checked = pref.vibra;
+    n.checked = pref.notif && "Notification" in window && Notification.permission === "granted";
+  };
+  sincronizza();
+  v.onchange = () => { pref.vibra = v.checked; salvaPref(); vibra("ok"); };
+  n.onchange = async () => {
+    if(!n.checked){ pref.notif = false; salvaPref(); return; }
+    if(!("Notification" in window)){ n.checked = false; toast("Notifiche non supportate qui", true); return; }
+    const p = await Notification.requestPermission();
+    pref.notif = p === "granted"; salvaPref(); sincronizza();
+    if(pref.notif) notificaSistema("Notifiche attive", "Ti avviso qui quando superi un budget.", "prova");
+    else toast("Permesso negato: riattivalo dalle impostazioni di Android", true);
+  };
+  document.getElementById("brand").addEventListener("click", sincronizza);
+})();
 
 /* service worker: rende l'app installabile e la fa aprire anche offline */
 if("serviceWorker" in navigator){
@@ -925,7 +1050,7 @@ $("pad").oncontextmenu = e => {           // pressione lunga sul tasto cancella 
 
 const OPERATORI = ["÷","×","−","+"];
 function premi(k){
-  if(navigator.vibrate) navigator.vibrate(8);
+  vibra("tap");
   const ultimo = espr.slice(-1);
 
   if(k === "⌫"){ espr = espr.slice(0,-1); }
@@ -1088,7 +1213,7 @@ function costruisciRuota(el, voci, sceltoIdx, onScelta){
     if(!pronto) return;                       // ignora gli scorrimenti di assestamento
     clearTimeout(t);
     t = setTimeout(() => {
-      if(navigator.vibrate) navigator.vibrate(6);
+      vibra("rotella");
       onScelta(i);
     }, 130);
   };
@@ -1206,7 +1331,7 @@ $("fab").onclick = () => {
   if(coda[coda.length-1].spesa.m === parseInt($("mm").value,10))
     totali.totale = (totali.totale||0) + v;
   riep = null; stat = null;
-  if(navigator.vibrate) navigator.vibrate([12,40,12]);
+  vibra("invio");
   paint(); drena();
 };
 
@@ -1227,7 +1352,7 @@ function drena(){
       inviando = false;
       if(!res.ok){
         item.stato="errore"; item.errore=res.errore;
-        showErr(res.errore); toast(res.errore, true);
+        showErr(res.errore); toast(res.errore, true); vibra("errore");
       } else {
         if(res.mese === parseInt($("mm").value,10)) totali = res.totali;
         ultime.unshift({m:item.spesa.m,d:item.spesa.d,desc:item.spesa.desc,v:item.spesa.v,
@@ -1236,6 +1361,8 @@ function drena(){
         ultime = ultime.slice(0,12);
         coda = coda.filter(c => c.id !== item.id);
         toast("Riga " + res.riga + " · " + res.secondary + testoLiquidita(res.liquidita));
+        vibra("ok");
+        controllaBudget(res, Number(item.spesa.v) || 0);
         // la spesa è scritta, ma il saldo non è stato scalato: lo dice senza bloccare
         if(res.liquidita && !res.liquidita.fatto && res.liquidita.motivo)
           showNota("Saldo non aggiornato: " + res.liquidita.motivo);
@@ -1251,7 +1378,7 @@ function drena(){
         return;
       }
       item.stato="errore"; item.errore=String(err.message||err);
-      showErr(item.errore); toast("Una spesa non è passata", true);
+      showErr(item.errore); toast("Una spesa non è passata", true); vibra("errore");
       salvaCoda(); paint(); drena();
     })
     .aggiungiSpesa(item.spesa);
@@ -1294,6 +1421,7 @@ function refresh(){
       // voci e conti ricordati: servono per registrare spese anche offline
       try{ localStorage.setItem(CHIAVE_STATO, JSON.stringify({voci:voci, conti:st.conti||[]})); }catch(e){}
       clearErr(); paint();
+      aggiornaBudgetInSottofondo();
     })
     .withFailureHandler(err => {
       if(err && err.rete && voci.length){
@@ -1367,7 +1495,7 @@ function caricaRiepilogo(){
   google.script.run
     .withSuccessHandler(r => {
       if(!r){ $("sumbody").innerHTML = `<div class="empty">Nessun dato per questo mese.</div>`; return; }
-      riep = r; renderRiepilogo(); renderBudgetFields();
+      riep = r; ricordaBudget(r.budget); renderRiepilogo(); renderBudgetFields();
     })
     .withFailureHandler(err => { $("sumbody").innerHTML = `<div class="err"><span>${esc(err.message||err)}</span></div>`; })
     .riepilogoMese(m, new Date().getFullYear());
@@ -2346,7 +2474,7 @@ $("acqGo").onclick = () => {
     .withSuccessHandler(r => {
       fine();
       if(!r.ok){ $("acqErr").innerHTML = `<div class="err"><span>${esc(r.errore)}</span></div>`; acqAnteprima(); return; }
-      if(navigator.vibrate) navigator.vibrate(12);
+      vibra("ok");
       toast(r.titolo + ": " + acqQ(r.quoteDopo) + " q a " + acqFmt(r.pzDopo, 2) + " " + acqSym(r.valuta) +
             (r.conto ? " · −" + eur(r.controvaloreEur) + " da " + r.conto : ""));
       $("acqQ").value = ""; $("acqP").value = ""; $("acqC").value = "";
