@@ -5,7 +5,7 @@
      salvata se c'è, altrimenti dalla rete.
    - Le chiamate al foglio (script.google.com) non passano mai dalla cache.
    Se cambi questo file, alza VERSIONE. */
-const VERSIONE = "spese-v2";
+const VERSIONE = "spese-v3";
 const GUSCIO = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
@@ -35,9 +35,11 @@ self.addEventListener("fetch", e => {
   if (url.hostname.endsWith("googleusercontent.com")) return;
 
   if (url.origin === self.location.origin) {
-    // prima la rete (max 4 s), poi la copia salvata
+    // prima la rete (max 4 s), poi la copia salvata.
+    // cache:"no-cache" chiede sempre a GitHub se il file è cambiato, invece di
+    // riusare per 10 minuti la copia del browser: gli aggiornamenti arrivano subito.
     e.respondWith(
-      conTimeout(fetch(req), 4000)
+      conTimeout(fetch(req, { cache: "no-cache" }), 4000)
         .then(r => {
           if (r.ok) { const copia = r.clone(); caches.open(VERSIONE).then(c => c.put(req, copia)); }
           return r;
