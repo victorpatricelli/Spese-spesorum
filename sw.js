@@ -5,7 +5,7 @@
      salvata se c'è, altrimenti dalla rete.
    - Le chiamate al foglio (script.google.com) non passano mai dalla cache.
    Se cambi questo file, alza VERSIONE. */
-const VERSIONE = "spese-v1";
+const VERSIONE = "spese-v2";
 const GUSCIO = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {
@@ -54,5 +54,16 @@ self.addEventListener("fetch", e => {
       if (r.ok || r.type === "opaque") { const copia = r.clone(); caches.open(VERSIONE).then(c => c.put(req, copia)); }
       return r;
     }))
+  );
+});
+
+/* tocco sulla notifica di budget: riporta in primo piano l'app (o la apre) */
+self.addEventListener("notificationclick", e => {
+  e.notification.close();
+  e.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then(lista => {
+      for (const c of lista) if ("focus" in c) return c.focus();
+      return self.clients.openWindow((e.notification.data && e.notification.data.url) || "./");
+    })
   );
 });
