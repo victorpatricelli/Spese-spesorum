@@ -6,19 +6,18 @@
 <title>Spese</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#F3F7F1" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0B100B" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F3EEE6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)">
 <meta name="color-scheme" content="light dark">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Spese">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='20' fill='%23B7F1BE'/%3E%3Cpath d='M32 14a18 18 0 0 1 18 18H32z' fill='%234285F4'/%3E%3Cpath d='M50 32a18 18 0 0 1-18 18V32z' fill='%2334A853'/%3E%3Cpath d='M32 50a18 18 0 0 1-18-18h18z' fill='%23FBBC04'/%3E%3Cpath d='M14 32a18 18 0 0 1 18-18v18z' fill='%23EA4335'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231F1E1C'/%3E%3Cpath d='M32 14a18 18 0 0 1 18 18H32z' fill='%234285F4'/%3E%3Cpath d='M50 32a18 18 0 0 1-18 18V32z' fill='%2334A853'/%3E%3Cpath d='M32 50a18 18 0 0 1-18-18h18z' fill='%23FBBC04'/%3E%3Cpath d='M14 32a18 18 0 0 1 18-18v18z' fill='%23EA4335'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%231F1E1C'/%3E%3C/svg%3E">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- font Google: Google Sans Flex se disponibile, altrimenti Roboto Flex (link separati: se uno manca l'altro resta) -->
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400..700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400..700&display=swap" rel="stylesheet">
+<!-- carattere Figtree e icone Material Symbols da Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400..800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -469,6 +468,365 @@ button:focus-visible,input:focus-visible{outline:none;box-shadow:var(--focus)}
 
 /* tastiera del PC: il tasto premuto si illumina un attimo */
 .key.premuto{transform:scale(.95);background:var(--s-highest)}
+
+/* ═══════════════════════════════════════════════════════════════
+   CREMA — fondo caldo, carte scure di contrasto, fogli crema,
+   accento viola. Questi blocchi vengono dopo e prevalgono su quelli sopra.
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  color-scheme:light;
+  --primary:#4B3F9E;--on-primary:#FFFFFF;--primary-c:#E4E0F7;--on-primary-c:#1D1747;
+  --secondary:#6F695F;--on-secondary:#FFFFFF;--secondary-c:#E9E2D6;--on-secondary-c:#1C1A17;
+  --tertiary:#3E8E8A;--tertiary-c:#D7ECEA;--on-tertiary-c:#0F2E2C;
+  --error:#B42318;--error-c:#FBE1DD;--on-error-c:#4A0E08;
+  --warn:#9A6200;--warn-c:#F8E6C2;--on-warn-c:#3A2600;
+  --good:#2F7A4F;--good-c:#DCEFE1;--on-good-c:#0E2A19;
+  --surface:#F3EEE6;
+  --s-lowest:#FFFFFF;--s-low:#FBF8F2;--s-c:#F1EBE1;--s-high:#E9E2D6;--s-highest:#DDD5C7;
+  --on-surface:#1C1A17;--on-surface-v:#6F695F;
+  --outline:#A8A196;--outline-v:#E3DBCD;
+  --inverse-s:#1F1E1C;--inverse-on:#F5F1EA;--inverse-primary:#C9C2F2;
+  --scrim:rgba(28,26,23,.45);
+  --glass:rgba(251,248,242,.86);--glass-border:rgba(255,255,255,.6);
+  /* carta scura di contrasto (quota, budget, patrimonio, barra in basso) */
+  --ink:#1F1E1C;--ink-2:#2E2C29;--ink-track:#3A3834;--ink-text:#F5F1EA;--ink-muted:#BDB6AA;--ink-accent:#9488E6;
+  --nav-on-bg:#F3EEE6;--nav-on:#1C1A17;--nav-off:#A8A196;
+  --sheet:#FBF8F2;
+  --cta:#1F1E1C;--on-cta:#F5F1EA;
+  /* categorie: viola, malva, ambra, verde acqua… stesso colore in ogni schermata */
+  --c1:#4B3F9E;--c2:#9C6B7E;--c3:#D9962A;--c4:#3E8E8A;--c5:#C2577E;--c6:#6B8E3E;
+  --c7:#6F7FB8;--c8:#C9705A;--c9:#B39A6B;--c10:#7A6A9E;--c11:#8C8579;--c12:#A39A8B;--c-altro:#CFC7B8;
+  --ch-grid:#E9E2D6;--ch-budget:#A8A196;--ch-concesso:#3E8E8A;
+  --font:"Figtree","Google Sans",system-ui,-apple-system,sans-serif;
+  --e1:0 1px 2px rgba(60,50,30,.06),0 4px 14px rgba(60,50,30,.05);
+  --e2:0 2px 6px rgba(60,50,30,.07),0 12px 28px rgba(60,50,30,.08);
+  --e3:0 6px 16px rgba(31,30,28,.16),0 18px 40px rgba(31,30,28,.18);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --primary:#A79EF0;--on-primary:#17123D;--primary-c:#2C2752;--on-primary-c:#E4E0F7;
+    --secondary:#A8A196;--on-secondary:#1C1A17;--secondary-c:#2E2C29;--on-secondary-c:#F2EDE4;
+    --tertiary:#6FBDB8;--tertiary-c:#1E3836;--on-tertiary-c:#CDEBE8;
+    --error:#F2928A;--error-c:#4A1B16;--on-error-c:#FBE1DD;
+    --warn:#E8B866;--warn-c:#43341A;--on-warn-c:#F8E6C2;
+    --good:#7FC79A;--good-c:#1F3A2A;--on-good-c:#DCEFE1;
+    --surface:#141311;
+    --s-lowest:#2A2825;--s-low:#1C1B19;--s-c:#23211E;--s-high:#2E2C29;--s-highest:#3A3733;
+    --on-surface:#F2EDE4;--on-surface-v:#A8A196;
+    --outline:#6F695F;--outline-v:#34312C;
+    --inverse-s:#F2EDE4;--inverse-on:#1C1A17;--inverse-primary:#4B3F9E;
+    --scrim:rgba(0,0,0,.6);
+    --glass:rgba(28,27,25,.88);--glass-border:rgba(255,255,255,.06);
+    --ink:#2A2825;--ink-2:#36332F;--ink-track:#45413B;--ink-text:#F5F1EA;--ink-muted:#BDB6AA;--ink-accent:#A79EF0;
+    --nav-on-bg:#F2EDE4;--nav-on:#1C1A17;--nav-off:#8F887D;
+    --sheet:#1C1B19;
+    --cta:#F2EDE4;--on-cta:#1C1A17;
+    --c1:#A79EF0;--c2:#C48BA0;--c3:#E8B24E;--c4:#5FB3AE;--c5:#D98AA6;--c6:#94B85E;
+    --c7:#94A2DB;--c8:#DB8A72;--c9:#CDB78E;--c10:#A595C9;--c11:#A8A196;--c12:#8F877A;--c-altro:#4A4640;
+    --ch-grid:#2E2C29;--ch-budget:#6F695F;--ch-concesso:#6FBDB8;
+    --e1:0 1px 2px rgba(0,0,0,.3);--e2:0 2px 8px rgba(0,0,0,.35);--e3:0 8px 24px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --primary:#A79EF0;--on-primary:#17123D;--primary-c:#2C2752;--on-primary-c:#E4E0F7;
+  --secondary:#A8A196;--on-secondary:#1C1A17;--secondary-c:#2E2C29;--on-secondary-c:#F2EDE4;
+  --tertiary:#6FBDB8;--tertiary-c:#1E3836;--on-tertiary-c:#CDEBE8;
+  --error:#F2928A;--error-c:#4A1B16;--on-error-c:#FBE1DD;
+  --warn:#E8B866;--warn-c:#43341A;--on-warn-c:#F8E6C2;
+  --good:#7FC79A;--good-c:#1F3A2A;--on-good-c:#DCEFE1;
+  --surface:#141311;
+  --s-lowest:#2A2825;--s-low:#1C1B19;--s-c:#23211E;--s-high:#2E2C29;--s-highest:#3A3733;
+  --on-surface:#F2EDE4;--on-surface-v:#A8A196;
+  --outline:#6F695F;--outline-v:#34312C;
+  --inverse-s:#F2EDE4;--inverse-on:#1C1A17;--inverse-primary:#4B3F9E;
+  --scrim:rgba(0,0,0,.6);
+  --glass:rgba(28,27,25,.88);--glass-border:rgba(255,255,255,.06);
+  --ink:#2A2825;--ink-2:#36332F;--ink-track:#45413B;--ink-text:#F5F1EA;--ink-muted:#BDB6AA;--ink-accent:#A79EF0;
+  --nav-on-bg:#F2EDE4;--nav-on:#1C1A17;--nav-off:#8F887D;
+  --sheet:#1C1B19;
+  --cta:#F2EDE4;--on-cta:#1C1A17;
+  --c1:#A79EF0;--c2:#C48BA0;--c3:#E8B24E;--c4:#5FB3AE;--c5:#D98AA6;--c6:#94B85E;
+  --c7:#94A2DB;--c8:#DB8A72;--c9:#CDB78E;--c10:#A595C9;--c11:#A8A196;--c12:#8F877A;--c-altro:#4A4640;
+  --ch-grid:#2E2C29;--ch-budget:#6F695F;--ch-concesso:#6FBDB8;
+  --e1:0 1px 2px rgba(0,0,0,.3);--e2:0 2px 8px rgba(0,0,0,.35);--e3:0 8px 24px rgba(0,0,0,.5);
+}
+
+body{background:var(--surface);letter-spacing:0}
+
+/* ── testata: logo tondo, titolo della scheda al centro, totale del mese a destra ── */
+.appbar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:10px;padding:12px 2px 10px;
+  background:color-mix(in srgb,var(--surface) 88%,transparent)}
+.appbar.su{background:var(--surface);box-shadow:0 6px 16px -10px rgba(60,50,30,.25);border-bottom:none}
+.brand{gap:0}
+.logo{width:44px;height:44px;border-radius:50%;background:var(--s-high);box-shadow:none}
+.ptitle{text-align:center;font-size:19px;line-height:24px;font-weight:700;letter-spacing:-.01em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hmeta{padding:7px 12px;border-radius:16px;background:var(--s-low);border:1px solid var(--outline-v);box-shadow:none;min-width:96px}
+.hmeta .lab{font-size:10.5px;letter-spacing:.06em}
+.hmeta .val{font-size:15px;line-height:20px}
+.hbar{background:var(--s-high)}
+
+/* ── barra in basso: scura, sospesa, solo icone ── */
+.navbar{padding:10px 12px calc(14px + env(safe-area-inset-bottom))}
+.navbar .in{flex:0 1 340px;width:auto;max-width:340px;margin:0 auto;background:var(--ink);border:none;border-radius:24px;
+  padding:9px 8px;box-shadow:var(--e3);backdrop-filter:none;-webkit-backdrop-filter:none}
+.navbar button{color:var(--nav-off);gap:0}
+.navbar button.on{color:var(--nav-on)}
+.navbar .pill{width:52px;height:40px;border-radius:14px}
+.navbar span.t{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.nav-ind{background:var(--nav-on-bg);box-shadow:none}
+.navbar.scorre button.on .pill{background:transparent}
+.navbar button.on .pill{background:var(--nav-on-bg);color:var(--nav-on)}
+
+/* ── carta scura di contrasto ── */
+.ink{background:var(--ink);color:var(--ink-text);border-radius:26px;padding:16px 18px 18px;box-shadow:var(--e3)}
+.ink-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ink-tit{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;min-width:0}
+.ink-ic{width:32px;height:32px;border-radius:10px;background:var(--ink-2);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.ink-ic .ms{font-size:18px}
+.ink-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:var(--ink-2);
+  color:var(--ink-muted);font-size:12px;white-space:nowrap}
+.ink-pill .ms{font-size:15px}
+.ink-bar{position:relative;height:8px;border-radius:4px;background:var(--ink-track);margin-top:16px}
+.ink-bar > i{display:block;height:100%;border-radius:4px;background:var(--ink-accent);transition:width .9s var(--ease-emph)}
+.ink-bar > i.bad{background:#F2928A}
+.ink-bar .passo{position:absolute;top:-5px;width:3px;height:18px;margin-left:-1.5px;border-radius:2px;background:var(--ink-text)}
+.ink-bot{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-top:14px}
+.ink-righe{display:flex;flex-direction:column;gap:6px;font-size:13px;color:#CFC8BC;min-width:0}
+.ink-righe span{display:flex;align-items:center;gap:8px}
+.ink-righe i{width:8px;height:8px;border-radius:3px;flex:0 0 auto}
+.ink-pct{text-align:right;flex:0 0 auto}
+.ink-pct b{display:block;font-size:26px;line-height:30px;font-weight:700}
+.ink-pct small{font-size:12px;color:#9E978B}
+.ink-pct small.ok{color:#8FD3A8}.ink-pct small.warn{color:#EBC27A}.ink-pct small.bad{color:#F2A49C}
+.ink-nota{font-size:13px;line-height:18px;color:#CFC8BC;margin-top:12px}
+
+/* ── foglio crema che sale dal basso ── */
+.sheet{margin:16px -16px 0;background:var(--sheet);border-radius:30px 30px 0 0;padding:10px 16px 20px;
+  box-shadow:0 -8px 24px rgba(60,50,30,.06);min-height:calc(100vh - 260px)}
+.handle{width:40px;height:5px;border-radius:3px;background:var(--s-highest);margin:0 auto 12px}
+.sheet-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.btn-pill{height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--outline-v);background:transparent;
+  color:var(--on-surface);font:600 14px var(--font);cursor:pointer;flex:0 0 auto}
+.voce-pill{height:36px;padding:0 12px 0 5px;border-radius:999px;border:none;background:var(--s-c);color:var(--on-surface);
+  display:inline-flex;align-items:center;gap:8px;font:600 14px var(--font);cursor:pointer;min-width:0;max-width:72%}
+.voce-pill .q{width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+  background:var(--s-highest);color:#fff}
+.voce-pill .q .ms{font-size:16px}
+.voce-pill .tx{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.voce-pill .tx.vuota{color:var(--on-surface-v);font-weight:500}
+.voce-pill > .ms{font-size:18px;color:var(--on-surface-v)}
+
+/* importo grande al centro, con − e + per correggere di un euro */
+.amt-row{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:14px}
+.pm{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--s-highest);background:transparent;color:var(--on-surface-v);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;flex:0 0 auto}
+.pm.scuro{background:var(--cta);border-color:var(--cta);color:var(--on-cta)}
+.pm .ms{font-size:20px}
+.amt-row .amt{font-size:48px;line-height:56px;font-weight:700;letter-spacing:-.03em;justify-content:center;min-width:0;color:var(--on-surface)}
+.amt-row .amt .cur{font-size:20px;font-weight:600;color:var(--on-surface-v);opacity:1;align-self:flex-start;margin-top:6px}
+.amt-row .amt .cursor{background:var(--primary);height:36px}
+.amt-row .amt .espr{background:var(--s-high);color:var(--on-surface);backdrop-filter:none}
+.amtsub{display:none}
+.quick-amt{justify-content:center;margin-top:10px}
+.quick-amt .chip{background:var(--s-c);border:none;color:var(--on-surface);height:30px;border-radius:999px;font-weight:700;backdrop-filter:none}
+:root[data-theme="dark"] .quick-amt .chip{background:var(--s-c);border:none}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .quick-amt .chip{background:var(--s-c);border:none}}
+
+/* tastierino crema */
+.pad{gap:8px;margin-top:14px}
+.key{background:var(--s-c);border:none;border-radius:16px;aspect-ratio:auto;height:54px;max-height:none;box-shadow:none;
+  color:var(--on-surface);font-size:22px;font-weight:600}
+.key:active,.key.premuto{border-radius:12px;background:var(--s-highest);transform:scale(.96)}
+.key.op{background:var(--s-high);color:var(--primary);font-size:24px;font-weight:700}
+.key.fn{background:var(--s-high);color:var(--on-surface)}
+
+/* voci: mattonelle che scorrono di lato, con il colore della categoria */
+.tiles{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x proximity;padding:2px 2px 6px;margin:12px -2px 0;scrollbar-width:none}
+.tiles::-webkit-scrollbar{display:none}
+.tile{flex:0 0 31%;min-width:104px;scroll-snap-align:start;text-align:left;background:var(--s-c);border:2px solid transparent;
+  border-radius:18px;padding:11px 12px;cursor:pointer;font-family:inherit;color:var(--on-surface)}
+.tile.on{border-color:var(--primary);background:var(--s-lowest)}
+.tile .q{width:28px;height:28px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff}
+.tile .q .ms{font-size:16px}
+.tile .n{display:block;font-size:13px;font-weight:700;margin-top:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .c{display:block;font-size:11px;color:var(--on-surface-v);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .m{display:block;font-size:13px;font-weight:700;margin-top:4px}
+.tile .m small{font-size:10.5px;font-weight:500;color:var(--on-surface-v)}
+
+/* conto: interruttore a segmenti */
+.conto-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px;
+  padding:6px 6px 6px 14px;border-radius:16px;background:var(--s-lowest);border:1px solid var(--outline-v)}
+.conto-row > span{font-size:14px;font-weight:600}
+.seg{display:flex;gap:2px;padding:3px;border-radius:12px;background:var(--s-c);overflow-x:auto;max-width:100%;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg .chip{border:none;background:transparent;height:32px;padding:0 13px;border-radius:10px;color:var(--on-surface-v);
+  font-weight:600;box-shadow:none;flex:0 0 auto}
+.seg .chip.on{background:var(--s-lowest);color:var(--on-surface);box-shadow:0 1px 3px rgba(60,50,30,.14);padding-left:13px}
+.seg .chip.on::before{content:none}
+
+/* data: una riga, le rotelle si aprono con «Cambia» */
+.data-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:0 4px}
+.data-row .dfull{margin:0}
+.link{background:none;border:none;color:var(--primary);font:700 14px var(--font);cursor:pointer;padding:6px 2px}
+.picker{margin-top:10px;background:var(--s-c);border:none}
+.band{background:var(--s-lowest);box-shadow:var(--e1)}
+.wopt.sel{color:var(--on-surface)}
+
+/* campi, pulsante principale, liste */
+.field input{background:var(--s-lowest);border-color:var(--outline-v);box-shadow:none}
+.salva{background:var(--cta);color:var(--on-cta);border-radius:20px;box-shadow:var(--e2);height:58px}
+.salva:disabled{background:var(--s-highest);color:var(--on-surface);opacity:.55;box-shadow:none}
+.salva.fatto,.salva.fatto:disabled{background:var(--good);color:#fff}
+.chip{border-color:var(--outline-v);background:transparent}
+.chip.on{background:var(--ink);color:var(--ink-text);border-color:transparent;box-shadow:none}
+.chip.on .sub{color:var(--ink-muted);opacity:1}
+.btn.tonal{background:var(--s-high);color:var(--on-surface);box-shadow:none}
+.btn.fill{background:var(--cta);color:var(--on-cta)}
+.btn{border-color:var(--outline-v);background:var(--s-lowest);box-shadow:none}
+.btn.text{color:var(--primary)}
+.list{background:var(--s-lowest);border:1px solid var(--outline-v);box-shadow:none;border-radius:22px}
+.ent{background:var(--s-lowest)}
+.ent + .ent{box-shadow:none;border-top:1px dashed var(--outline-v)}
+.ent .ic{border-radius:12px}
+.ent .ic .ms{color:#fff}
+.lgiorno{background:var(--s-lowest)}
+.lgiorno + .ent{border-top:none}
+.ent.pend{background:var(--s-c)}
+.empty{background:var(--s-c);border:1px dashed var(--s-highest)}
+.skeleton{background:linear-gradient(90deg,var(--s-c) 25%,var(--s-high) 50%,var(--s-c) 75%);background-size:200% 100%}
+.dialog{background:var(--sheet);border:none}
+.toast{border-radius:16px}
+
+
+[hidden]{display:none!important}
+.brand .title{display:none}
+.btn-pill.scuro{background:var(--cta);color:var(--on-cta);border-color:transparent;padding:0 18px;font-weight:700}
+.btn-pill:disabled{opacity:.45;cursor:default}
+.btn-pill.scuro:disabled{background:var(--s-highest);color:var(--on-surface);opacity:.6}
+.cerca{margin-top:12px}
+.cerca .field input{height:48px;border-radius:14px}
+.voce-nota{font-size:12px;color:var(--error);margin:2px 4px 0;min-height:0}
+.voce-nota:empty{display:none}
+.tile.cerca{background:transparent;border:2px dashed var(--s-highest)}
+.tile.cerca .q{background:var(--s-high);color:var(--on-surface)}
+.conto-row small{font-size:12px;font-weight:500;color:var(--on-surface-v)}
+.data-row .dfull .ms{color:var(--on-surface-v)}
+.sheet .sec{margin-top:18px}
+.sheet .foot{margin-top:24px;padding-bottom:4px}
+.view > .sheet:last-child{margin-bottom:-112px;padding-bottom:132px}
+#sumSheet{min-height:0;margin-top:18px}
+
+/* compattezza: tastierino il più possibile sopra la barra in basso */
+.ink{padding:14px 16px 16px}
+.ink-bar{margin-top:13px}
+.ink-bot{margin-top:11px}
+#viewAdd .sheet{margin-top:12px}
+.handle{margin-bottom:10px}
+.amt-row{margin-top:10px}
+.quick-amt{margin-top:6px}
+.tile{padding:10px 11px}
+.tile .n small{font-weight:500;color:var(--on-surface-v)}
+.tile .n{margin-top:8px}
+.tile .m{margin-top:2px}
+.tiles{margin-top:10px}
+.pad{margin-top:10px}
+
+/* ── Mese e Anno ── */
+.mesi{display:flex;gap:2px;padding:4px;border-radius:14px;background:var(--s-high);margin-bottom:14px}
+.mesi button{flex:1;height:36px;border:none;border-radius:10px;background:transparent;color:var(--on-surface-v);
+  font:500 14px var(--font);cursor:pointer;white-space:nowrap;min-width:0}
+.mesi button.on{background:var(--s-lowest);color:var(--on-surface);font-weight:700;box-shadow:0 1px 3px rgba(60,50,30,.14)}
+.mesi button.fut{color:var(--outline)}
+.mesi.accento button.on{background:var(--primary);color:var(--on-primary)}
+.duemini{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.mini{background:var(--s-low);border-radius:22px;padding:14px;box-shadow:var(--e1);min-width:0}
+.mini .cerchio{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff}
+.mini .cerchio .ms{font-size:17px}
+.mini .tt{font-size:15px;font-weight:700;margin-top:10px}
+.mini .tr{height:6px;border-radius:3px;background:var(--s-high);margin-top:10px;overflow:hidden}
+.mini .tr i{display:block;height:100%;border-radius:3px}
+.mini .r1{font-size:13px;margin-top:10px}
+.mini .r1 b{font-weight:700}
+.mini .r2{font-size:13px;color:var(--on-surface-v);margin-top:2px}
+.pillole{display:flex;gap:8px;overflow-x:auto;margin:14px -16px 0;padding:0 16px 2px;scrollbar-width:none}
+.pillole::-webkit-scrollbar{display:none}
+.pillola{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px 0 6px;border-radius:999px;background:var(--s-low);
+  border:1px solid var(--outline-v);font:600 14px var(--font);color:var(--on-surface);white-space:nowrap;flex:0 0 auto;cursor:default}
+button.pillola{cursor:pointer}
+.pillola .pc{width:28px;height:28px;border-radius:50%;background:var(--s-high);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.pillola .pc .ms{font-size:16px}
+.pillola .pc.scuro{background:var(--ink);color:var(--ink-text)}
+.cat-tit{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.cat-tit b{font-size:17px;font-weight:700}
+.cat-tit span{font-size:12px;color:var(--on-surface-v)}
+.crow{display:flex;align-items:center;gap:12px;padding:12px 0}
+.crow + .crow{border-top:1px dashed var(--outline-v)}
+.crow .q{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:#fff}
+.crow .q .ms{font-size:20px}
+.crow .nm{flex:1;min-width:0}
+.crow .nm b{display:block;font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.crow .nm small{display:block;font-size:12px;color:var(--on-surface-v)}
+.crow .nm .tr{height:4px;border-radius:2px;background:var(--s-high);margin-top:6px;overflow:hidden;max-width:180px}
+.crow .nm .tr i{display:block;height:100%;border-radius:2px}
+.crow .vl{text-align:right;flex:0 0 auto}
+.crow .vl b{display:block;font-size:15px;font-weight:700}
+.crow .vl small{font-size:12px;color:var(--on-surface-v)}
+.crow .vl small.bad{color:var(--error);font-weight:600}
+.card{background:var(--s-low);border:none;box-shadow:var(--e1);border-radius:24px}
+.card.el{background:var(--s-lowest)}
+.cardh .tt .ms{color:var(--primary)}
+.sheet.cat{min-height:0;padding-bottom:16px}
+.quadrante{background:var(--s-low);border-radius:28px;padding:14px 0 18px;box-shadow:var(--e1);margin-top:14px}
+.quadrante > svg{display:block;width:100%;height:auto}
+.anelli svg{display:block;margin:0 auto;width:60px;height:60px}
+.anelli{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:6px;padding:0 8px;text-align:center}
+.anelli .e{font-size:12px;color:var(--on-surface-v);margin-top:4px;line-height:15px}
+.anelli b{display:block;font-size:16px;font-weight:700;margin-top:2px}
+.barre{display:flex;align-items:flex-end;gap:5px;height:178px;margin-top:14px;padding-top:28px;box-sizing:border-box;border-bottom:1px dashed var(--outline-v)}
+.barre > div{flex:1;display:flex;justify-content:center;align-items:flex-end;height:100%;position:relative;min-width:0}
+.barre i{display:block;width:min(20px,100%);border-radius:10px;background:var(--s-highest)}
+.barre i.top{background:var(--primary)}
+.barre i.corso{background:var(--s-high);border:1.5px dashed var(--outline);box-sizing:border-box}
+.barre i.vuoto{height:6px!important;background:var(--s-c);border-radius:3px}
+.barre .tip{position:absolute;left:50%;transform:translateX(-50%);padding:4px 8px;border-radius:8px;background:var(--primary);
+  color:var(--on-primary);font-size:12px;font-weight:700;white-space:nowrap}
+.mesi12{display:flex;gap:5px;margin-top:8px;font-size:11px;color:var(--on-surface-v);text-align:center}
+.mesi12 span{flex:1;min-width:0}
+.mesi12 span.on{color:var(--on-surface);font-weight:700}
+.piedi{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--on-surface-v)}
+.piedi b{color:var(--on-surface)}
+.barre > div{cursor:pointer}
+.tbl tr[data-anno]{cursor:pointer}
+.tbl tr.sel td{color:var(--primary);font-weight:700}
+.quadrante .anelli{margin-top:2px}
+
+/* ── Portafoglio e Acquisto: stessa famiglia ── */
+.pf-hero{background:var(--ink);color:var(--ink-text);box-shadow:var(--e3)}
+.pf-hero::before{background:var(--inverse-primary);opacity:.045}
+.pf-hero::after{background:var(--inverse-primary);opacity:.05}
+.pf-hchip{background:var(--ink-2);color:var(--ink-text)}
+.pf-ref{background:var(--ink-2);color:var(--ink-text)}
+.pf-complab{color:var(--ink-muted)}
+.pf-complab b{color:var(--ink-text)}
+.pf-card{background:var(--s-low);border:none;box-shadow:var(--e1);border-radius:26px}
+.pf-tt .ic{background:var(--s-high);color:var(--on-surface)}
+.pf-seg{background:var(--s-high);border:none}
+.pf-stat{background:var(--s-lowest);border:1px solid var(--outline-v)}
+.pf-in{background:var(--s-lowest);border-color:var(--outline-v);box-shadow:none}
+.pf-lgrp{background:var(--s-lowest)}
+.acq-grid .field input{background:var(--s-lowest)}
+.seg-big{padding:4px;border-radius:14px;background:var(--s-high)}
+.seg-big .chip{height:36px;flex:1 0 auto;justify-content:center;font-size:14px}
+.acq-pos{margin:12px 6px 0}
+#viewBuy .conto-row{margin-top:16px}
+.acq-ink{padding:10px 18px}
+.acq-ink .acq-row span{color:var(--ink-muted)}
+.acq-ink .acq-row b{color:var(--ink-text)}
+.acq-ink .acq-row b .ms{color:var(--ink-muted)}
+.acq-ink .acq-row + .acq-row{border-top:1px dashed var(--ink-track)}
 </style>
 </head>
 <body>
@@ -478,9 +836,10 @@ button:focus-visible,input:focus-visible{outline:none;box-shadow:var(--focus)}
       <div class="logo"><svg width="22" height="22" viewBox="0 0 36 36" aria-hidden="true">
         <path d="M18 0a18 18 0 0 1 18 18H18z" fill="#4285F4"/><path d="M36 18a18 18 0 0 1-18 18V18z" fill="#34A853"/>
         <path d="M18 36A18 18 0 0 1 0 18h18z" fill="#FBBC04"/><path d="M0 18A18 18 0 0 1 18 0v18z" fill="#EA4335"/>
-        <circle cx="18" cy="18" r="7" fill="var(--primary-c)"/></svg></div>
+        <circle cx="18" cy="18" r="7" fill="var(--s-high)"/></svg></div>
       <div class="title">Spese<small id="sottotitolo">Vik</small></div>
     </div>
+    <div class="ptitle" id="ptitle">Nuova spesa</div>
     <div class="hmeta">
       <div class="lab"><span class="badge-net" id="netDot" title="Online"></span><span id="mlab">—</span></div>
       <div class="val" id="mtot">€ 0</div>
@@ -489,8 +848,19 @@ button:focus-visible,input:focus-visible{outline:none;box-shadow:var(--focus)}
   </div>
 
   <div id="viewAdd" class="view">
-    <div class="display">
-      <div class="amt"><span class="cur">€</span><span id="amt"><span class="num zero">0</span><span class="cursor"></span></span></div>
+    <div class="ink" id="qcard"></div>
+    <div class="sheet">
+      <div class="handle"></div>
+      <div class="sheet-top">
+        <button type="button" class="btn-pill rip" id="pulisci">Annulla</button>
+        <button type="button" class="voce-pill rip" id="vocePill" aria-label="Scegli la voce di spesa"></button>
+        <button type="button" class="btn-pill scuro rip" id="salvaMini" disabled>Salva</button>
+      </div>
+      <div class="amt-row">
+        <button type="button" class="pm rip" id="meno1" aria-label="Meno un euro"><span class="ms">remove</span></button>
+        <div class="amt"><span class="cur">€</span><span id="amt"><span class="num zero">0</span><span class="cursor"></span></span></div>
+        <button type="button" class="pm scuro rip" id="piu1" aria-label="Più un euro"><span class="ms">add</span></button>
+      </div>
       <div class="amtsub" id="sub"></div>
       <div class="quick-amt" id="quickAmt">
         <button type="button" class="chip rip" data-q="5">5</button>
@@ -499,63 +869,69 @@ button:focus-visible,input:focus-visible{outline:none;box-shadow:var(--focus)}
         <button type="button" class="chip rip" data-q="50">50</button>
         <button type="button" class="chip rip" data-q="100">100</button>
       </div>
-    </div>
-    <div class="pad" id="pad"></div>
-    <div class="sec">
-      <div class="seclab"><span>Voce di spesa</span><span id="vocehint"></span></div>
-      <div class="field"><span class="ms">search</span>
-        <input type="text" id="desc" placeholder="conad, bar, benzina…" autocomplete="off" autocapitalize="none"></div>
-      <div class="chips" id="voci" style="margin-top:12px"></div>
-    </div>
-    <div class="sec">
-      <div class="seclab"><span>Conto</span><span id="brokhint"></span></div>
-      <div class="chips" id="brok"></div>
-    </div>
-    <div class="sec">
-      <div class="picker">
+      <div class="cerca" id="cercaBox" hidden>
+        <div class="field trail"><span class="ms">search</span>
+          <input type="text" id="desc" placeholder="conad, bar, benzina…" autocomplete="off" autocapitalize="none">
+          <button type="button" class="trail-btn rip" id="cercaX" aria-label="Chiudi la ricerca"><span class="ms">close</span></button>
+        </div>
+      </div>
+      <div class="tiles" id="voci"></div>
+      <div class="voce-nota"><span id="vocehint"></span></div>
+      <div class="pad" id="pad"></div>
+      <div class="conto-row"><span>Conto <small id="brokhint"></small></span><div class="seg" id="brok"></div></div>
+      <div class="data-row">
+        <div class="dfull" id="dfull"></div>
+        <button type="button" class="link" id="dataBtn" aria-expanded="false">Cambia</button>
+      </div>
+      <div class="picker" id="picker" hidden>
         <div class="pcol"><span class="dlab">Giorno</span><div class="wheel" id="wdd"></div></div>
         <div class="pcol"><span class="dlab">Mese</span><div class="wheel" id="wmm"></div></div>
         <div class="band"></div>
       </div>
       <input type="hidden" id="dd"><input type="hidden" id="mm"><input type="hidden" id="yy">
-      <div class="dfull" id="dfull"></div>
-    </div>
-    <div class="sec">
-      <div class="field"><span class="ms">edit_note</span>
-        <input type="text" id="note" placeholder="Nota (facoltativa)" autocomplete="off"></div>
-      <button class="salva rip" id="fab" disabled>
-        <span class="ms">add</span><span id="fabtxt">Aggiungi al foglio</span>
-      </button>
-      <div id="errbox"></div>
-    </div>
-    <div class="sec">
-      <div class="seclab"><span>Registrate</span><span id="codainfo"></span></div>
-      <div class="field trail" style="margin-bottom:10px">
-        <span class="ms">filter_list</span>
-        <input type="search" id="listQ" placeholder="Cerca nelle registrate…" autocomplete="off">
-        <button type="button" class="trail-btn rip" id="listQClear" aria-label="Pulisci" style="display:none"><span class="ms">close</span></button>
-      </div>
-      <div class="btn-row">
-        <button type="button" class="btn tonal rip" id="dupLast" style="flex:1" disabled>
-          <span class="ms">content_copy</span>Duplica ultima
+      <div class="sec">
+        <div class="field"><span class="ms">edit_note</span>
+          <input type="text" id="note" placeholder="Nota (facoltativa)" autocomplete="off"></div>
+        <button class="salva rip" id="fab" disabled>
+          <span class="ms">add</span><span id="fabtxt">Aggiungi al foglio</span>
         </button>
+        <div id="errbox"></div>
       </div>
-      <div id="list" style="margin-top:12px"><div class="empty"><span class="ms">receipt_long</span>Carico dal foglio…</div></div>
+      <div class="sec">
+        <div class="cat-tit" style="margin:0 4px 10px"><b>Registrate</b><span id="codainfo"></span></div>
+        <div class="field trail" style="margin-bottom:10px">
+          <span class="ms">filter_list</span>
+          <input type="search" id="listQ" placeholder="Cerca nelle registrate…" autocomplete="off">
+          <button type="button" class="trail-btn rip" id="listQClear" aria-label="Pulisci" style="display:none"><span class="ms">close</span></button>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn tonal rip" id="dupLast" style="flex:1" disabled>
+            <span class="ms">content_copy</span>Duplica ultima
+          </button>
+        </div>
+        <div id="list" style="margin-top:12px"><div class="empty"><span class="ms">receipt_long</span>Carico dal foglio…</div></div>
+      </div>
+      <div class="foot" id="footAdd">Primary e Secondary le calcola il foglio partendo dalla voce scelta.</div>
     </div>
   </div>
 
   <div id="viewSum" class="view" style="display:none">
+    <div class="mesi" id="sumMesi"></div>
     <div id="sumbody"><div class="skeleton"></div><div class="skeleton" style="height:160px"></div></div>
-    <div class="sec">
-      <div class="seclab"><span>Budget mensile</span>
-        <button class="btn text rip" id="bopen"><span class="ms">tune</span>Modifica</button></div>
-      <div class="card el" id="bpanel" style="display:none">
-        <div id="bfields"></div>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button class="btn fill rip" id="bsave" style="flex:1"><span class="ms">save</span>Salva nel foglio</button>
-          <button class="btn rip" id="bclose">Annulla</button>
+    <div class="sheet" id="sumSheet">
+      <div class="handle"></div>
+      <div id="sumcat"></div>
+      <div class="sec" id="bsec">
+        <div class="cat-tit" style="align-items:center"><b>Budget mensile</b>
+          <button class="btn text rip" id="bopen"><span class="ms">tune</span>Modifica</button></div>
+        <div class="card el" id="bpanel" style="display:none;margin-top:8px">
+          <div id="bfields"></div>
+          <div style="display:flex;gap:8px;margin-top:14px">
+            <button class="btn fill rip" id="bsave" style="flex:1"><span class="ms">save</span>Salva nel foglio</button>
+            <button class="btn rip" id="bclose">Annulla</button>
+          </div>
+          <div style="font-size:12px;color:var(--on-surface-v);margin-top:12px;line-height:16px">Finisce nella scheda «Budget Spese», modificabile anche da PC.</div>
         </div>
-        <div style="font-size:12px;color:var(--on-surface-v);margin-top:12px;line-height:16px">Finisce nella scheda «Budget Spese», modificabile anche da PC.</div>
       </div>
     </div>
   </div>
@@ -567,12 +943,11 @@ button:focus-visible,input:focus-visible{outline:none;box-shadow:var(--focus)}
     <div id="portbody"><div class="skeleton" style="height:140px"></div><div class="skeleton"></div></div>
   </div>
   <div id="viewBuy" class="view" style="display:none">
-    <div class="sec" style="margin-top:4px">
-      <div class="seclab"><span>Titolo</span><span id="acqHint"></span></div>
-      <div class="chips" id="acqTit"><div class="empty" style="width:100%">Carico i titoli…</div></div>
-      <div class="acq-pos" id="acqPos" style="display:none"></div>
-    </div>
-    <div class="sec">
+    <div class="cat-tit" style="margin:4px 4px 8px"><b>Titolo</b><span id="acqHint"></span></div>
+    <div class="seg seg-big" id="acqTit"><div class="empty" style="width:100%">Carico i titoli…</div></div>
+    <div class="acq-pos" id="acqPos" style="display:none"></div>
+    <div class="sheet">
+      <div class="handle"></div>
       <div class="acq-grid">
         <div><span class="dlab">Quote</span><div class="field"><span class="ms">tag</span><input type="text" id="acqQ" inputmode="decimal" placeholder="0" autocomplete="off"></div></div>
         <div><span class="dlab" id="acqPlab">Prezzo</span><div class="field"><span class="ms" id="acqPic">sell</span><input type="text" id="acqP" inputmode="decimal" placeholder="0,00" autocomplete="off"></div></div>
@@ -580,28 +955,24 @@ button:focus-visible,input:focus-visible{outline:none;box-shadow:var(--focus)}
         <div><span class="dlab">Data</span><div class="field"><span class="ms">event</span><input type="date" id="acqD"></div></div>
         <div class="full" id="acqFxBox" style="display:none"><span class="dlab">Cambio EUR/USD</span><div class="field"><span class="ms">currency_exchange</span><input type="text" id="acqFx" inputmode="decimal" placeholder="1,1600" autocomplete="off"></div></div>
       </div>
-    </div>
-    <div class="sec">
-      <div class="seclab"><span>Scala dalla liquidità</span><span id="acqContoHint"></span></div>
-      <div class="chips" id="acqConti"></div>
-    </div>
-    <div class="sec">
-      <div class="card el" id="acqPrev"><div class="acq-vuota">Scegli il titolo e inserisci quote e prezzo.</div></div>
-      <button class="salva rip" id="acqGo" disabled><span class="ms">shopping_bag</span><span id="acqGoTxt">Registra acquisto</span></button>
-      <div id="acqErr"></div>
-    </div>
-    <div class="sec">
-      <div class="seclab"><span>Ultimo acquisto</span><span>scheda «Movimenti»</span></div>
-      <div id="acqUlt"></div>
+      <div class="conto-row"><span>Scala dalla liquidità <small id="acqContoHint"></small></span><div class="seg" id="acqConti"></div></div>
+      <div class="sec">
+        <div class="card el" id="acqPrev"><div class="acq-vuota">Scegli il titolo e inserisci quote e prezzo.</div></div>
+        <button class="salva rip" id="acqGo" disabled><span class="ms">shopping_bag</span><span id="acqGoTxt">Registra acquisto</span></button>
+        <div id="acqErr"></div>
+      </div>
+      <div class="sec">
+        <div class="cat-tit" style="margin:0 4px 10px"><b>Ultimo acquisto</b><span>scheda «Movimenti»</span></div>
+        <div id="acqUlt"></div>
+      </div>
     </div>
   </div>
-  <div class="foot" id="footAdd">Primary e Secondary le calcola il foglio partendo dalla voce scelta.</div>
 </div>
 
 <nav class="navbar"><div class="in" id="nav"><span class="nav-ind" id="navInd" aria-hidden="true"></span>
   <button class="on" data-v="add"><span class="pill rip"><span class="ms">add_circle</span></span><span class="t">Aggiungi</span></button>
   <button data-v="sum"><span class="pill rip"><span class="ms">donut_large</span></span><span class="t">Mese</span></button>
-  <button data-v="year"><span class="pill rip"><span class="ms">calendar_month</span></span><span class="t">Anno</span></button>
+  <button data-v="year"><span class="pill rip"><span class="ms">bar_chart</span></span><span class="t">Anno</span></button>
   <button data-v="port"><span class="pill rip"><span class="ms">monitoring</span></span><span class="t">Portafoglio</span></button>
   <button data-v="buy"><span class="pill rip"><span class="ms">shopping_bag</span></span><span class="t">Acquisto</span></button>
 </div></nav>
@@ -738,7 +1109,7 @@ function applicaTema(t){
   const r = document.documentElement;
   if(t === "light" || t === "dark") r.setAttribute("data-theme", t); else r.removeAttribute("data-theme");
   const scuro = t === "dark" || (t !== "light" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
-  document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute("content", scuro ? "#0B100B" : "#F3F7F1"));
+  document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute("content", scuro ? "#141311" : "#F3EEE6"));
 }
 applicaTema(pref.tema);
 
@@ -763,7 +1134,7 @@ function ricordaBudget(b){
   if(!b) return;
   budgetMese = { b: b, quando: Date.now() };
   try{ localStorage.setItem(CHIAVE_BUDGET, JSON.stringify(budgetMese)); }catch(e){}
-  try{ mostraTotale(totali.totale || 0); }catch(e){}       // aggiorna subito la barra in alto
+  try{ mostraTotale(totali.totale || 0); renderQuota(); }catch(e){}   // aggiorna subito barra e quota
 }
 function aggiornaBudgetInSottofondo(){
   if(budgetMese && Date.now() - budgetMese.quando < 6*3600*1000) return;   // fresco: max 6 ore
@@ -941,6 +1312,7 @@ function chiedi(titolo, testo, icona, conferma){
 }
 
 /* ══════════ navigazione ══════════ */
+const TITOLI = {add:"Nuova spesa", sum:"Riepilogo", year:"Spese per anno", port:"Portafoglio", buy:"Acquisto"};
 $("nav").onclick = e => {
   const b = e.target.closest("button"); if(!b) return;
   if(b.dataset.v === vista) return;
@@ -952,7 +1324,7 @@ $("nav").onclick = e => {
     if(vista===k){ el.classList.remove("view"); void el.offsetWidth; el.classList.add("view"); }
   });
   window.scrollTo({top:0});
-  $("footAdd").style.display = vista==="add" ? "" : "none";
+  $("ptitle").textContent = TITOLI[vista] || "Spese";
   if(vista==="sum")  caricaRiepilogo();
   if(vista==="year") caricaAnni();
   if(vista==="port") caricaPortafoglio();
@@ -1075,27 +1447,97 @@ $("brok").onclick = e => {
   paint();                                  // aggiorna subito il testo del pulsante
 };
 
+/* Voci: mattonelle che scorrono di lato. Senza ricerca mostra le preferite
+   (più quella scelta, se non è fra queste); con la ricerca aperta filtra tutto l'elenco. */
+let cercaAperta = false;
 function renderVoci(){
   const q = $("desc").value.trim().toLowerCase();
+  const filtro = cercaAperta ? q : "";
+  const scelta = voceScelta();
   let sel;
-  if(!q){
-    sel = PREFERITE.map(p => voci.find(v => v.entry.toLowerCase()===p)).filter(Boolean);
-    if(!sel.length) sel = voci.slice(0,12);
+  if(!filtro || (scelta && scelta.entry.toLowerCase() === filtro)){
+    // preferite, poi quelle usate di recente, fino a 8
+    const trova = nome => voci.find(v => v.entry.toLowerCase() === String(nome||"").toLowerCase());
+    sel = [];
+    PREFERITE.map(trova).concat(ultime.map(e => trova(e.desc)), voci)
+      .forEach(v => { if(v && sel.length < 8 && sel.indexOf(v) === -1) sel.push(v); });
+    if(scelta && sel.indexOf(scelta) === -1) sel = [scelta].concat(sel.slice(0,7));
   } else {
-    sel = voci.filter(v => v.entry.toLowerCase().indexOf(q) !== -1).slice(0,16);
+    sel = voci.filter(v => v.entry.toLowerCase().indexOf(filtro) !== -1).slice(0,16);
   }
-  $("voci").innerHTML = sel.map(v =>
-    `<button class="chip rip ${v.entry.toLowerCase()===q?"on":""}" data-d="${esc(v.entry)}"><i class="dot" style="background:${col(v.primary)}"></i>${esc(v.entry)}` +
-    `<span class="sub">${esc(v.secondary || v.primary)}</span></button>`).join("")
-    || `<div class="empty" style="padding:16px;width:100%">${voci.length
+  const speso = v => Number((totali.perSotto||{})[v.primary + "|" + v.secondary]) || 0;
+  const tile = v => {
+    const c = col(v.primary);
+    return `<button type="button" class="tile rip ${v===scelta?"on":""}" data-d="${esc(v.entry)}">` +
+      `<span class="q" style="background:${c}"><span class="ms f">${ico(v.primary)}</span></span>` +
+      `<span class="n">${esc(v.entry)}<small> · ${esc(v.secondary || v.primary)}</small></span>` +
+      `<span class="m">${eur0(speso(v))} <small>nel mese</small></span></button>`;
+  };
+  const cerca = `<button type="button" class="tile cerca rip" data-cerca="1">` +
+    `<span class="q"><span class="ms">search</span></span><span class="n">Altra voce</span>` +
+    `<span class="m"><small>cerca fra ${voci.length}</small></span></button>`;
+  $("voci").innerHTML = sel.length
+    ? sel.map(tile).join("") + (cercaAperta ? "" : cerca)
+    : `<div class="empty" style="padding:16px;width:100%">${voci.length
         ? "Nessuna voce corrisponde."
         : "Elenco voci non caricato: controlla la scheda «Categorie Spese»."}</div>`;
 }
+function apriCerca(apri){
+  cercaAperta = apri;
+  $("cercaBox").hidden = !apri;
+  if(apri){ $("desc").focus(); $("desc").select(); }
+  else if(!voceScelta()) $("desc").value = "";
+  paint();
+}
 $("voci").onclick = e => {
+  if(e.target.closest("[data-cerca]")){ apriCerca(true); return; }
   const b = e.target.closest("[data-d]"); if(!b) return;
-  $("desc").value = b.dataset.d; paint();
+  vibra("tap");
+  $("desc").value = b.dataset.d;
+  if(cercaAperta){ cercaAperta = false; $("cercaBox").hidden = true; $("desc").blur(); }
+  paint();
+  const on = $("voci").querySelector(".tile.on");
+  if(on && on.scrollIntoView) on.scrollIntoView({block:"nearest", inline:"nearest", behavior:"smooth"});
 };
 $("desc").oninput = paint;
+$("desc").onkeydown = e => {
+  if(e.key === "Enter"){                       // Invio sceglie la prima voce trovata
+    const b = $("voci").querySelector("[data-d]");
+    if(b){ e.preventDefault(); b.click(); }
+  }
+  if(e.key === "Escape") apriCerca(false);
+};
+$("vocePill").onclick = () => apriCerca(!cercaAperta);
+$("cercaX").onclick = () => apriCerca(false);
+
+/* Annulla in alto: svuota importo, voce e nota (la data resta quella scelta). */
+$("pulisci").onclick = () => {
+  if(!espr && !$("desc").value && !$("note").value) return;
+  vibra("tap");
+  espr = ""; $("desc").value = ""; $("note").value = "";
+  cercaAperta = false; $("cercaBox").hidden = true;
+  clearErr(); paint();
+};
+$("salvaMini").onclick = () => $("fab").click();
+
+/* − e +: correggono l'importo di un euro (con un'operazione in corso, partono dal risultato). */
+function ritocca(d){
+  const n = Math.max(0, Math.round((val() + d) * 100) / 100);
+  vibra("tap");
+  espr = n ? (Number.isInteger(n) ? String(n) : n.toFixed(2).replace(".", ",")) : "";
+  paint();
+}
+$("meno1").onclick = () => ritocca(-1);
+$("piu1").onclick = () => ritocca(1);
+
+/* Data: una riga; «Cambia» apre le rotelle. */
+$("dataBtn").onclick = () => {
+  const pk = $("picker"), apri = pk.hidden;
+  pk.hidden = !apri;
+  $("dataBtn").textContent = apri ? "Fatto" : "Cambia";
+  $("dataBtn").setAttribute("aria-expanded", String(apri));
+  if(apri){ ruotaMesi(); ruotaGiorni(); }
+};
 
 /* Importi rapidi: sostituiscono quello che c'è sul display. */
 /* Tastiera del computer sulla scheda Aggiungi. Non interferisce quando scrivi in un campo. */
@@ -1167,11 +1609,19 @@ function paint(){
        <span class="tag ok"><span class="ms f">${ico(voce.primary)}</span>${esc(voce.primary)} › ${esc(voce.secondary)}</span>`
     : `<span style="opacity:.75">Importo, poi la voce di spesa</span>`;
 
-  if(voci.length) $("vocehint").innerHTML = voce
-    ? `<span style="color:var(--primary)">riconosciuta</span>`
-    : `<span>scegli dall'elenco</span>`;
+  $("vocePill").innerHTML = voce
+    ? `<span class="q" style="background:${col(voce.primary)}"><span class="ms f">${ico(voce.primary)}</span></span>` +
+      `<span class="tx">${esc(voce.entry)} · ${esc(voce.primary)} › ${esc(voce.secondary)}</span><span class="ms">expand_more</span>`
+    : `<span class="q"><span class="ms">search</span></span>` +
+      `<span class="tx vuota">${voci.length ? "Scegli la voce" : "Carico le voci…"}</span><span class="ms">expand_more</span>`;
+
+  $("vocehint").textContent = !voci.length || voce || cercaAperta ? ""
+    : $("desc").value.trim() ? "Nessuna voce si chiama così: scegline una dall'elenco"
+    : "";
 
   $("fab").disabled = !(v>0 && voce);
+  $("salvaMini").disabled = $("fab").disabled;
+  $("pulisci").disabled = !espr && !$("desc").value && !$("note").value;
   // per un secondo dopo l'invio il pulsante conferma, poi torna normale
   const conferma = Date.now() < fabOk.fino;
   $("fab").classList.toggle("fatto", conferma);
@@ -1188,6 +1638,67 @@ function paint(){
   scriviData(m);
   $("mlab").textContent = (MESI[(m||1)-1] || "—");
   mostraTotale(totali.totale||0);
+  renderQuota();
+}
+
+/* Carta scura in cima ad Aggiungi.
+   Mese in corso con budget: quota di oggi = budget rimasto stamattina ÷ giorni rimasti
+   (oggi incluso), la stessa regola del riepilogo. Altrimenti: il mese scelto. */
+function renderQuota(){
+  const box = $("qcard"); if(!box) return;
+  const n = new Date();
+  const m = parseInt($("mm").value,10) || n.getMonth()+1, a = getAnno();
+  const tot = Number(totali.totale) || 0;
+  const tetto = budgetMese && budgetMese.b ? Number(budgetMese.b.TOTALE) : 0;
+  const corrente = m === n.getMonth()+1 && a === n.getFullYear();
+  const testa = (icona, titolo, pillola) =>
+    `<div class="ink-top"><div class="ink-tit"><span class="ink-ic"><span class="ms">${icona}</span></span>${titolo}</div>` +
+    (pillola ? `<span class="ink-pill">${pillola}</span>` : "") + `</div>`;
+  const barra = (pct, cattiva) =>
+    `<div class="ink-bar"><i class="${cattiva?"bad":""}" style="width:${Math.min(100, Math.max(0, pct*100)).toFixed(1)}%"></i></div>`;
+  const riga = (colore, testo) => `<span><i style="background:${colore}"></i>${testo}</span>`;
+
+  if(!corrente){
+    const pct = tetto > 0 ? tot / tetto : 0;
+    box.innerHTML = testa("event", MESI[m-1] + " " + a, "altro mese") +
+      (tetto > 0 ? barra(pct, pct > 1) : "") +
+      `<div class="ink-bot"><div class="ink-righe">` +
+        riga("var(--ink-accent)", eur0(tot) + " nel mese") +
+        (tetto > 0 ? riga("#E0A33B", (tetto - tot >= 0 ? eur0(tetto - tot) + " ancora nel budget" : eur0(tot - tetto) + " oltre il budget")) : "") +
+      `</div>` +
+      (tetto > 0 ? `<div class="ink-pct"><b>${Math.round(pct*100)}%</b><small class="${pct>1?"bad":pct>=.8?"warn":""}">del budget</small></div>` : "") +
+      `</div><div class="ink-nota">Stai registrando in ${MESI[m-1].toLowerCase()}: la quota di oggi vale solo per il mese in corso.</div>`;
+    return;
+  }
+
+  const g = n.getDate();
+  const oggiE = (mm, dd, aa) => mm === m && dd === g && (aa || a) === a;
+  const spesoOggi =
+    ultime.filter(e => oggiE(e.m, e.d, e.a)).reduce((t,e) => t + (Number(e.v)||0), 0) +
+    coda.filter(c => oggiE(c.spesa.m, c.spesa.d, c.spesa.a)).reduce((t,c) => t + (Number(c.spesa.v)||0), 0);
+
+  if(!(tetto > 0)){
+    box.innerHTML = testa("today", "Oggi", "nessun budget") +
+      `<div class="ink-bot"><div class="ink-righe">` +
+        riga("var(--ink-accent)", eur(spesoOggi) + " spesi oggi") +
+        riga("#E0A33B", eur0(tot) + " a " + MESI[m-1].toLowerCase()) +
+      `</div><div class="ink-pct"><b>${eur0(spesoOggi)}</b><small>oggi</small></div></div>` +
+      `<div class="ink-nota">Imposta il budget nella scheda Mese per avere la quota di ogni giorno.</div>`;
+    return;
+  }
+
+  const rimasti = giorniDelMese(m, a) - g + 1;
+  const quota = Math.max(0, tetto - (tot - spesoOggi)) / rimasti;
+  const resta = quota - spesoOggi;
+  const pct = quota > 0 ? spesoOggi / quota : (spesoOggi > 0 ? 9.99 : 0);
+  box.innerHTML = testa("account_balance_wallet", "Quota di oggi",
+      quota > 0 ? `Limite ${eur0(quota)}/giorno` : "budget finito") +
+    barra(pct, pct > 1) +
+    `<div class="ink-bot"><div class="ink-righe">` +
+      riga("var(--ink-accent)", eur(spesoOggi) + " spesi oggi") +
+      riga(resta >= 0 ? "#E0A33B" : "#F2928A", resta >= 0 ? eur(resta) + " ancora disponibili" : eur(-resta) + " oltre la quota") +
+    `</div><div class="ink-pct"><b>${pct >= 9.99 ? "—" : Math.round(pct*100) + "%"}</b>` +
+      `<small class="${pct>1?"bad":pct>=.8?"warn":"ok"}">della quota</small></div></div>`;
 }
 
 /* "12,50": i centesimi in piccolo. Solo per un numero semplice, non per le operazioni. */
@@ -1325,7 +1836,7 @@ function scriviData(m){
 
 function icona(primary){
   const c = col(primary);
-  return `<span class="ic" style="background:${c}26"><span class="ms f" style="color:${c}">${ico(primary)}</span></span>`;
+  return `<span class="ic" style="background:${c}"><span class="ms f">${ico(primary)}</span></span>`;
 }
 
 function renderList(){
@@ -1408,6 +1919,7 @@ $("fab").onclick = () => {
   coda[coda.length-1].spesa.idem = coda[coda.length-1].id;
   salvaCoda();
   espr=""; $("desc").value=""; $("note").value="";
+  cercaAperta = false; $("cercaBox").hidden = true;
   // il totale in testata riguarda solo il mese mostrato
   if(coda[coda.length-1].spesa.m === parseInt($("mm").value,10))
     totali.totale = (totali.totale||0) + v;
@@ -1575,8 +2087,10 @@ function anello(pct, colore, dentro, sotto){
 
 /* ══════════ MESE ══════════ */
 function caricaRiepilogo(){
+  segmentiMesi();
   if(riep){ renderRiepilogo(); return; }
-  $("sumbody").innerHTML = `<div class="skeleton"></div><div class="skeleton" style="height:160px"></div>`;
+  $("sumbody").innerHTML = `<div class="skeleton" style="height:150px"></div><div class="skeleton" style="height:130px"></div>`;
+  $("sumcat").innerHTML = "";
   const m = parseInt($("mm").value,10) || new Date().getMonth()+1;
   google.script.run
     .withSuccessHandler(r => {
@@ -1675,185 +2189,170 @@ function graficoGiorni(r){
     plugins:[lineaOggi]});
 }
 
-/* Riquadro in cima: quota di oggi (mese in corso) o sintesi (mese chiuso / futuro).
-   Quota di oggi = budget rimasto stamattina ÷ giorni rimasti, oggi incluso:
-   è l'unico numero "al giorno" della schermata. */
-function bloccoOggi(r){
-  const stato = r.stato || "corrente";
-  if(stato==="chiuso"){
-    const esito = !r.tetto ? "neutro" : r.totale > r.tetto ? "bad" : "ok";
-    return `<div class="oggi ${esito}"><div class="lab"><span class="ms f">event_available</span>
-      ${MESI[r.mese-1]} ${r.anno||""} · mese chiuso</div>
-      <div class="cifra">${eur(r.totale)}<small>spesi</small></div>
-      <div class="sotto"><span>${r.tetto ? (r.totale>r.tetto
-          ? "Oltre il budget di <b>"+eur0(r.totale-r.tetto)+"</b>"
-          : "Sotto il budget di <b>"+eur0(r.tetto-r.totale)+"</b>") : "Nessun budget impostato"}</span>
-        <span><b>${r.numSpese}</b> spese</span></div></div>`;
-  }
-  if(stato==="futuro"){
-    return `<div class="oggi neutro"><div class="lab"><span class="ms">event_upcoming</span>
-      ${MESI[r.mese-1]} · mese futuro</div>
-      <div class="cifra">${eur(r.totale)}<small>già programmati</small></div>
-      <div class="sotto"><span>Stima sul ritmo recente: <b>${eur0(r.proiezione)}</b></span></div></div>`;
-  }
-
-  const spesoOggi = r.spesoOggi != null ? r.spesoOggi : (r.perGiorno[r.giorniTrascorsi-1] || 0);
-  if(!r.tetto){
-    return `<div class="oggi neutro"><div class="lab"><span class="ms">today</span>Oggi</div>
-      <div class="cifra">${eur(spesoOggi)}<small>spesi</small></div>
-      <div class="sotto"><span>Imposta un budget per vedere quanto resta</span></div></div>`;
-  }
-
-  const primaDiOggi = r.totale - spesoOggi;
-  if(r.tetto - primaDiOggi <= 0 || r.totale > r.tetto){
-    return `<div class="oggi bad"><div class="lab"><span class="ms f">block</span>Budget del mese esaurito</div>
-      <div class="cifra">−${eur0(Math.max(0, r.totale - r.tetto))}<small>oltre il budget di ${eur0(r.tetto)}</small></div>
-      <div class="sotto"><span>Speso oggi <b>${eur0(spesoOggi)}</b></span>
-        <span><b>${r.giorniRimasti}</b> giorni al ${r.giorniMese}, oggi incluso</span></div></div>`;
-  }
-  const concesso = r.quotaOggi != null ? r.quotaOggi : Math.max(0, (r.tetto - primaDiOggi) / r.giorniRimasti);
-  const resta = concesso - spesoOggi;
-  const quota = concesso ? Math.min(1, spesoOggi / concesso) : 1;
-  const esito = resta < 0 ? "bad" : quota >= .75 ? "warn" : "ok";
-  const oltre = resta < 0 && concesso ? Math.min(1, -resta / concesso) : 0;
-
-  return `<div class="oggi ${esito}">
-    <div class="lab"><span class="ms f">${resta<0?"running_with_errors":quota>=.75?"hourglass_bottom":"savings"}</span>
-      ${resta<0 ? "Oggi · quota superata" : "Puoi ancora spendere oggi"}</div>
-    <div class="cifra">
-      ${resta<0 ? "−"+eur0(-resta) : eur(resta)}
-      <small>${resta<0 ? "oltre la quota di "+eur0(concesso) : "della quota di "+eur0(concesso)}</small></div>
-    <div class="obar">
-      <i style="width:${quota*100}%;background:currentColor;opacity:.75"></i>
-      ${oltre ? `<i style="width:${oltre*100}%;background:currentColor;opacity:.35"></i>` : ``}
-    </div>
-    <div class="sotto">
-      <span>Speso oggi <b>${eur0(spesoOggi)}</b></span>
-      <span>quota = rimasto ÷ <b>${r.giorniRimasti}</b> giorni</span>
-    </div></div>`;
+/* Selettore del mese: i due precedenti, quello scelto e il successivo.
+   Cambiare mese qui cambia anche la data proposta in Aggiungi (come la rotella). */
+function segmentiMesi(){
+  const m = parseInt($("mm").value,10) || new Date().getMonth()+1, a = getAnno();
+  const n = new Date(), oraIdx = n.getFullYear()*12 + n.getMonth();
+  const lista = [-2,-1,0,1].map(k => { const d = new Date(a, m-1+k, 1); return { m:d.getMonth()+1, a:d.getFullYear() }; });
+  $("sumMesi").innerHTML = lista.map(x => {
+    const futuro = x.a*12 + x.m-1 > oraIdx;
+    const nome = MESI[x.m-1] + (x.a !== n.getFullYear() ? " ’" + String(x.a).slice(2) : "");
+    return `<button type="button" class="${x.m===m && x.a===a ? "on" : ""}${futuro ? " fut" : ""}" data-m="${x.m}" data-a="${x.a}">${nome}</button>`;
+  }).join("");
+}
+$("sumMesi").onclick = e => {
+  const b = e.target.closest("[data-m]"); if(!b || b.classList.contains("on")) return;
+  vibra("tap");
+  vaiAlMese(Number(b.dataset.m), Number(b.dataset.a));
+  caricaRiepilogo();
+};
+function vaiAlMese(m, a){
+  $("mm").value = m; $("yy").value = a;
+  const max = giorniDelMese(m, a);
+  if(parseInt($("dd").value,10) > max) $("dd").value = max;
+  if(!$("picker").hidden){ ruotaMesi(); ruotaGiorni(); }
+  riep = null; refresh(); paint();
 }
 
-/* Spesa singola più piccola e più grande del mese. */
-function carteMinMax(r){
-  if(!r.minSpesa || !r.maxSpesa) return "";
-  const c = (v, etichetta, icona, cls) => `
-    <div class="carta ${cls}">
-      <div class="v">${eur(v.valore)}</div>
-      <div class="e">${etichetta} · giorno ${v.giorno}</div>
-      <div class="n"><span class="ms">${icona}</span>${esc(v.desc)}</div>
-    </div>`;
-  return `<div class="duecarte">
-    ${c(r.minSpesa,"la più piccola","trending_down","min")}
-    ${c(r.maxSpesa,"la più grande","trending_up","max")}
-  </div>`;
-}
-
+/* Mese: carta scura col budget, due riquadri (oggi e proiezione), pillole coi numeri,
+   grafici, e in fondo il foglio crema con le categorie e il budget. */
 function renderRiepilogo(){
   const r = riep, tetto = r.tetto, stato = r.stato || "corrente";
-  // fino a oggi, senza le spese registrate con data futura
+  const nomeMese = MESI[r.mese-1].toLowerCase();
   const spesoFinora = r.spesoAOggi != null ? r.spesoAOggi : r.totale;
   const pct = tetto ? r.totale/tetto : 0;
   // passo del budget: quanto avresti speso a oggi andando in linea retta verso il tetto
   const ideale = tetto ? tetto*r.giorniTrascorsi/r.giorniMese : 0;
   const scarto = spesoFinora - ideale;
-  const colore = !tetto ? P.altro : pct>=1 ? P.male : stato==="futuro" ? P.altro
-    : (scarto<=0 ? P.bene : P.attenzione);
-  const chip = !tetto
-    ? `<span class="stato warn"><span class="ms">tune</span>nessun budget</span>`
-    : pct>=1 ? `<span class="stato bad"><span class="ms">error</span>budget superato</span>`
-    : stato==="futuro" ? ``
-    : stato==="chiuso" ? `<span class="stato ok"><span class="ms">check_circle</span>dentro il budget</span>`
-    : scarto<=0 ? `<span class="stato ok"><span class="ms">check_circle</span>${eur0(-scarto)} sotto il passo del budget</span>`
-    : `<span class="stato warn"><span class="ms">trending_up</span>${eur0(scarto)} sopra il passo del budget</span>`;
+  const progr = r.programmate>0 ? ` Contati anche ${eur0(r.programmate)} registrati con data futura.` : "";
 
-  const legenda = r.categorie.map(c=>{
-    const b = r.budget[c.nome], p = b ? Math.min(100,c.valore/b*100) : 0;
-    return `<div class="lrow"><span class="sw" style="background:${col(c.nome)}"></span>
-      <span class="nm">${esc(c.nome)}</span>
-      <span class="pc">${b?Math.round(c.valore/b*100)+"% di "+eur0(b):""}</span>
-      <span class="vl">${eur0(c.valore)}</span></div>
-      ${b?`<div class="bar" style="margin:-4px 0 4px 24px"><i style="width:${p}%;
-        background:${c.valore>b?P.male:col(c.nome)}"></i></div>`:``}`;
-  }).join("");
+  /* ── carta scura: budget del mese ── */
+  const riga = (colore, testo) => `<span><i style="background:${colore}"></i>${testo}</span>`;
+  const esitoTesto = !tetto ? "" : pct >= 1 ? `<small class="bad">${eur0(r.totale-tetto)} oltre il budget</small>`
+    : stato==="corrente" ? (scarto<=0 ? `<small class="ok">${eur0(-scarto)} sotto il passo</small>`
+                                      : `<small class="warn">${eur0(scarto)} sopra il passo</small>`)
+    : stato==="chiuso" ? `<small class="ok">${eur0(tetto-r.totale)} avanzati</small>`
+    : `<small>già impegnati</small>`;
+  const notaHero = !tetto ? `Imposta un budget qui sotto, nel foglio crema.`
+    : stato==="chiuso" ? `Mese chiuso: budget di ${eur0(tetto)}, ${r.totale>tetto?"superato di":"avanzati"} ${eur0(Math.abs(tetto-r.totale))}.`
+    : r.residuo < 0 ? `Budget di ${eur0(tetto)} superato di ${eur0(-r.residuo)}.` + progr
+    : stato==="futuro" ? `Mese futuro: ${eur0(r.totale)} già programmati.`
+    : `Restano ${eur0(r.residuo)} per ${r.giorniRimasti} giorni, oggi incluso.` + progr;
+  const hero = `<div class="ink">
+    <div class="ink-top"><div class="ink-tit"><span class="ink-ic"><span class="ms">receipt_long</span></span>Spese di ${nomeMese}</div>
+      <span class="ink-pill">${tetto ? "Budget " + eur0(tetto) : "nessun budget"}</span></div>
+    ${tetto ? `<div class="ink-bar"><i class="${pct>=1?"bad":""}" style="width:${Math.min(100,pct*100).toFixed(1)}%"></i>${
+        stato==="corrente" ? `<span class="passo" style="left:${Math.min(100, ideale/tetto*100).toFixed(1)}%" title="passo del budget"></span>` : ""}</div>` : ""}
+    <div class="ink-bot"><div class="ink-righe">
+      ${riga("var(--ink-accent)", eur(r.totale) + " spesi")}
+      ${tetto && stato==="corrente" ? riga("var(--ink-text)", "passo del budget a oggi " + eur0(ideale))
+        : riga("#E0A33B", r.numSpese + " spese registrate")}
+    </div><div class="ink-pct"><b>${tetto ? Math.round(pct*100) + "%" : eur0(r.totale)}</b>${esitoTesto || "<small>nel mese</small>"}</div></div>
+    <div class="ink-nota">${notaHero}</div></div>`;
 
-  const progr = r.programmate>0 ? `<br>Contati anche ${eur0(r.programmate)} registrati con data futura` : "";
-  const testoHero = !tetto ? `Imposta un budget qui sotto.`
-    : stato==="chiuso" ? `Budget di <b>${eur0(tetto)}</b>, ${r.totale>tetto?"superato di":"avanzati"} <b>${eur0(Math.abs(tetto-r.totale))}</b>`
-    : r.residuo < 0 ? `Budget di <b>${eur0(tetto)}</b> superato di <b>${eur0(-r.residuo)}</b>` + progr
-    : stato==="futuro" ? `Budget di <b>${eur0(tetto)}</b>, già impegnati <b>${eur0(r.totale)}</b>`
-    : `Restano <b>${eur0(r.residuo)}</b> su ${eur0(tetto)} per ${r.giorniRimasti} giorni, oggi incluso` + progr;
+  /* ── due riquadri ── */
+  const mini = (colore, icona, titolo, frazione, r1, r2, coloreBarra) => `<div class="mini">
+    <span class="cerchio" style="background:${colore}"><span class="ms f">${icona}</span></span>
+    <div class="tt">${titolo}</div>
+    ${frazione == null ? "" : `<div class="tr"><i style="width:${Math.min(100, Math.max(0, frazione*100)).toFixed(1)}%;background:${coloreBarra||colore}"></i></div>`}
+    <div class="r1">${r1}</div><div class="r2">${r2}</div></div>`;
+  let m1, m2;
+  if(stato==="corrente"){
+    const spesoOggi = r.spesoOggi != null ? r.spesoOggi : (r.perGiorno[r.giorniTrascorsi-1] || 0);
+    if(!tetto) m1 = mini(P.slot[1], "today", "Oggi", null, `<b>${eur0(spesoOggi)}</b> spesi`, "nessun budget impostato");
+    else {
+      const q = r.quotaOggi != null ? r.quotaOggi : Math.max(0, (tetto - (r.totale - spesoOggi)) / r.giorniRimasti);
+      const resta = q - spesoOggi;
+      m1 = q > 0
+        ? mini(P.slot[1], "account_balance_wallet", "Quota di oggi", spesoOggi/q, `<b>${eur0(spesoOggi)}</b> spesi di ${eur0(q)}`,
+            resta >= 0 ? eur0(resta) + " disponibili" : `<span style="color:${P.male}">${eur0(-resta)} oltre la quota</span>`,
+            resta < 0 ? P.male : null)
+        : mini(P.male, "block", "Budget esaurito", 1, `<b>${eur0(spesoOggi)}</b> spesi oggi`, `${r.giorniRimasti} giorni al ${r.giorniMese}`);
+    }
+  } else if(stato==="chiuso"){
+    m1 = mini(P.slot[1], "local_fire_department", "Giorno più caro", r.totale ? r.piuCaro.valore/r.totale : 0,
+      `<b>${eur0(r.piuCaro.valore)}</b>`, r.piuCaro.giorno ? "il " + r.piuCaro.giorno + " " + nomeMese : "—");
+  } else {
+    m1 = mini(P.slot[1], "event_upcoming", "Già programmati", tetto ? r.totale/tetto : null, `<b>${eur0(r.totale)}</b>`, r.numSpese + " con data futura");
+  }
+  if(stato==="chiuso"){
+    m2 = mini(P.primario, "functions", "Media al giorno", null, `<b>${eur0(r.media)}</b> al giorno`, "sul mese intero");
+  } else {
+    const sfora = tetto && r.proiezione > tetto;
+    m2 = mini(sfora ? P.male : P.primario, sfora ? "warning" : "trending_up", "Proiezione",
+      tetto ? r.proiezione/tetto : null, `<b>${eur0(r.proiezione)}</b> a fine mese`,
+      "ritmo " + eur0(r.ritmo||0) + " al giorno", sfora ? P.male : null);
+  }
 
+  /* ── pillole ── */
+  const pill = (icona, testo, scuro, attr) => (attr ? `<button type="button" class="pillola rip" ${attr}>` : `<span class="pillola">`) +
+    `<span class="pc${scuro?" scuro":""}"><span class="ms">${icona}</span></span>${testo}` + (attr ? `</button>` : `</span>`);
+  const pl = [pill("tune", "Modifica budget", true, 'data-azione="budget"')];
+  if(r.confronto){
+    const c = r.confronto, diff = c.attuale - c.precedente;
+    const nomeM = MESI[c.mese-1].toLowerCase() + (c.anno!==r.anno ? " " + c.anno : "");
+    pl.push(pill(diff>0 ? "trending_up" : "trending_down",
+      `<span style="color:${diff>0?P.male:P.bene}">${segno(diff)}</span>&nbsp;vs ${nomeM}${c.tipo==="pari giorno" ? " allo stesso giorno" : ""}`));
+  }
+  if(stato!=="futuro") pl.push(pill("block", `${r.giorniZero} giorni a spesa zero`));
+  if(stato!=="chiuso" && stato!=="futuro") pl.push(pill("functions", `${eur0(r.media)} al giorno`));
+  pl.push(pill("receipt", `${r.numSpese} spese · ${eur0(r.mediaSpesa)} in media`));
+  if(r.minSpesa && r.maxSpesa){
+    pl.push(pill("arrow_upward", `la più grande ${eur(r.maxSpesa.valore)} · ${esc(r.maxSpesa.desc)}`));
+    pl.push(pill("arrow_downward", `la più piccola ${eur(r.minSpesa.valore)} · ${esc(r.minSpesa.desc)}`));
+  }
+
+  /* ── grafici ── */
   const straord = r.straordinarie || {num:0,totale:0,soglia:100};
   const notaRitmo = stato==="chiuso" ? "" :
     `Tratteggio: per ogni giorno ${stato==="corrente"?"dopo oggi":"del mese"} si aggiunge il ritmo normale di <b>${eur0(r.ritmo||0)}</b>` +
     (straord.num ? `, calcolato senza ${straord.num} spes${straord.num===1?"a":"e"} una tantum (${eur0(straord.totale)}: viaggi o singole da ${eur0(straord.soglia)} in su)` : "") +
     (r.ritmoStorico!=null && r.giorniTrascorsi<14 ? `; nei primi giorni pesa anche la media dei mesi scorsi (${eur0(r.ritmoStorico)}/giorno)` : "") +
     (r.programmate>0 ? `. Include ${eur0(r.programmate)} già registrati con data futura` : "") + ".";
-
-  // riquadri numerici
-  const K = (k, v, d, stile) => `<div class="kpi"><div class="k">${k}</div>
-    <div class="v"${stile?` style="${stile}"`:""}>${v}</div>${d?`<div class="d">${d}</div>`:""}</div>`;
-  const kp = [];
-  if(stato==="futuro") kp.push(K("Già programmati", eur0(r.totale), r.numSpese+" spese con data futura"));
-  else kp.push(K("Media al giorno", eur0(r.media),
-    stato==="corrente" ? "fino a oggi, senza programmate" : "sul mese intero"));
-  if(stato==="chiuso") kp.push(K("Giorno più caro", eur0(r.piuCaro.valore),
-    r.piuCaro.giorno ? "il "+r.piuCaro.giorno+" "+MESI[r.mese-1].toLowerCase() : ""));
-  else kp.push(K("Proiezione fine mese",
-    (tetto?`<span class="ms">${r.proiezione>tetto?"warning":"check_circle"}</span>`:"")+eur0(r.proiezione),
-    "ritmo "+eur0(r.ritmo||0)+"/giorno"+(stato==="corrente"?" dopo oggi":""),
-    "color:"+(tetto&&r.proiezione>tetto?P.male:(tetto?P.bene:P.testo))));
-  if(r.confronto){
-    const c = r.confronto, diff = c.attuale - c.precedente;
-    const nomeM = MESI3[c.mese-1] + (c.anno!==r.anno ? " "+c.anno : "");
-    kp.push(K(c.tipo==="pari giorno" ? "Vs "+nomeM+" allo stesso giorno" : "Vs "+nomeM+", mese intero",
-      segno(diff), eur0(c.attuale)+" contro "+eur0(c.precedente), "color:"+(diff>0?P.male:P.bene)));
-  }
-  if(stato!=="futuro") kp.push(K("Giorni a spesa zero", r.giorniZero,
-    stato==="corrente" ? "oggi escluso" : "su "+r.giorniMese));
-  kp.push(K("Spese registrate", r.numSpese, eur0(r.mediaSpesa)+" in media"));
-  kp.push(K("Voce più pesante", r.categorie.length?esc(r.categorie[0].nome):"—",
-    r.categorie.length?eur0(r.categorie[0].valore):"", "font-size:16px"));
-
   const notaGiorni = r.programmate>0 && stato!=="chiuso"
     ? `<div class="clegend"><span><i class="fill" style="background:${P.primario}80"></i>spese fatte</span>
        <span><i class="fill" style="background:${P.concesso}80"></i>registrate con data futura</span></div>` : "";
 
-  $("sumbody").innerHTML = bloccoOggi(r) + carteMinMax(r) + `
-    <div class="hero"><div class="herotop">
-      ${anello(pct,colore,tetto?Math.round(pct*100)+"%":"—",tetto?"del budget":"senza budget")}
-      <div class="gnum"><div class="big">${eur(r.totale)}</div>
-        <div class="sml">${testoHero}</div>${chip}</div></div></div>
-
-    <div class="kpis">${kp.join("")}</div>
-
+  $("sumbody").innerHTML = hero +
+    `<div class="duemini">${m1}${m2}</div>` +
+    `<div class="pillole" id="sumPill">${pl.join("")}</div>` + `
     <div class="sec"><div class="card">
       <div class="cardh"><span class="tt"><span class="ms">show_chart</span>${stato==="chiuso"?"Andamento":"Proiezione"}</span>
         <span class="sb">${stato==="chiuso"?"speso cumulato nel mese":"stima a fine mese "+eur0(r.proiezione)}</span></div>
       <div class="chartbox"><canvas id="cvProj"></canvas></div>
       <div class="clegend" id="legProj"></div>
       ${notaRitmo?`<div class="cnota">${notaRitmo}</div>`:""}</div></div>
-
-    <div class="sec"><div class="card">
-      <div class="cardh"><span class="tt"><span class="ms">donut_large</span>Dove sono finiti</span>
-        <span class="sb">${r.senzaCategoria
-          ? eur0(r.senzaCategoria)+" senza categoria"
-          : r.categorie.length+" categorie"}</span></div>
-      ${r.categorie.length
-        ? `<div class="chartbox donut"><canvas id="cvCat"></canvas></div><div class="legend">${legenda}</div>`
-        : `<div class="empty">Nessuna spesa con categoria in questo mese.</div>`}
-      ${r.senzaCategoria ? `<div class="cnota">${eur0(r.senzaCategoria)} sono nel totale ma non nel grafico:
-        la voce scelta non ha una categoria nella scheda «Categorie Spese».</div>` : ""}</div></div>
-
     <div class="sec"><div class="card">
       <div class="cardh"><span class="tt"><span class="ms">bar_chart</span>Giorno per giorno</span>
         <span class="sb">${r.piuCaro.giorno?"picco il "+r.piuCaro.giorno+" ("+eur0(r.piuCaro.valore)+")":""}</span></div>
       <div class="chartbox sm"><canvas id="cvDay"></canvas></div>${notaGiorni}</div></div>`;
 
-  if(window.Chart){ graficoProiezione(r); graficoCategorie(r); graficoGiorni(r); }
+  /* ── foglio crema: categorie ── */
+  const base = r.categorie.reduce((t,c) => t + c.valore, 0);
+  const righe = r.categorie.map(c => {
+    const b = r.budget[c.nome], colore = col(c.nome), oltre = b && c.valore > b;
+    return `<div class="crow"><span class="q" style="background:${colore}"><span class="ms f">${ico(c.nome)}</span></span>
+      <div class="nm"><b>${esc(c.nome)}</b><small>${base ? Math.round(c.valore/base*100) : 0}% delle spese del mese</small>
+        ${b ? `<div class="tr"><i style="width:${Math.min(100, c.valore/b*100).toFixed(1)}%;background:${oltre?P.male:colore}"></i></div>` : ""}</div>
+      <div class="vl"><b>${eur0(c.valore)}</b>${b
+        ? `<small class="${oltre?"bad":""}">${oltre ? "+" + eur0(c.valore-b) + " su " + eur0(b) : "di " + eur0(b)}</small>`
+        : `<small>senza budget</small>`}</div></div>`;
+  }).join("");
+  $("sumcat").innerHTML = `<div class="cat-tit"><b>Categorie di ${nomeMese}</b><span>speso · budget</span></div>` +
+    (r.categorie.length ? `<div style="margin-top:4px">${righe}</div>` : `<div class="empty" style="margin-top:10px">Nessuna spesa con categoria in questo mese.</div>`) +
+    (r.senzaCategoria ? `<div class="cnota">${eur0(r.senzaCategoria)} sono nel totale ma non qui:
+        la voce scelta non ha una categoria nella scheda «Categorie Spese».</div>` : "");
+
+  if(window.Chart){ graficoProiezione(r); graficoGiorni(r); }
   else $("sumbody").insertAdjacentHTML("beforeend",
     `<div class="err"><span>Non riesco a caricare la libreria dei grafici.</span></div>`);
 }
+$("sumbody").addEventListener("click", e => {
+  if(!e.target.closest('[data-azione="budget"]')) return;
+  if($("bpanel").style.display === "none") $("bopen").click();
+  $("bsec").scrollIntoView({behavior:"smooth", block:"start"});
+});
 
 /* ══════════ ANNO ══════════ */
 function ricalcola(){
@@ -1877,75 +2376,145 @@ function caricaAnni(){
     .statisticheAnnuali();
 }
 
+/* Anno: segmenti degli anni, quadrante delle categorie, tre anellini,
+   e nel foglio crema le barre mese per mese, il cumulato, le categorie e la tabella. */
+let annoSel = null, barraSel = null;
+function anellino(pct, colore, testo){
+  const R = 22, C = 2*Math.PI*R, f = pct == null ? 0 : Math.min(1, Math.max(0, pct));
+  return `<svg width="60" height="60" viewBox="0 0 60 60" aria-hidden="true">
+    <circle cx="30" cy="30" r="${R}" fill="none" stroke="${P.traccia}" stroke-width="6"/>
+    ${f ? `<circle cx="30" cy="30" r="${R}" fill="none" stroke="${colore}" stroke-width="6" stroke-linecap="round"
+      stroke-dasharray="${(C*f).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 30 30)"/>` : ""}
+    <text x="30" y="34" text-anchor="middle" fill="${P.testo}" style="font-family:var(--font);font-size:12px;font-weight:700">${testo}</text></svg>`;
+}
+/* Quadrante: le prime 5 categorie e «Altro», archi con un piccolo stacco,
+   etichette attorno (spostate in verticale se si sovrappongono). */
+function quadrante(a){
+  const W = 358, H = 280, cx = W/2, cy = H/2, R = 92, C = 2*Math.PI*R;
+  const cat = a.categorie.filter(c => c.valore > 0);
+  const tot = cat.reduce((t,c) => t + c.valore, 0);
+  if(!tot) return `<div class="empty" style="margin:0 16px">Nessuna spesa con categoria nel ${a.anno}.</div>`;
+  const pezzi = cat.slice(0,5).map(c => ({nome:c.nome, valore:c.valore, colore:col(c.nome)}));
+  const resto = cat.slice(5).reduce((t,c) => t + c.valore, 0);
+  if(resto > 0) pezzi.push({nome:"Altro", valore:resto, colore:P.altro});
+  const stacco = pezzi.length > 1 ? 6 : 0;
+  let off = 0;
+  const archi = pezzi.map(p => {
+    const lung = C * p.valore / tot;
+    const arco = `<circle cx="${cx}" cy="${cy}" r="${R}" stroke="${p.colore}" stroke-dasharray="${Math.max(0.5, lung - stacco).toFixed(2)} ${C.toFixed(2)}" stroke-dashoffset="${(-off).toFixed(2)}"><title>${esc(p.nome)} · ${eur0(p.valore)}</title></circle>`;
+    p.mezzo = (off + lung/2) / C * 2*Math.PI - Math.PI/2;      // angolo a metà arco, da ore 12
+    off += lung;
+    return arco;
+  }).join("");
+  // etichette: fuori dall'anello, allineate a sinistra o a destra secondo il lato
+  const et = pezzi.map(p => {
+    const x = cx + Math.cos(p.mezzo)*(R+26), y = cy + Math.sin(p.mezzo)*(R+26);
+    const lato = Math.abs(x - cx) < 26 ? "middle" : (x > cx ? "start" : "end");
+    return {p, x, y: y - 4, lato};
+  });
+  ["start","end","middle"].forEach(l => {
+    const g = et.filter(e => e.lato === l).sort((a,b) => a.y - b.y);
+    for(let i=1;i<g.length;i++) if(g[i].y - g[i-1].y < 30) g[i].y = g[i-1].y + 30;
+    g.forEach(e => e.y = Math.max(14, Math.min(H - 20, e.y)));
+  });
+  const testi = et.map(e => `<text x="${e.x.toFixed(1)}" y="${e.y.toFixed(1)}" text-anchor="${e.lato}" font-size="12" font-weight="600" fill="${P.testo}">${esc(e.p.nome)}` +
+    `<tspan x="${e.x.toFixed(1)}" dy="14" font-weight="400" fill="${P.testo2}">${eur0(e.p.valore)}</tspan></text>`).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Spese ${a.anno} per categoria: totale ${eur0(a.totale)}">
+    <circle cx="${cx}" cy="${cy}" r="74" fill="none" stroke="${P.altro}" stroke-width="5" stroke-dasharray="1.4 17.97" transform="rotate(-90 ${cx} ${cy})"/>
+    <g fill="none" stroke-width="16" transform="rotate(-90 ${cx} ${cy})">${archi}</g>
+    <g style="font-family:var(--font)">
+      <text x="${cx}" y="${cy-12}" text-anchor="middle" font-size="12" fill="${P.testo2}">Totale ${a.anno}</text>
+      <text x="${cx}" y="${cy+17}" text-anchor="middle" font-size="28" font-weight="700" fill="${P.testo}">${eur0(a.totale)}</text>
+      ${testi}</g></svg>`;
+}
+/* Barre mese per mese (HTML): il più caro in evidenza col valore sopra,
+   il mese in corso tratteggiato, quelli futuri appena accennati. Tocca una barra per il suo valore. */
+function barreMesi(a){
+  const corrente = a.anno === stat.annoCorrente, mc = stat.meseCorrente;
+  const max = Math.max(1, ...a.mensili);
+  const piuCaro = a.mensili.indexOf(Math.max(...a.mensili));
+  const sel = barraSel != null ? barraSel : piuCaro;
+  const alt = 124;                                   // altezza utile in px
+  return `<div class="barre" id="barre">${a.mensili.map((v,i) => {
+      const futuro = corrente && i+1 > mc, inCorso = corrente && i+1 === mc;
+      const h = Math.max(6, Math.round(v / max * alt));
+      const cls = futuro || !v ? "vuoto" : i === sel ? "top" : inCorso ? "corso" : "";
+      return `<div data-i="${i}" title="${MESI[i]} · ${eur0(v)}">` +
+        (i === sel && v ? `<span class="tip" style="bottom:${h + 8}px">${eur0(v)}</span>` : "") +
+        `<i class="${cls}" style="height:${h}px"></i></div>`;
+    }).join("")}</div>
+    <div class="mesi12">${MESI3.map((m,i) => `<span class="${i===sel?"on":""}">${m}</span>`).join("")}</div>`;
+}
 function renderAnni(){
-  const s = stat;
-  const anni = s.anni;
-  const cur = anni[anni.length-1];
-  const prec = anni.length>1 ? anni[anni.length-2] : null;
+  const s = stat, anni = s.anni;
+  if(!annoSel || !anni.some(x => x.anno === annoSel)) annoSel = anni[anni.length-1].anno;
+  const idx = anni.findIndex(x => x.anno === annoSel);
+  const a = anni[idx], prec = idx > 0 ? anni[idx-1] : null;
+  const corrente = a.anno === s.annoCorrente;
+  const tetto = budgetMese && budgetMese.b ? Number(budgetMese.b.TOTALE) : 0;
 
-  const dYtd = prec ? cur.ytd - prec.ytd : 0;
-  const pYtd = prec && prec.ytd ? (cur.ytd/prec.ytd - 1)*100 : 0;
-  const proiezAnno = cur.media * 12;
+  // segmenti: gli ultimi tre anni (gli altri si scelgono dalla tabella)
+  const seg = anni.slice(-3).map(x => `<button type="button" class="${x.anno===annoSel?"on":""}" data-anno="${x.anno}">${x.anno}</button>`).join("");
 
-  const kpis = `<div class="kpis" style="margin-top:0">
-    <div class="kpi"><div class="k">Da gennaio a oggi, ${cur.anno}</div>
-      <div class="v">${eur0(cur.ytd)}</div>
-      ${prec?`<div class="d">${prec.anno}, stesso periodo: ${eur0(prec.ytd)}</div>`:``}</div>
-    <div class="kpi"><div class="k">Differenza a pari periodo</div>
-      <div class="v" style="color:${dYtd>0?P.male:P.bene}">${segno(dYtd)}</div>
-      ${prec?`<div class="d">${pYtd>0?"+":""}${pYtd.toFixed(1)}%</div>`:``}</div>
-    <div class="kpi"><div class="k">Media mensile ${cur.anno}</div>
-      <div class="v">${eur0(cur.media)}</div>
-      <div class="d">su ${cur.mesiAttivi} mesi</div></div>
-    <div class="kpi"><div class="k">Proiezione ${cur.anno}</div>
-      <div class="v">${eur0(proiezAnno)}</div>
-      ${prec?`<div class="d">${prec.anno}: ${eur0(prec.totale)}</div>`:``}</div>
+  // tre anellini
+  const proiez = corrente ? a.media * 12 : a.totale;
+  const confr = prec ? (corrente ? a.ytd - prec.ytd : a.totale - prec.totale) : null;
+  const confrBase = prec ? (corrente ? prec.ytd : prec.totale) : 0;
+  const pc = x => Math.round(x*100) + "%";
+  const anelli = `<div class="anelli">
+    <div>${anellino(tetto ? a.media/tetto : null, P.primario, tetto ? pc(a.media/tetto) : "—")}
+      <div class="e">Media mensile</div><b>${eur0(a.media)}</b></div>
+    <div>${anellino(tetto ? proiez/(tetto*12) : null, P.slot[2], tetto ? pc(proiez/(tetto*12)) : "—")}
+      <div class="e">${corrente ? "Proiezione anno" : "Totale anno"}</div><b>${eur0(proiez)}</b></div>
+    <div>${anellino(confrBase ? Math.abs(confr)/confrBase : null, confr > 0 ? P.male : P.bene,
+        confrBase ? (confr > 0 ? "+" : confr < 0 ? "−" : "") + Math.round(Math.abs(confr)/confrBase*100) + "%" : "—")}
+      <div class="e">${prec ? "Vs " + prec.anno + (corrente ? ", stesso periodo" : "") : "Primo anno"}</div>
+      <b style="color:${confr == null ? P.testo : confr > 0 ? P.male : P.bene}">${confr == null ? "—" : segno(confr)}</b></div>
   </div>`;
+  const nota = tetto ? `<div class="cnota" style="margin:10px 16px 0;text-align:center">Gli anelli confrontano con il budget mensile di ${eur0(tetto)} (${eur0(tetto*12)} l'anno).</div>` : "";
 
-  const righe = anni.slice().reverse().map(a => `
-    <tr><td>${a.anno}</td>
-      <td>${eur0(a.totale)}</td>
-      <td>${eur0(a.media)}</td>
-      <td>${a.piuAlto.mese?MESI3[a.piuAlto.mese-1]:"—"}</td>
-      <td>${a.righe}</td></tr>`).join("");
-
-  // categorie: anno corrente contro precedente
+  // categorie con la variazione sull'anno prima
   const mappaPrec = {};
   if(prec) prec.categorie.forEach(c => mappaPrec[c.nome] = c.valore);
-  const catRighe = cur.categorie.slice(0,10).map(c => {
-    const p = mappaPrec[c.nome] || 0;
-    const d = p ? (c.valore/p - 1)*100 : null;
-    return `<div class="lrow"><span class="sw" style="background:${col(c.nome)}"></span>
-      <span class="nm">${esc(c.nome)}</span>
-      <span class="pc" style="color:${d===null?"var(--on-surface-v)":(d>0?P.male:P.bene)}">
-        ${d===null?"nuova":(d>0?"+":"")+Math.round(d)+"%"}</span>
-      <span class="vl">${eur0(c.valore)}</span></div>`;
+  const catRighe = a.categorie.slice(0,10).map(c => {
+    const p = mappaPrec[c.nome] || 0, d = p ? (c.valore/p - 1)*100 : null;
+    return `<div class="crow"><span class="q" style="background:${col(c.nome)}"><span class="ms f">${ico(c.nome)}</span></span>
+      <div class="nm"><b>${esc(c.nome)}</b><small>${a.totale ? Math.round(c.valore/a.totale*100) : 0}% dell'anno</small></div>
+      <div class="vl"><b>${eur0(c.valore)}</b>${
+        !prec ? "" : corrente
+          // anno in corso: il confronto in % con un anno intero sarebbe falsato, quindi solo il valore di allora
+          ? `<small>${prec.anno}: ${p ? eur0(p) : "—"}</small>`
+          : `<small style="color:${d===null?P.testo2:(d>0?P.male:P.bene)}">${d===null ? "nuova" : (d>0?"+":"") + Math.round(d) + "% su " + prec.anno}</small>`}</div></div>`;
   }).join("");
 
-  $("yearbody").innerHTML = kpis + `
-    <div class="sec"><div class="card">
-      <div class="cardh"><span class="tt"><span class="ms">bar_chart</span>Mese per mese</span>
-        <span class="sb">ultimi ${Math.min(anni.length,3)} anni</span></div>
-      <div class="chartbox"><canvas id="cvAnni"></canvas></div></div></div>
+  const righe = anni.slice().reverse().map(x => `
+    <tr data-anno="${x.anno}" class="${x.anno===annoSel?"sel":""}"><td>${x.anno}</td>
+      <td>${eur0(x.totale)}</td><td>${eur0(x.media)}</td>
+      <td>${x.piuAlto.mese?MESI3[x.piuAlto.mese-1]:"—"}</td><td>${x.righe}</td></tr>`).join("");
 
-    <div class="sec"><div class="card">
-      <div class="cardh"><span class="tt"><span class="ms">stacked_line_chart</span>Cumulato da gennaio</span>
-        <span class="sb">confronto diretto</span></div>
-      <div class="chartbox"><canvas id="cvCum"></canvas></div></div></div>
+  const piuCaro = a.mensili.indexOf(Math.max(...a.mensili));
+  const piedi = `<div class="piedi"><span>Mese più caro: <b>${a.mensili[piuCaro] ? MESI[piuCaro].toLowerCase() : "—"}</b></span>${
+    prec ? `<span>${prec.anno}${corrente ? ", stesso periodo" : ""}: <b>${eur0(corrente ? prec.ytd : prec.totale)}</b></span>` : ""}</div>`;
 
-    <div class="sec"><div class="card">
-      <div class="cardh"><span class="tt"><span class="ms">category</span>Categorie ${cur.anno}</span>
-        ${prec?`<span class="sb">variazione su ${prec.anno}</span>`:``}</div>
-      <div class="chartbox sm"><canvas id="cvCatAnno"></canvas></div>
-      <div class="legend">${catRighe}</div></div></div>
+  $("yearbody").innerHTML = `<div class="mesi accento" id="anniSeg">${seg}</div>
+    <div class="quadrante">${quadrante(a)}${anelli}${nota}</div>
+    <div class="sheet">
+      <div class="handle"></div>
+      <div class="cat-tit"><b>Mese per mese</b><span>${corrente ? MESI[s.meseCorrente-1].toLowerCase() + " in corso" : "anno chiuso"}</span></div>
+      <div id="barreBox">${barreMesi(a)}</div>${piedi}
 
-    <div class="sec"><div class="card">
-      <div class="cardh"><span class="tt"><span class="ms">table_rows</span>Tutti gli anni</span>
-        <button class="btn text rip" onclick="ricalcola()">
-          <span class="ms">refresh</span>Ricalcola</button></div>
-      <table class="tbl"><thead><tr>
-        <th>Anno</th><th>Totale</th><th>Media</th><th>Picco</th><th>Voci</th>
-      </tr></thead><tbody>${righe}</tbody></table></div></div>`;
+      <div class="sec"><div class="cat-tit"><b>Cumulato da gennaio</b><span>confronto con gli anni prima</span></div>
+        <div class="chartbox" style="margin-top:10px"><canvas id="cvCum"></canvas></div></div>
+
+      <div class="sec"><div class="cat-tit"><b>Categorie ${a.anno}</b>${prec?`<span>${corrente ? "e quanto nel " + prec.anno + " intero" : "variazione su " + prec.anno}</span>`:``}</div>
+        <div style="margin-top:4px">${catRighe || `<div class="empty">Nessuna categoria.</div>`}</div></div>
+
+      <div class="sec"><div class="cat-tit" style="align-items:center"><b>Tutti gli anni</b>
+          <button class="btn text rip" onclick="ricalcola()"><span class="ms">refresh</span>Ricalcola</button></div>
+        <table class="tbl" id="tblAnni"><thead><tr>
+          <th>Anno</th><th>Totale</th><th>Media</th><th>Picco</th><th>Voci</th>
+        </tr></thead><tbody>${righe}</tbody></table></div>
+    </div>`;
 
   if(!window.Chart){
     $("yearbody").insertAdjacentHTML("beforeend",
@@ -1953,36 +2522,23 @@ function renderAnni(){
     return;
   }
   chartDefaults();
-  const ultimi = anni.slice(-3);
-  // anno corrente in primario pieno, anni precedenti in toni via via più tenui
-  const tinte = [P.budget+"66", P.slot[0]+"B3", P.primario].slice(-ultimi.length);
+  const ultimi = anni.slice(0, idx+1).slice(-3);
+  // anno scelto in viola pieno, quelli prima in ambra e grigio
+  const tinte = [P.budget, P.slot[2], P.primario].slice(-ultimi.length);
   const legendaAnni = {display:true,position:"bottom",
     labels:{usePointStyle:true,pointStyle:"circle",boxWidth:8,boxHeight:8,padding:16,font:{size:12}}};
-
-  if(chAnni) chAnni.destroy();
-  chAnni = new Chart($("cvAnni"),{type:"bar",
-    data:{labels:MESI3.map(m=>m),
-      datasets:ultimi.map((a,i)=>({label:String(a.anno),data:a.mensili,
-        backgroundColor:tinte[i],borderRadius:4,borderSkipped:false,maxBarThickness:10}))},
-    options:{maintainAspectRatio:false,
-      plugins:{legend:legendaAnni,
-        tooltip:{...tip(),displayColors:true,boxWidth:8,boxHeight:8,usePointStyle:true,
-          callbacks:{label:c=>c.dataset.label+": "+eur0(c.raw)}}},
-      scales:{x:{grid:{display:false},border:{display:false},ticks:{padding:4,maxRotation:0,autoSkip:true,autoSkipPadding:6}},
-        y:{grid:grid(),border:{display:false},ticks:{maxTicksLimit:5,padding:8,callback:v=>"€"+v.toLocaleString("it-IT")}}}}});
-
   if(chCum) chCum.destroy();
   chCum = new Chart($("cvCum"),{type:"line",
     data:{labels:MESI3,
-      datasets:ultimi.map((a,i)=>{
-        let acc=0; const cum=a.mensili.map(v=>{acc+=v; return acc;});
-        const ultimoMese = a.anno===s.annoCorrente ? s.meseCorrente : 12;
-        const tinta = tinte[i].slice(0,7);
-        return {label:String(a.anno),
+      datasets:ultimi.map((x,i)=>{
+        let acc=0; const cum=x.mensili.map(v=>{acc+=v; return acc;});
+        const ultimoMese = x.anno===s.annoCorrente ? s.meseCorrente : 12;
+        const scelto = x.anno===annoSel;
+        return {label:String(x.anno),
           data:cum.map((v,j)=> j<ultimoMese ? v : null),
-          borderColor:tinte[i],borderWidth:a.anno===s.annoCorrente?2.5:2,
-          pointRadius:0,pointHoverRadius:5,tension:.3,fill:a.anno===s.annoCorrente,
-          backgroundColor:c=>sfuma(c.chart.ctx,c.chart.chartArea,tinta)};
+          borderColor:tinte[i],borderWidth:scelto?2.5:2,borderDash:scelto?[]:[5,4],
+          pointRadius:0,pointHoverRadius:5,tension:.3,fill:scelto,
+          backgroundColor:c=>sfuma(c.chart.ctx,c.chart.chartArea,tinte[i].slice(0,7))};
       })},
     options:{maintainAspectRatio:false,interaction:{mode:"index",intersect:false},
       plugins:{legend:legendaAnni,
@@ -1990,22 +2546,22 @@ function renderAnni(){
           callbacks:{label:c=>c.raw==null?null:c.dataset.label+": "+eur0(c.raw)}}},
       scales:{x:{grid:{display:false},border:{display:false},ticks:{padding:4,maxRotation:0,autoSkip:true,autoSkipPadding:6}},
         y:{grid:grid(),border:{display:false},ticks:{maxTicksLimit:5,padding:8,callback:v=>"€"+v.toLocaleString("it-IT")}}}}});
-
-  const top = cur.categorie.slice(0,8);
-  if(chCatAnno) chCatAnno.destroy();
-  chCatAnno = new Chart($("cvCatAnno"),{type:"bar",
-    data:{labels:top.map(c=>c.nome),
-      datasets:[{label:String(cur.anno),data:top.map(c=>c.valore),
-          backgroundColor:top.map(c=>col(c.nome)),borderRadius:4,borderSkipped:false,maxBarThickness:12}]
-        .concat(prec?[{label:String(prec.anno),data:top.map(c=>mappaPrec[c.nome]||0),
-          backgroundColor:P.traccia,borderRadius:4,borderSkipped:false,maxBarThickness:12}]:[])},
-    options:{indexAxis:"y",maintainAspectRatio:false,
-      plugins:{legend:{...legendaAnni,display:!!prec},
-        tooltip:{...tip(),displayColors:true,boxWidth:8,boxHeight:8,usePointStyle:true,
-          callbacks:{label:c=>c.dataset.label+": "+eur0(c.raw)}}},
-      scales:{x:{grid:grid(),border:{display:false},ticks:{maxTicksLimit:4,callback:v=>"€"+v.toLocaleString("it-IT")}},
-        y:{grid:{display:false},border:{display:false},ticks:{font:{size:12},padding:4}}}}});
 }
+$("yearbody").addEventListener("click", e => {
+  const b = e.target.closest("[data-anno]");
+  if(b){
+    const n = Number(b.dataset.anno);
+    if(n !== annoSel){ vibra("tap"); annoSel = n; barraSel = null; renderAnni();
+      if(b.tagName === "TR") window.scrollTo({top:0, behavior:"smooth"}); }
+    return;
+  }
+  const bar = e.target.closest("#barre [data-i]");
+  if(bar && stat){
+    barraSel = Number(bar.dataset.i);
+    const a = stat.anni.find(x => x.anno === annoSel);
+    if(a) $("barreBox").innerHTML = barreMesi(a);
+  }
+});
 
 /* ══════════ PORTAFOGLIO ══════════
    Solo lettura. Obiettivi dalla tabella di sinistra di «Asset Allocation»,
@@ -2510,6 +3066,7 @@ function acqAnteprima(){
   const fx = acqNum($("acqFx").value);
   const ok = !!t && q > 0 && p > 0 && c >= 0 && (!usd || fx > 0) && !!$("acqD").value;
   $("acqGo").disabled = !ok || acqInvio;
+  $("acqPrev").className = ok ? "ink acq-ink" : "card el";
   if(!ok){
     $("acqPrev").innerHTML = `<div class="acq-vuota">${!t ? "Scegli il titolo." :
       !(q > 0) ? "Inserisci le quote." : !(p > 0) ? "Inserisci il prezzo." :
