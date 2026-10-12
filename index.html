@@ -1963,6 +1963,12 @@ function renderList(){
    tocco sulla riga = compila il modulo per controllare, ✕ = scarta. */
 const walletInCoda = id => coda.some(c => c.spesa && c.spesa.walletId === id);
 const walletVoce = w => voci.find(v => v.entry === w.voce) || null;
+/* Cashback per conto: l'importo registrato è già al netto (es. Trading 212 1,5%). */
+const CASHBACK = { "Trading 212": 0.015 };
+const walletCb = w => CASHBACK[w.conto] || 0;
+const walletNetto = w => w.importo == null ? null : Math.round(w.importo * (1 - walletCb(w)) * 100) / 100;
+const walletNota = w => (w.esercente || "") +
+  (walletCb(w) ? " · cashback " + it(walletCb(w)*100).replace(/,?0+$/, "") + "% su " + it(w.importo) : "");
 
 function renderWallet(){
   const box = $("walletBox"); if(!box) return;
@@ -1978,8 +1984,8 @@ function renderWallet(){
         (voce ? icona(voce.primary)
               : `<span class="ic" style="background:${P.altro}"><span class="ms f">contactless</span></span>`) +
         `<span class="txt"><div class="t1">${esc(w.esercente || "Pagamento")}</div>
-          <div class="t2">${w.d}/${w.m} · ${voce ? esc(voce.entry) : "voce da scegliere"} · ${esc(w.conto || w.carta || "conto?")}</div></span>
-        <span class="v">${w.importo != null ? it(w.importo) : "?"}</span>` +
+          <div class="t2">${w.d}/${w.m} · ${voce ? esc(voce.entry) : "voce da scegliere"} · ${esc(w.conto || w.carta || "conto?")}${walletCb(w) ? " · cashback" : ""}</div></span>
+        <span class="v">${w.importo != null ? it(walletNetto(w)) : "?"}</span>` +
         (pronta ? `<button type="button" class="undo wok rip" data-ok="${esc(w.id)}" aria-label="Registra"><span class="ms">check</span></button>` : "") +
         `<button type="button" class="undo rip" data-no="${esc(w.id)}" aria-label="Scarta"><span class="ms">close</span></button></div>`;
     }).join("") + `</div>`;
@@ -2005,10 +2011,10 @@ function compilaWallet(id){
   const w = wallet.find(x => x.id === id); if(!w) return;
   vibra("tap");
   walletCorrente = id;
-  espr = w.importo != null ? it(w.importo) : "";
+  espr = w.importo != null ? it(walletNetto(w)) : "";
   const voce = walletVoce(w);
   $("desc").value = voce ? voce.entry : "";
-  $("note").value = w.esercente || "";
+  $("note").value = walletNota(w);
   if(w.conto && conti.indexOf(w.conto) !== -1){ broker = w.conto; renderConti(); }
   impostaData(w.d, w.m, w.a);
   renderWallet(); paint();
@@ -2022,11 +2028,11 @@ function confermaWallet(id){
   if(!voce || !(w.importo > 0) || conti.indexOf(w.conto) === -1){ compilaWallet(id); return; }
   const cid = Date.now() + "-" + Math.random().toString(36).slice(2,7);
   coda.push({ id: cid, stato: "attesa", primary: voce.primary, secondary: voce.secondary,
-    spesa: { idem: cid, a: w.a, m: w.m, d: w.d, desc: voce.entry, v: w.importo,
-             broker: w.conto, note: w.esercente || "", walletId: w.id } });
+    spesa: { idem: cid, a: w.a, m: w.m, d: w.d, desc: voce.entry, v: walletNetto(w),
+             broker: w.conto, note: walletNota(w), walletId: w.id } });
   salvaCoda();
   if(walletCorrente === id) walletCorrente = null;
-  if(w.m === parseInt($("mm").value,10) && w.a === getAnno()) totali.totale = (totali.totale||0) + w.importo;
+  if(w.m === parseInt($("mm").value,10) && w.a === getAnno()) totali.totale = (totali.totale||0) + walletNetto(w);
   riep = null; stat = null;
   vibra("invio");
   renderWallet(); paint(); drena();
