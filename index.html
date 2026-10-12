@@ -1962,7 +1962,66 @@ function renderList(){
    conferme precedenti. Qui: ✓ registra subito (se voce e conto sono noti),
    tocco sulla riga = compila il modulo per controllare, ✕ = scarta. */
 const walletInCoda = id => coda.some(c => c.spesa && c.spesa.walletId === id);
-const walletVoce = w => voci.find(v => v.entry === w.voce) || null;
+/* Voce proposta per un pagamento di Wallet, in quest'ordine:
+   1) quella che hai già confermato per lo stesso esercente (arriva dal foglio);
+   2) parole chiave dei negozi (CRF → carrefour, Eni → benzina, Atac → metro…);
+   3) il nome di una tua voce dentro l'esercente ("Conad City" → conad).
+   Le 2) e 3) sono solo proposte: compaiono con «proposta» e le confermi tu. */
+const PAROLE_CHIAVE = [
+  [/\bprime video\b|\bamazon prime\b/, "prime"],
+  [/\buber ?eats\b|\bglovo\b|\bdeliveroo\b|\bjust ?eat\b/, "food delivery"],
+  [/\b(crf|carrefour)\b/, "carrefour"],
+  [/\bconad\b/, "conad"],
+  [/\bcoop\b/, "coop"],
+  [/\bnatura ?si\b/, "natura si"],
+  [/\b(lidl|eurospin|todis|pam|esselunga|despar|ins|md|penny|tuodi|elite|sigma|crai|simply|famila|aldi|tigre|carrefour express)\b/, "market"],
+  [/\bmacelleri/, "macelleria"],
+  [/\b(eni|enilive|agip|q8|ip|tamoil|esso|api|shell|repsol|carburant\w*|distributor\w*)\b/, "benzina"],
+  [/\b(autostrad\w*|telepass|pedagg\w*)\b/, "autostrada"],
+  [/\b(easypark|parchegg\w*|parking|saba|apcoa|mycicero)\b/, "parking"],
+  [/\b(atac|cotral|metro|metropolitana)\b/, "metro"],
+  [/\b(trenitalia|italo|ntv|frecciarossa)\b/, "treno"],
+  [/\b(flixbus|itabus|clickbus)\b/, "clickbus"],
+  [/\b(uber|free ?now|itaxi|taxi|bolt|wetaxi)\b/, "taxi"],
+  [/\b(ryanair|easyjet|wizz\w*|ita airways|vueling|volotea|aeroport\w*)\b/, "plane"],
+  [/\b(booking|airbnb|hotel|albergo)\b/, "hotel"],
+  [/\b(farmaci\w*|parafarmaci\w*|pharma\w*)\b/, "pharmacy"],
+  [/\b(mc ?donald\w*|burger king|kfc|pizzeri\w*|ristorant\w*|trattori\w*|osteri\w*|sushi|poke|kebab|trapizzino)\b/, "restaurant"],
+  [/\bpasticc\w*/, "pasticceria"],
+  [/\b(bar|caffe|cafe|coffee|tabacchi|tabaccheria)\b/, "bar"],
+  [/\b(decathlon|palestr\w*|fitness|gym|mcfit|virgin active)\b/, "gym"],
+  [/\b(zara|h&m|primark|bershka|uniqlo|ovs|nike|adidas|foot ?locker|zalando)\b/, "shopping"],
+  [/\b(amazon|amzn)\w*/, "amazon"],
+  [/\b(acqua ?& ?sapone|tigota|sephora|douglas|kiko|profumeri\w*|dm)\b/, "Care"],
+  [/\b(ikea|leroy merlin|brico\w*|jysk)\b/, "furniture"],
+  [/\b(mediaworld|unieuro|euronics|trony|apple store)\b/, "tech"],
+  [/\b(feltrinelli|mondadori|librer\w*)\b/, "books"],
+  [/\b(cinema|uci|the space|ticketone|vivaticket)\b/, "freetime"],
+  [/\bspotify\b/, "spotify"], [/\bdisney\b/, "disney"], [/\bperplexity\b/, "perplexity"],
+  [/\bgoogle\b/, "google"], [/\bvodafone\b/, "vodafone"], [/\bho ?mobile\b/, "homobile"],
+  [/\b(onedrive|microsoft)\b/, "onedrive"], [/\bgetquin\b/, "getquin"],
+];
+// voci troppo generiche per cercarle dentro il nome di un negozio
+const VOCI_GENERICHE = ["roma","milano","other","weekend","summer","study","dinner","freetime",
+  "tech","gift","gas","tv","rent","fees","phone","internet","electricity","care","medicines","games"];
+const normEsercente = s => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+  .replace(/['’`]/g, "").replace(/[^a-z0-9&]+/g, " ").trim();
+const voceDaNome = e => voci.find(v => v.entry.toLowerCase() === String(e).toLowerCase()) || null;
+function indovinaVoce(esercente){
+  const n = normEsercente(esercente);
+  if(!n) return null;
+  for(const [re, entry] of PAROLE_CHIAVE){
+    if(re.test(n)){ const v = voceDaNome(entry); if(v) return v; }
+  }
+  const esc_ = t => t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const candidate = voci.filter(v => {
+    const e = normEsercente(v.entry);
+    return e.length >= 3 && VOCI_GENERICHE.indexOf(e) === -1 && new RegExp("\\b" + esc_(e) + "\\b").test(n);
+  }).sort((a, b) => b.entry.length - a.entry.length);
+  return candidate[0] || null;
+}
+const walletImparata = w => !!w.voce && !!voceDaNome(w.voce);
+const walletVoce = w => (walletImparata(w) ? voceDaNome(w.voce) : indovinaVoce(w.esercente));
 /* Cashback per conto: l'importo registrato è già al netto (es. Trading 212 1,5%). */
 const CASHBACK = { "Trading 212": 0.015 };
 const walletCb = w => CASHBACK[w.conto] || 0;
@@ -1984,7 +2043,7 @@ function renderWallet(){
         (voce ? icona(voce.primary)
               : `<span class="ic" style="background:${P.altro}"><span class="ms f">contactless</span></span>`) +
         `<span class="txt"><div class="t1">${esc(w.esercente || "Pagamento")}</div>
-          <div class="t2">${w.d}/${w.m} · ${voce ? esc(voce.entry) : "voce da scegliere"} · ${esc(w.conto || w.carta || "conto?")}${walletCb(w) ? " · cashback" : ""}</div></span>
+          <div class="t2">${w.d}/${w.m} · ${voce ? esc(voce.entry) + (walletImparata(w) ? "" : " (proposta)") : "voce da scegliere"} · ${esc(w.conto || w.carta || "conto?")}${walletCb(w) ? " · cashback" : ""}</div></span>
         <span class="v">${w.importo != null ? it(walletNetto(w)) : "?"}</span>` +
         (pronta ? `<button type="button" class="undo wok rip" data-ok="${esc(w.id)}" aria-label="Registra"><span class="ms">check</span></button>` : "") +
         `<button type="button" class="undo rip" data-no="${esc(w.id)}" aria-label="Scarta"><span class="ms">close</span></button></div>`;
