@@ -239,6 +239,12 @@ button:focus-visible,input:focus-visible{outline:none;box-shadow:var(--focus)}
 .st.inv{background:var(--tertiary-c);color:var(--on-tertiary-c);animation:puls 1.2s ease-in-out infinite}
 .st.err2{background:var(--error);color:var(--error-c)}
 @keyframes puls{0%,100%{opacity:1}50%{opacity:.5}}
+/* pagamenti da Wallet da confermare (in cima ad Aggiungi) */
+#walletBox:empty{display:none}
+#walletBox{margin:0 0 16px}
+#walletBox .ent{cursor:pointer;gap:10px;padding-right:8px}
+#walletBox .ent.sel{box-shadow:inset 0 0 0 2px var(--primary)}
+#walletBox .undo.wok{background:var(--primary-c);color:var(--on-primary-c)}
 .undo{width:40px;height:40px;border-radius:50%;background:transparent;border:none;color:var(--on-surface-v);cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .undo .ms{font-size:22px}
 .empty{text-align:center;color:var(--on-surface-v);font-size:14px;padding:36px 16px;border-radius:var(--radius);background:var(--s-low);border:1px dashed var(--outline-v)}
@@ -893,6 +899,7 @@ button.pillola{cursor:pointer}
     <div class="ink" id="qcard"></div>
     <div class="sheet">
       <div class="handle"></div>
+      <div id="walletBox"></div>
       <div class="sheet-top">
         <button type="button" class="btn-pill rip" id="pulisci">Annulla</button>
         <button type="button" class="voce-pill rip" id="vocePill" aria-label="Scegli la voce di spesa"></button>
@@ -1311,6 +1318,7 @@ const CHIAVE_STATO = "spese:stato";
 let espr="", broker="Revolut", voci=[], vista="add";
 let totali={totale:0,perCategoria:{},perSotto:{}}, ultime=[], riep=null, stat=null;
 let coda=[], inviando=false;
+let wallet=[], walletCorrente=null;   // pagamenti da Google Wallet da confermare
 
 const $ = id => document.getElementById(id);
 const val = () => calcola(espr);
@@ -1560,6 +1568,7 @@ $("pulisci").onclick = () => {
   vibra("tap");
   espr = ""; $("desc").value = ""; $("note").value = "";
   cercaAperta = false; $("cercaBox").hidden = true;
+  if(walletCorrente){ walletCorrente = null; renderWallet(); }
   clearErr(); paint();
 };
 $("salvaMini").onclick = () => $("fab").click();
@@ -1947,6 +1956,105 @@ function renderList(){
         : `<div class="empty"><span class="ms">receipt_long</span>Nessuna spesa nel foglio.</div>`;
 }
 
+/* ══════════ WALLET: pagamenti da confermare ══════════
+   MacroDroid manda al foglio ogni notifica di pagamento di Google Wallet;
+   il foglio la tiene in «Da confermare» e propone voce e conto in base alle
+   conferme precedenti. Qui: ✓ registra subito (se voce e conto sono noti),
+   tocco sulla riga = compila il modulo per controllare, ✕ = scarta. */
+const walletInCoda = id => coda.some(c => c.spesa && c.spesa.walletId === id);
+const walletVoce = w => voci.find(v => v.entry === w.voce) || null;
+
+function renderWallet(){
+  const box = $("walletBox"); if(!box) return;
+  const lista = wallet.filter(w => !walletInCoda(w.id));
+  if(walletCorrente && !lista.some(w => w.id === walletCorrente)) walletCorrente = null;
+  if(!lista.length){ box.innerHTML = ""; return; }
+  box.innerHTML = `<div class="cat-tit" style="margin:2px 4px 10px"><b>Da confermare</b>` +
+    `<span>${lista.length} ${lista.length === 1 ? "pagamento" : "pagamenti"} da Wallet</span></div>` +
+    `<div class="list">` + lista.map(w => {
+      const voce = walletVoce(w);
+      const pronta = !!(voce && w.importo > 0 && w.conto && conti.indexOf(w.conto) !== -1);
+      return `<div class="ent${w.id === walletCorrente ? " sel" : ""}" data-w="${esc(w.id)}">` +
+        (voce ? icona(voce.primary)
+              : `<span class="ic" style="background:${P.altro}"><span class="ms f">contactless</span></span>`) +
+        `<span class="txt"><div class="t1">${esc(w.esercente || "Pagamento")}</div>
+          <div class="t2">${w.d}/${w.m} · ${voce ? esc(voce.entry) : "voce da scegliere"} · ${esc(w.conto || w.carta || "conto?")}</div></span>
+        <span class="v">${w.importo != null ? it(w.importo) : "?"}</span>` +
+        (pronta ? `<button type="button" class="undo wok rip" data-ok="${esc(w.id)}" aria-label="Registra"><span class="ms">check</span></button>` : "") +
+        `<button type="button" class="undo rip" data-no="${esc(w.id)}" aria-label="Scarta"><span class="ms">close</span></button></div>`;
+    }).join("") + `</div>`;
+}
+
+function caricaWallet(){
+  google.script.run
+    .withSuccessHandler(l => { if(Array.isArray(l)){ wallet = l; renderWallet(); } })
+    .withFailureHandler(() => {})
+    .daConfermare(getAnno());
+}
+
+/* Data della spesa sulle rotelle; se cambia il mese ricarica i totali di quel mese. */
+function impostaData(d, m, a){
+  const cambia = parseInt($("mm").value,10) !== m || getAnno() !== a;
+  $("yy").value = a; $("mm").value = m; $("dd").value = d;
+  if(!$("picker").hidden){ ruotaMesi(); ruotaGiorni(); }
+  if(cambia){ riep = null; refresh(); }
+}
+
+/* Tocco sulla riga: compila importo, voce, conto, data e nota (l'esercente). */
+function compilaWallet(id){
+  const w = wallet.find(x => x.id === id); if(!w) return;
+  vibra("tap");
+  walletCorrente = id;
+  espr = w.importo != null ? it(w.importo) : "";
+  const voce = walletVoce(w);
+  $("desc").value = voce ? voce.entry : "";
+  $("note").value = w.esercente || "";
+  if(w.conto && conti.indexOf(w.conto) !== -1){ broker = w.conto; renderConti(); }
+  impostaData(w.d, w.m, w.a);
+  renderWallet(); paint();
+  toast(voce ? "Controlla e premi Aggiungi" : "Scegli la voce e premi Aggiungi");
+}
+
+/* ✓: registra subito con la voce e il conto proposti. */
+function confermaWallet(id){
+  const w = wallet.find(x => x.id === id); if(!w) return;
+  const voce = walletVoce(w);
+  if(!voce || !(w.importo > 0) || conti.indexOf(w.conto) === -1){ compilaWallet(id); return; }
+  const cid = Date.now() + "-" + Math.random().toString(36).slice(2,7);
+  coda.push({ id: cid, stato: "attesa", primary: voce.primary, secondary: voce.secondary,
+    spesa: { idem: cid, a: w.a, m: w.m, d: w.d, desc: voce.entry, v: w.importo,
+             broker: w.conto, note: w.esercente || "", walletId: w.id } });
+  salvaCoda();
+  if(walletCorrente === id) walletCorrente = null;
+  if(w.m === parseInt($("mm").value,10) && w.a === getAnno()) totali.totale = (totali.totale||0) + w.importo;
+  riep = null; stat = null;
+  vibra("invio");
+  renderWallet(); paint(); drena();
+}
+
+/* ✕: non registrarlo (doppione, rimborso, già segnato a mano…). */
+async function scartaPagamento(id){
+  const w = wallet.find(x => x.id === id); if(!w) return;
+  const si = await chiedi("Scartare il pagamento?",
+    "«" + (w.esercente || "Pagamento") + "» da " + eur(w.importo || 0) +
+    ": non lo registro. Nel foglio resta in «Da confermare» come scartato.", "close", "Scarta");
+  if(!si) return;
+  wallet = wallet.filter(x => x.id !== id);
+  if(walletCorrente === id){ walletCorrente = null; }
+  renderWallet();
+  google.script.run
+    .withSuccessHandler(r => { if(r && !r.ok) toast(r.errore, true); })
+    .withFailureHandler(err => { toast(String(err.message||err), true); caricaWallet(); })
+    .scartaWallet(id);
+}
+
+$("walletBox").onclick = e => {
+  const ok = e.target.closest("[data-ok]"), no = e.target.closest("[data-no]"), riga = e.target.closest("[data-w]");
+  if(no){ scartaPagamento(no.dataset.no); return; }
+  if(ok){ confermaWallet(ok.dataset.ok); return; }
+  if(riga) compilaWallet(riga.dataset.w);
+};
+
 function showErr(m){ $("errbox").innerHTML = `<div class="err"><span>${esc(m)}</span></div>`; }
 function showNota(m){ $("errbox").innerHTML = `<div class="note"><span class="ms">account_balance_wallet</span><span>${esc(m)}</span></div>`; }
 function clearErr(){ $("errbox").innerHTML = ""; }
@@ -1962,9 +2070,11 @@ $("fab").onclick = () => {
             a: getAnno(),
             m: parseInt($("mm").value,10) || new Date().getMonth()+1,
             d: parseInt($("dd").value,10) || new Date().getDate(),
-            desc: voce.entry, v: v, broker: broker, note: $("note").value.trim() }
+            desc: voce.entry, v: v, broker: broker, note: $("note").value.trim(),
+            walletId: walletCorrente || undefined }
   });
   coda[coda.length-1].spesa.idem = coda[coda.length-1].id;
+  walletCorrente = null; renderWallet();
   salvaCoda();
   espr=""; $("desc").value=""; $("note").value="";
   cercaAperta = false; $("cercaBox").hidden = true;
@@ -2000,9 +2110,11 @@ function drena(){
         if(res.mese === parseInt($("mm").value,10)) totali = res.totali;
         ultime.unshift({m:item.spesa.m,d:item.spesa.d,desc:item.spesa.desc,v:item.spesa.v,
           broker:item.spesa.broker,primary:res.primary,secondary:res.secondary,
-          riga:res.riga, idem:item.spesa.idem, a:res.anno || item.spesa.a, annullabile:true});
+          riga:res.riga, idem:item.spesa.idem, a:res.anno || item.spesa.a, annullabile:true,
+          walletId:item.spesa.walletId});
         ultime = ultime.slice(0,12);
         coda = coda.filter(c => c.id !== item.id);
+        if(item.spesa.walletId){ wallet = wallet.filter(w => w.id !== item.spesa.walletId); renderWallet(); }
         toast("Riga " + res.riga + " · " + res.secondary + testoLiquidita(res.liquidita));
         vibra("ok");
         controllaBudget(res, Number(item.spesa.v) || 0);
@@ -2041,6 +2153,9 @@ async function annulla(){
       ultime.shift();
       riep = null; stat = null;
       clearErr(); paint();
+      // presa da Wallet: il pagamento torna fra quelli da confermare
+      if(e.walletId) google.script.run.withSuccessHandler(() => caricaWallet())
+        .withFailureHandler(() => {}).riapriWallet(e.walletId);
       toast("Riga " + e.riga + " annullata" + (res.liquidita && res.liquidita.fatto ? " · saldo ripristinato" : ""));
     })
     .withFailureHandler(err => toast(String(err.message||err), true))
@@ -2064,6 +2179,7 @@ function refresh(){
       // ogni spesa ricorda l'anno (cioè la scheda) da cui viene: serve per annullarla
       ultime=(st.ultime||[]).map(e => Object.assign({a: anno}, e));
       if(st.conti && st.conti.length){ conti = st.conti; renderConti(); }
+      if(Array.isArray(st.wallet)){ wallet = st.wallet; renderWallet(); }
       // voci e conti ricordati: servono per registrare spese anche offline
       try{ localStorage.setItem(CHIAVE_STATO, JSON.stringify({voci:voci, conti:st.conti||[]})); }catch(e){}
       clearErr(); paint();
@@ -3253,6 +3369,7 @@ document.addEventListener("visibilitychange", () => {
   // il portafoglio cambia ogni giorno: al rientro nell'app lo rilegge
   if(vista==="port") caricaPortafoglio(true); else port = null;
   if(vista==="buy") caricaAcquisto(true); else acq = null;
+  caricaWallet();   // i pagamenti arrivati mentre l'app era chiusa
   const n = new Date();
   if(parseInt($("mm").value,10) !== n.getMonth()+1){
     $("mm").value = n.getMonth()+1; $("dd").value = n.getDate(); $("yy").value = n.getFullYear();
