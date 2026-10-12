@@ -2337,6 +2337,17 @@ function renderRiepilogo(){
       esc(r.minSpesa.desc) + " · il " + r.minSpesa.giorno));
   }
 
+  /* Spesa ordinaria: il mese senza la categoria Travel, confrontata col budget.
+     Compare solo se nel mese ci sono viaggi; va in seconda posizione nella griglia. */
+  const viaggi = Number((r.categorie.find(c => c.nome === "Travel") || {}).valore) || 0;
+  if(viaggi > 0){
+    const ord = r.totale - viaggi, oltreOrd = tetto && ord > tetto;
+    const confrOrd = tetto ? (oltreOrd ? " · " + eur0(ord - tetto) + " oltre il budget"
+                                       : " · " + eur0(tetto - ord) + " sotto il budget") : "";
+    tl.splice(1, 0, T("no_luggage", col("Travel"), "Senza viaggi", eur0(ord),
+      "esclusi " + eur0(viaggi) + " di viaggi" + confrOrd, oltreOrd ? P.male : null));
+  }
+
   /* ── grafici ── */
   const straord = r.straordinarie || {num:0,totale:0,soglia:100};
   const notaRitmo = stato==="chiuso" ? "" :
