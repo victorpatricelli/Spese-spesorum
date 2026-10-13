@@ -807,6 +807,7 @@ button.pillola{cursor:pointer}
 .pillola .pc{width:28px;height:28px;border-radius:50%;background:var(--s-high);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .pillola .pc .ms{font-size:16px}
 .pillola .pc.scuro{background:var(--ink);color:var(--ink-text)}
+.torta{position:relative;height:230px;margin:12px 0 6px}
 .cat-tit{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .cat-tit b{font-size:17px;font-weight:700}
 .cat-tit span{font-size:12px;color:var(--on-surface-v)}
@@ -1111,6 +1112,35 @@ function chiamata(){
 }
 window.google = { script: { get run(){ return chiamata(); } } };
 
+/* ══════════ precaricamento ══════════
+   All'apertura (e dopo ogni aggiornamento) Mese, Anno, Portafoglio e Acquisto
+   si caricano in sottofondo: passando da una scheda all'altra i dati ci sono già.
+   prendi() condivide la richiesta in corso: se tocchi una scheda mentre si sta
+   ancora caricando, aspetta quella invece di farne partire un'altra.
+   invalida() scarta le risposte di richieste partite prima di una modifica. */
+const inVolo = {}, ultimaRichiesta = {};
+function prendi(k, fn, args, nuova){
+  if(inVolo[k] && !nuova) return inVolo[k];
+  const p = api(fn, args || []);
+  inVolo[k] = p; ultimaRichiesta[k] = p;
+  const fine = () => { if(inVolo[k] === p) delete inVolo[k]; };
+  p.then(fine, fine);
+  return p;
+}
+const valida = (k, p) => ultimaRichiesta[k] === p;
+function invalida(...chiavi){
+  chiavi.forEach(k => { delete inVolo[k]; delete ultimaRichiesta[k];
+    if(k==="sum") riep = null; if(k==="year") stat = null;
+    if(k==="port") port = null; if(k==="buy") acq = null; });
+}
+function precaricaTutto(){
+  if(!cfg.url || !cfg.pin) return;
+  sicuro(() => caricaRiepilogo(true));
+  sicuro(() => caricaAnni(true));
+  sicuro(() => caricaPortafoglio(false, true));
+  sicuro(() => caricaAcquisto(false, true));
+}
+
 function apriImpostazioni(messaggio){
   const s = document.getElementById("cfgScrim");
   document.getElementById("cfgUrl").value = cfg.url || "";
@@ -1188,6 +1218,8 @@ function ricordaBudget(b){
 function aggiornaBudgetInSottofondo(){
   if(budgetMese && Date.now() - budgetMese.quando < 6*3600*1000) return;   // fresco: max 6 ore
   const n = new Date();
+  // se il mese aperto è quello corrente, il precaricamento di Mese aggiorna già il budget
+  if(chiaveMese() === (n.getMonth()+1) + "-" + n.getFullYear()) return;
   api("riepilogoMese", [n.getMonth()+1, n.getFullYear()], cfg.url && cfg.pin ? cfg : null)
     .then(r => { if(r && r.budget) ricordaBudget(r.budget); })
     .catch(() => {});
@@ -2092,7 +2124,7 @@ function confermaWallet(id){
   salvaCoda();
   if(walletCorrente === id) walletCorrente = null;
   if(w.m === parseInt($("mm").value,10) && w.a === getAnno()) totali.totale = (totali.totale||0) + walletNetto(w);
-  riep = null; stat = null;
+  invalida("sum", "year");
   vibra("invio");
   renderWallet(); paint(); drena();
 }
@@ -2146,7 +2178,7 @@ $("fab").onclick = () => {
   // il totale in testata riguarda solo il mese mostrato
   if(coda[coda.length-1].spesa.m === parseInt($("mm").value,10))
     totali.totale = (totali.totale||0) + v;
-  riep = null; stat = null;
+  invalida("sum", "year");
   vibra("invio");
   fabOk.fino = Date.now() + 1100; fabOk.testo = eur(v);
   setTimeout(paint, 1150);
@@ -2179,6 +2211,9 @@ function drena(){
           walletId:item.spesa.walletId});
         ultime = ultime.slice(0,12);
         coda = coda.filter(c => c.id !== item.id);
+        // spesa scritta: Mese e Anno si rileggono in sottofondo (quando la coda è vuota)
+        invalida("sum", "year");
+        if(!coda.some(c => c.stato==="attesa")) precaricaTutto();
         if(item.spesa.walletId){ wallet = wallet.filter(w => w.id !== item.spesa.walletId); renderWallet(); }
         toast("Riga " + res.riga + " · " + res.secondary + testoLiquidita(res.liquidita));
         vibra("ok");
@@ -2216,8 +2251,8 @@ async function annulla(){
       if(!res.ok){ toast(res.errore, true); return; }
       if(res.totali && e.m === parseInt($("mm").value,10)) totali = res.totali;
       ultime.shift();
-      riep = null; stat = null;
-      clearErr(); paint();
+      invalida("sum", "year");
+      clearErr(); paint(); precaricaTutto();
       // presa da Wallet: il pagamento torna fra quelli da confermare
       if(e.walletId) google.script.run.withSuccessHandler(() => caricaWallet())
         .withFailureHandler(() => {}).riapriWallet(e.walletId);
@@ -2252,6 +2287,7 @@ function refresh(){
         m:m, a:anno, totali:totali, ultime:ultime})); }catch(e){}
       clearErr(); paint();
       aggiornaBudgetInSottofondo();
+      precaricaTutto();
     })
     .withFailureHandler(err => {
       if(err && err.rete && voci.length){
@@ -2318,19 +2354,29 @@ function anello(pct, colore, dentro, sotto){
 }
 
 /* ══════════ MESE ══════════ */
-function caricaRiepilogo(){
-  segmentiMesi();
-  if(riep){ renderRiepilogo(); return; }
-  $("sumbody").innerHTML = `<div class="skeleton" style="height:150px"></div><div class="skeleton" style="height:130px"></div>`;
-  $("sumcat").innerHTML = "";
+const chiaveMese = () => (parseInt($("mm").value,10) || new Date().getMonth()+1) + "-" + getAnno();
+let riepChiave = "";
+function caricaRiepilogo(sottofondo){
+  const vede = () => vista === "sum";
+  if(!sottofondo) segmentiMesi();
+  const k = chiaveMese();
+  if(riep && riepChiave === k){ if(!sottofondo) renderRiepilogo(); return; }
+  if(!sottofondo){
+    $("sumbody").innerHTML = `<div class="skeleton" style="height:150px"></div><div class="skeleton" style="height:130px"></div>`;
+    $("sumcat").innerHTML = "";
+  }
   const m = parseInt($("mm").value,10) || new Date().getMonth()+1;
-  google.script.run
-    .withSuccessHandler(r => {
-      if(!r){ $("sumbody").innerHTML = `<div class="empty">Nessun dato per questo mese.</div>`; return; }
-      riep = r; ricordaBudget(r.budget); renderRiepilogo(); renderBudgetFields();
-    })
-    .withFailureHandler(err => { $("sumbody").innerHTML = `<div class="err"><span>${esc(err.message||err)}</span></div>`; })
-    .riepilogoMese(m, getAnno());
+  const p = prendi("sum", "riepilogoMese", [m, getAnno()], inVolo.sum && inVolo.sum.mese !== k);
+  p.mese = k;
+  p.then(r => {
+    if(!valida("sum", p) || chiaveMese() !== k) return;   // nel frattempo è cambiato qualcosa
+    if(!r){ riep = null; if(vede()) $("sumbody").innerHTML = `<div class="empty">Nessun dato per questo mese.</div>`; return; }
+    riep = r; riepChiave = k; ricordaBudget(r.budget);
+    if(vede()) renderRiepilogo();
+    renderBudgetFields();
+  }, err => {
+    if(valida("sum", p) && vede() && !riep) $("sumbody").innerHTML = `<div class="err"><span>${esc(err.message||err)}</span></div>`;
+  });
 }
 
 /* Proiezione:
@@ -2387,17 +2433,38 @@ function graficoProiezione(r){
     `<span><i style="border-top-color:${d.borderColor};border-top-style:${d.borderDash?"dashed":"solid"}"></i>${d.label}</span>`).join("");
 }
 
-/* Ciambella: tutte le categorie, ognuna col suo colore fisso (lo stesso della legenda). */
+/* Torta delle categorie del mese: ogni fetta ha lo stesso colore della sua riga
+   nell'elenco sotto (che fa da legenda); sulle fette dal 6% in su c'è la percentuale. */
+const percentualiFette = {
+  id:"percentualiFette",
+  afterDatasetsDraw(ch){
+    const ds = ch.data.datasets[0], tot = ds.data.reduce((a,b)=>a+b,0);
+    if(!tot) return;
+    const ctx = ch.ctx; ctx.save();
+    ctx.font = "700 12px " + Chart.defaults.font.family;
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    ch.getDatasetMeta(0).data.forEach((arc, i) => {
+      const q = ds.data[i]/tot; if(q < 0.06 || arc.hidden) return;
+      const pos = arc.tooltipPosition();
+      // testo scuro sulle fette chiare, bianco sulle scure
+      const h = String(ds.backgroundColor[i]).replace("#",""), chiara = h.length >= 6 &&
+        (0.299*parseInt(h.slice(0,2),16) + 0.587*parseInt(h.slice(2,4),16) + 0.114*parseInt(h.slice(4,6),16)) > 160;
+      ctx.fillStyle = chiara ? "#1c1b1f" : "#fff";
+      ctx.fillText(Math.round(q*100) + "%", pos.x, pos.y);
+    });
+    ctx.restore();
+  }
+};
 function graficoCategorie(r){
   if(!chartDefaults() || !r.categorie.length || !$("cvCat")) return;
   const cat = r.categorie;
   const base = cat.reduce((s,c)=>s+c.valore,0);
   if(chCat) chCat.destroy();
-  chCat = new Chart($("cvCat"),{type:"doughnut",
+  chCat = new Chart($("cvCat"),{type:"pie",plugins:[percentualiFette],
     data:{labels:cat.map(c=>c.nome),datasets:[{data:cat.map(c=>c.valore),
       backgroundColor:cat.map(c=>col(c.nome)),
-      borderColor:P.superficie,borderWidth:3,borderRadius:6,hoverOffset:6,spacing:2}]},
-    options:{maintainAspectRatio:false,cutout:"70%",
+      borderColor:getComputedStyle($("sumSheet")).backgroundColor || P.carta,borderWidth:2,hoverOffset:8}]},
+    options:{maintainAspectRatio:false,layout:{padding:8},
       plugins:{legend:{display:false},tooltip:{...tip(),callbacks:{
         label:c=>c.label+" · "+eur0(c.raw)+" ("+(base?Math.round(c.raw/base*100):0)+"%)"}}}}});
 }
@@ -2568,11 +2635,12 @@ function renderRiepilogo(){
         : `<small>senza budget</small>`}</div></div>`;
   }).join("");
   $("sumcat").innerHTML = `<div class="cat-tit"><b>Categorie di ${nomeMese}</b><span>speso · budget</span></div>` +
-    (r.categorie.length ? `<div style="margin-top:4px">${righe}</div>` : `<div class="empty" style="margin-top:10px">Nessuna spesa con categoria in questo mese.</div>`) +
+    (r.categorie.length ? `<div class="torta"><canvas id="cvCat" role="img" aria-label="Torta delle spese di ${nomeMese} per categoria"></canvas></div>
+       <div style="margin-top:4px">${righe}</div>` : `<div class="empty" style="margin-top:10px">Nessuna spesa con categoria in questo mese.</div>`) +
     (r.senzaCategoria ? `<div class="cnota">${eur0(r.senzaCategoria)} sono nel totale ma non qui:
         la voce scelta non ha una categoria nella scheda «Categorie Spese».</div>` : "");
 
-  if(window.Chart){ graficoProiezione(r); graficoGiorni(r); }
+  if(window.Chart){ graficoProiezione(r); graficoGiorni(r); graficoCategorie(r); }
   else $("sumbody").insertAdjacentHTML("beforeend",
     `<div class="err"><span>Non riesco a caricare la libreria dei grafici.</span></div>`);
 }
@@ -2584,7 +2652,7 @@ $("sumbody").addEventListener("click", e => {
 
 /* ══════════ ANNO ══════════ */
 function ricalcola(){
-  stat = null; riep = null;
+  invalida("year", "sum");
   $("yearbody").innerHTML = `<div class="empty">Ricalcolo dal foglio…</div>`;
   google.script.run
     .withSuccessHandler(() => caricaAnni())
@@ -2592,16 +2660,16 @@ function ricalcola(){
     .azzeraCacheStat();
 }
 
-function caricaAnni(){
-  if(stat){ renderAnni(); return; }
-  $("yearbody").innerHTML = `<div class="skeleton"></div><div class="skeleton" style="height:180px"></div>`;
-  google.script.run
-    .withSuccessHandler(s => {
-      if(!s || !s.anni || !s.anni.length){ $("yearbody").innerHTML=`<div class="empty">Nessuna scheda «Spese &lt;anno&gt;» trovata.</div>`; return; }
-      stat = s; renderAnni();
-    })
-    .withFailureHandler(err => { $("yearbody").innerHTML=`<div class="err"><span>${esc(err.message||err)}</span></div>`; })
-    .statisticheAnnuali();
+function caricaAnni(sottofondo){
+  const vede = () => vista === "year";
+  if(stat){ if(!sottofondo) renderAnni(); return; }
+  if(!sottofondo) $("yearbody").innerHTML = `<div class="skeleton"></div><div class="skeleton" style="height:180px"></div>`;
+  const p = prendi("year", "statisticheAnnuali");
+  p.then(s => {
+    if(!valida("year", p)) return;
+    if(!s || !s.anni || !s.anni.length){ if(vede()) $("yearbody").innerHTML=`<div class="empty">Nessuna scheda «Spese &lt;anno&gt;» trovata.</div>`; return; }
+    stat = s; if(vede()) renderAnni();
+  }, err => { if(valida("year", p) && vede()) $("yearbody").innerHTML=`<div class="err"><span>${esc(err.message||err)}</span></div>`; });
 }
 
 /* Anno: segmenti degli anni, quadrante delle categorie, tre anellini,
@@ -2806,19 +2874,23 @@ const dataLunga = s => { const p = s.split("-"); return Number(p[2]) + " " + MES
 const giorniFra = (a, b) => (Date.UTC(+b.slice(0,4), +b.slice(5,7)-1, +b.slice(8,10)) -
                              Date.UTC(+a.slice(0,4), +a.slice(5,7)-1, +a.slice(8,10))) / 86400000;
 
-function caricaPortafoglio(forza){
-  if(port && !forza){ renderPortafoglio(); return; }
+function caricaPortafoglio(forza, sottofondo){
+  const vede = () => vista === "port";
+  if(port && !forza){ if(!sottofondo) renderPortafoglio(); return; }
   // con dati già a schermo gira solo l'icona di aggiornamento
-  if(port && $("pfRef")) $("pfRef").classList.add("gira");
-  else $("portbody").innerHTML = `<div class="skeleton" style="height:140px"></div><div class="skeleton"></div>`;
-  google.script.run
-    .withSuccessHandler(p => { port = p; renderPortafoglio(); })
-    .withFailureHandler(err => {
+  if(!sottofondo){
+    if(port && $("pfRef")) $("pfRef").classList.add("gira");
+    else $("portbody").innerHTML = `<div class="skeleton" style="height:140px"></div><div class="skeleton"></div>`;
+  }
+  const p = prendi("port", "portafoglio", [], forza && !!port);
+  p.then(d => { if(!valida("port", p)) return; port = d; if(vede()) renderPortafoglio(); },
+    err => {
+      if(!valida("port", p)) return;
       if($("pfRef")) $("pfRef").classList.remove("gira");
+      if(!vede()) return;
       if(port) toast(String(err.message||err), true);
       else $("portbody").innerHTML = `<div class="err"><span>${esc(err.message||err)}</span></div>`;
-    })
-    .portafoglio();
+    });
 }
 
 /* ── loghi e simboli ──
@@ -3243,14 +3315,14 @@ const acqQ = n => acqFmt(n, n % 1 ? 4 : 0);
 const acqSym = v => v === "USD" ? "$" : "€";
 const acqTitolo = () => acq && acq.titoli.find(t => t.nome === acqTit);
 
-function caricaAcquisto(forza){
-  if(acq && !forza){ renderAcquisto(); return; }
-  google.script.run
-    .withSuccessHandler(s => { acq = s; renderAcquisto(); })
-    .withFailureHandler(err => {
+function caricaAcquisto(forza, sottofondo){
+  if(acq && !forza){ if(!sottofondo) renderAcquisto(); return; }
+  const p = prendi("buy", "acqStato", [], forza);
+  p.then(d => { if(!valida("buy", p)) return; acq = d; if(vista === "buy") renderAcquisto(); },
+    err => {
+      if(!valida("buy", p) || vista !== "buy") return;
       $("acqTit").innerHTML = `<div class="err" style="width:100%;margin:0"><span>${esc(err.message||err)}</span></div>`;
-    })
-    .acqStato();
+    });
 }
 
 function renderAcquisto(){
@@ -3349,8 +3421,8 @@ $("acqGo").onclick = () => {
       toast(r.titolo + ": " + acqQ(r.quoteDopo) + " q a " + acqFmt(r.pzDopo, 2) + " " + acqSym(r.valuta) +
             (r.conto ? " · −" + eur(r.controvaloreEur) + " da " + r.conto : ""));
       $("acqQ").value = ""; $("acqP").value = ""; $("acqC").value = "";
-      port = null;                                // il portafoglio va riletto
-      caricaAcquisto(true);
+      invalida("port");                           // il portafoglio va riletto
+      caricaAcquisto(true); caricaPortafoglio(false, true);
     })
     .withFailureHandler(err => {
       fine();
@@ -3370,8 +3442,8 @@ async function acqAnnulla(){
     .withSuccessHandler(r => {
       if(!r.ok){ toast(r.errore, true); return; }
       toast("Acquisto annullato: " + r.titolo);
-      port = null;
-      caricaAcquisto(true);
+      invalida("port");
+      caricaAcquisto(true); caricaPortafoglio(false, true);
     })
     .withFailureHandler(err => toast(String(err.message||err), true))
     .annullaUltimoAcquisto();
@@ -3403,7 +3475,7 @@ $("bsave").onclick = () => {
     .withSuccessHandler(res => {
       $("bsave").disabled = false;
       if(!res.ok){ toast(res.errore, true); return; }
-      $("bpanel").style.display="none"; riep=null; caricaRiepilogo(); toast("Budget salvato");
+      $("bpanel").style.display="none"; invalida("sum"); caricaRiepilogo(); toast("Budget salvato");
     })
     .withFailureHandler(err => { $("bsave").disabled=false; toast(String(err.message||err), true); })
     .salvaBudget(v);
@@ -3435,14 +3507,15 @@ if(window.matchMedia){
 document.addEventListener("visibilitychange", () => {
   if(document.visibilityState!=="visible") return;
   // il portafoglio cambia ogni giorno: al rientro nell'app lo rilegge
-  if(vista==="port") caricaPortafoglio(true); else port = null;
-  if(vista==="buy") caricaAcquisto(true); else acq = null;
+  // in sottofondo anche se sei su un'altra scheda: i dati vecchi restano finché arrivano i nuovi
+  caricaPortafoglio(true, vista!=="port");
+  caricaAcquisto(true, vista!=="buy");
   caricaWallet();   // i pagamenti arrivati mentre l'app era chiusa
   const n = new Date();
   if(parseInt($("mm").value,10) !== n.getMonth()+1){
     $("mm").value = n.getMonth()+1; $("dd").value = n.getDate(); $("yy").value = n.getFullYear();
     ruotaMesi(); ruotaGiorni();
-    riep=null; stat=null; refresh();
+    invalida("sum", "year"); refresh();
   }
   drena();
 });
@@ -3469,7 +3542,7 @@ try{
 sicuro(ruotaMesi);
 sicuro(ruotaGiorni);
 sicuro(paint);
-if(cfg.url && cfg.pin){ sicuro(refresh); sicuro(drena); }
+if(cfg.url && cfg.pin){ sicuro(refresh); sicuro(drena); precaricaTutto(); }
 else apriImpostazioni();
 
 /* Scorciatoie sull'icona (tenendola premuta): aprono direttamente una scheda. */
