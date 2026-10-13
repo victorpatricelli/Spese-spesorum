@@ -2246,7 +2246,10 @@ function refresh(){
       if(st.conti && st.conti.length){ conti = st.conti; renderConti(); }
       if(Array.isArray(st.wallet)){ wallet = st.wallet; renderWallet(); }
       // voci e conti ricordati: servono per registrare spese anche offline
-      try{ localStorage.setItem(CHIAVE_STATO, JSON.stringify({voci:voci, conti:st.conti||[]})); }catch(e){}
+      // e totali/ultime spese del mese: alla prossima apertura si vedono subito,
+      // mentre il foglio risponde in sottofondo
+      try{ localStorage.setItem(CHIAVE_STATO, JSON.stringify({voci:voci, conti:st.conti||[],
+        m:m, a:anno, totali:totali, ultime:ultime})); }catch(e){}
       clearErr(); paint();
       aggiornaBudgetInSottofondo();
     })
@@ -3452,7 +3455,16 @@ caricaCoda();
 // voci e conti dell'ultima volta, così l'app è usabile subito (anche offline)
 try{
   const st = JSON.parse(localStorage.getItem(CHIAVE_STATO) || "null");
-  if(st){ voci = st.voci || []; if(st.conti && st.conti.length){ conti = st.conti; renderConti(); } }
+  if(st){
+    voci = st.voci || []; if(st.conti && st.conti.length){ conti = st.conti; renderConti(); }
+    // totali e ultime spese salvati, se sono dello stesso mese: si vedono subito e
+    // vengono sostituiti appena risponde il foglio. Finché non arriva la risposta
+    // fresca l'annullamento resta spento (il numero di riga potrebbe essere cambiato).
+    if(st.totali && st.m === now.getMonth()+1 && st.a === now.getFullYear()){
+      totali = st.totali;
+      ultime = (st.ultime || []).map(e => Object.assign({}, e, {annullabile:false}));
+    }
+  }
 }catch(e){}
 sicuro(ruotaMesi);
 sicuro(ruotaGiorni);
