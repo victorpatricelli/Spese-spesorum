@@ -852,6 +852,39 @@ button.pillola{cursor:pointer}
 .tbl tr.sel td{color:var(--primary);font-weight:700}
 .quadrante .anelli{margin-top:2px}
 
+/* ── Portafoglio · Oggi ── */
+.pf-av.sm{width:36px;height:36px;border-radius:12px}
+.pf-av.sm img{width:22px;height:22px}
+.pf-av.sm.mono{font-size:13px}
+.pf-av.sm.etf .ms{font-size:20px}
+.pf-brd{display:flex;gap:3px;height:10px}
+.pf-brd i{display:block;height:100%;border-radius:5px;animation:cresci .9s var(--ease-emph) both;transform-origin:left}
+.pf-brdlab{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-size:12px;color:var(--on-surface-v)}
+.pf-brdlab span{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.pf-brdlab b{color:var(--on-surface);font-weight:700}
+.pf-brdlab .ms{font-size:16px}
+.pf-mvtop{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0 6px}
+.pf-mvtop .pf-stat{display:flex;gap:10px;align-items:center;min-width:0;border-left:4px solid var(--c)}
+.pf-mvtop .pf-stat > div{min-width:0}
+.pf-mvtop .v{font-size:17px}
+.pf-mvtop .d{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pf-mv{display:flex;align-items:center;gap:12px;padding:11px 0}
+.pf-mv + .pf-mv{border-top:1px solid var(--outline-v)}
+.pf-mvc{flex:1;min-width:0}
+.pf-mvh{display:flex;align-items:baseline;gap:8px}
+.pf-mvh .nm{flex:1;min-width:0;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pf-mvh .vv{font-size:14px;font-weight:800;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pf-mvt{position:relative;height:8px;border-radius:4px;background:var(--s-highest);margin:7px 0 5px}
+.pf-mvt .z{position:absolute;left:50%;top:-3px;bottom:-3px;width:2px;margin-left:-1px;border-radius:1px;background:var(--on-surface-v);opacity:.55}
+.pf-mvt .b{position:absolute;top:0;bottom:0;border-radius:4px;animation:cresci .8s var(--ease-emph) both}
+.pf-mvt .b.up{left:50%;background:var(--good);transform-origin:left}
+.pf-mvt .b.down{right:50%;background:var(--error);transform-origin:right}
+.pf-mvf{font-size:11px;color:var(--on-surface-v);display:flex;justify-content:space-between;gap:8px;font-variant-numeric:tabular-nums}
+.up-t{color:var(--good)}
+.down-t{color:var(--error)}
+.pf-mvnote{font-size:12px;color:var(--on-surface-v);background:var(--s-lowest);border-radius:14px;padding:10px 12px;margin-top:12px;display:flex;gap:8px;align-items:center}
+.pf-mvnote .ms{font-size:18px}
+
 /* ── Portafoglio e Acquisto: stessa famiglia ── */
 .pf-hero{background:var(--ink);color:var(--ink-text);box-shadow:var(--e3)}
 .pf-hero::before{background:var(--inverse-primary);opacity:.045}
@@ -2919,7 +2952,7 @@ function coloreDa(testo){
 }
 function logoKo(img){
   const box = img.parentNode; if(!box) return;
-  box.className = "pf-av mono"; box.style.background = img.dataset.c; box.textContent = img.dataset.i;
+  box.className = "pf-av mono" + (box.classList.contains("sm") ? " sm" : ""); box.style.background = img.dataset.c; box.textContent = img.dataset.i;
 }
 function stelleUE(){
   let d = "";
@@ -3183,6 +3216,56 @@ function graficoAllocazione(){
         label:c=>c.label+" · "+eur0(c.raw)+" ("+pc1(c.raw/tot)+")"}}}}});
 }
 
+/* ── oggi: variazione giornaliera di ciascun titolo ──
+   varEur dal foglio; la % è sul valore di ieri (valore − varEur). */
+let modoOggi = "%";
+const pcs2 = n => (n>0.00005?"+":n<-0.00005?"−":"") + Math.abs(n*100).toFixed(2).replace(".",",") + "%";
+const segno2 = n => (n>0.005?"+":n<-0.005?"−":"") + eur(Math.abs(n));
+function datiOggi(pos){
+  return pos.lista.filter(p => p.varEur != null && isFinite(p.varEur)).map(p => {
+    const base = p.valore - p.varEur;
+    return Object.assign({}, p, {pct: base > 0 ? p.varEur/base : 0});
+  });
+}
+function avatarSm(p){ return avatar(p).replace('class="pf-av', 'class="pf-av sm'); }
+
+function bloccoOggi(pos){
+  const d = datiOggi(pos);
+  const k = modoOggi === "%" ? "pct" : "varEur";
+  const fP = modoOggi === "%" ? pcs2 : segno2, fS = modoOggi === "%" ? segno2 : pcs2;
+  const kS = modoOggi === "%" ? "varEur" : "pct";
+  d.sort((a,b) => b[k] - a[k]);
+  const eps = k === "pct" ? 0.00005 : 0.005;
+  const su = d.filter(x => x[k] > eps).length, giu = d.filter(x => x[k] < -eps).length, pari = d.length - su - giu;
+  const max = Math.max(...d.map(x => Math.abs(x[k]))) || 0;
+  const cls = v => v > eps ? "up" : v < -eps ? "down" : "";
+
+  const brd = `<div class="pf-brd">
+      ${su ? `<i style="flex:${su} 1 0;background:var(--good)"></i>` : ``}
+      ${pari ? `<i style="flex:${pari} 1 0;background:var(--s-highest);animation-delay:80ms"></i>` : ``}
+      ${giu ? `<i style="flex:${giu} 1 0;background:var(--error);animation-delay:160ms"></i>` : ``}</div>
+    <div class="pf-brdlab">
+      <span><span class="ms f up-t">arrow_upward</span><b>${su}</b> in rialzo</span>
+      ${pari ? `<span><b>${pari}</b> invariati</span>` : ``}
+      <span><span class="ms f down-t">arrow_downward</span><b>${giu}</b> in ribasso</span></div>`;
+
+  if(!max) return brd + `<div class="pf-mvnote"><span class="ms">bedtime</span>Nessuna variazione oggi: mercati chiusi o prezzi non ancora aggiornati.</div>`;
+
+  const best = d[0], worst = d[d.length-1];
+  const tile = (x, lab, col) => `<div class="pf-stat" style="--c:${col}">${avatarSm(x)}<div>
+      <div class="k">${lab}</div><div class="v ${cls(x[k]) ? cls(x[k])+"-t" : ""}">${fP(x[k])}</div><div class="d">${esc(x.nome)}</div></div></div>`;
+  const top = d.length > 1 ? `<div class="pf-mvtop">${tile(best, "Migliore", "var(--good)")}${tile(worst, "Peggiore", "var(--error)")}</div>` : ``;
+
+  const righe = d.map((x, i) => {
+    const c = cls(x[k]), w = Math.abs(x[k]) / max * 50;
+    return `<div class="pf-mv">${avatarSm(x)}<div class="pf-mvc">
+        <div class="pf-mvh"><span class="nm">${esc(x.nome)}</span><span class="vv ${c ? c+"-t" : ""}">${fP(x[k])}</span></div>
+        <div class="pf-mvt"><i class="z"></i>${c ? `<i class="b ${c}" style="width:${w.toFixed(2)}%;animation-delay:${i*45}ms"></i>` : ``}</div>
+        <div class="pf-mvf"><span>${fS(x[kS])}</span><span>${eur0(x.valore)}</span></div></div></div>`;
+  }).join("");
+  return brd + top + righe;
+}
+
 /* ── posizioni ── */
 function bloccoPosizioni(pos){
   const lista = pos.lista.filter(p => filtroPos==="Tutti" || (filtroPos==="ETF" ? /etf/i.test(p.tipo) : !/etf/i.test(p.tipo)));
@@ -3248,6 +3331,14 @@ function renderPortafoglio(){
         `<button class="${x[0]===periodo?"on":""}" data-p="${x[0]}">${x[0]}</button>`).join("")}</div>
       <div class="pf-stats" id="storStats"></div></div></div>` : ``;
 
+  // ── oggi
+  const oggiOk = pos && pos.lista.some(x => x.varEur != null);
+  const oggi = oggiOk ? `<div class="sec"><div class="pf-card">
+      <div class="pf-ch"><span class="pf-tt"><span class="ic"><span class="ms">bolt</span></span>Oggi</span>
+        <div class="pf-seg" id="oggiModo" style="width:104px">${["%","€"].map(m =>
+          `<button class="${m===modoOggi?"on":""}" data-m="${m}">${m}</button>`).join("")}</div></div>
+      <div id="oggiBox">${bloccoOggi(pos)}</div></div></div>` : ``;
+
   // ── allocazione e calcolatore
   const allocazione = a ? `<div class="sec"><div class="pf-card">
       <div class="pf-ch"><span class="pf-tt"><span class="ic"><span class="ms">donut_large</span></span>Allocazione</span></div>
@@ -3268,7 +3359,14 @@ function renderPortafoglio(){
         `<button class="${f===filtroPos?"on":""}" data-f="${f}">${f}</button>`).join("")}</div>
       <div id="posBox">${bloccoPosizioni(pos)}</div></div>` : ``;
 
-  $("portbody").innerHTML = errori + hero + grafico + allocazione + posizioni;
+  $("portbody").innerHTML = errori + hero + oggi + grafico + allocazione + posizioni;
+
+  if($("oggiModo")) $("oggiModo").onclick = e => {
+    const b = e.target.closest("[data-m]"); if(!b || b.dataset.m===modoOggi) return;
+    modoOggi = b.dataset.m;
+    [...$("oggiModo").children].forEach(c => c.classList.toggle("on", c.dataset.m===modoOggi));
+    $("oggiBox").innerHTML = bloccoOggi(pos);
+  };
 
   if($("periodi")) $("periodi").onclick = e => {
     const b = e.target.closest("[data-p]"); if(!b) return;
