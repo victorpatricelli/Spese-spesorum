@@ -44,7 +44,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Bricolage Grotesque per titoli e cifre, Instrument Sans per il resto, icone Material Symbols -->
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Caveat:wght@500..700&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════════
@@ -643,9 +643,281 @@ body.con-cta .toast{bottom:calc(160px + env(safe-area-inset-bottom))}
 .temi input:checked + span{background:var(--sheet);color:var(--ink);box-shadow:0 1px 3px rgba(60,50,30,.16)}
 .temi input:focus-visible + span{outline:2px solid var(--ink)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ═══════════════════════════════════════════════════════════════
+   CARTA RUVIDA E MATITA
+   Sopra il tema: grana a rilievo su tutta la pagina, bordi e righe
+   tracciati a matita (leggermente storti e spezzati), evidenziatore
+   con i bordi sbavati, grafici e barre ripassati a mano.
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --matita:rgba(70,64,56,.62);      /* grafite */
+  --matita-2:rgba(70,64,56,.34);
+  --linea:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27600%27 height=%274%27 viewBox=%270 0 600 4%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%270%27 y=%27-50%25%27 width=%27100%25%27 height=%27200%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.35 .9%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M0 2.1 Q150 1.3 300 2.3 T600 1.7%27 stroke=%27%234a453e%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
+  --linea-v:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%274%27 height=%27400%27 viewBox=%270 0 4 400%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%27-50%25%27 y=%270%27 width=%27200%25%27 height=%27100%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9 .35%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M2 0 Q1.4 100 2.2 200 T1.8 400%27 stroke=%27%234a453e%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
+  --linea-inch:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27600%27 height=%274%27 viewBox=%270 0 600 4%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%270%27 y=%27-50%25%27 width=%27100%25%27 height=%27200%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.35 .9%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M0 2.1 Q150 1.3 300 2.3 T600 1.7%27 stroke=%27%23bdb6a8%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
+  --dente:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27220%27 height=%27220%27%3E %3Cfilter id=%27f%27 x=%270%27 y=%270%27 width=%27100%25%27 height=%27100%25%27%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.62%27 numOctaves=%274%27 seed=%274%27 stitchTiles=%27stitch%27/%3E %3CfeDiffuseLighting lighting-color=%27%23ffffff%27 surfaceScale=%272.2%27 diffuseConstant=%271.05%27%3E%3CfeDistantLight azimuth=%27225%27 elevation=%2758%27/%3E%3C/feDiffuseLighting%3E %3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url%28%23f%29%27/%3E%3C/svg%3E");--macchie:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27640%27 height=%27640%27%3E %3Cfilter id=%27f%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.006%27 numOctaves=%273%27 seed=%2711%27 stitchTiles=%27stitch%27/%3E %3CfeColorMatrix values=%270 0 0 0 .55 0 0 0 0 .47 0 0 0 0 .36 0 0 0 1.4 -.55%27/%3E%3C/filter%3E %3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url%28%23f%29%27/%3E%3C/svg%3E");--fibre:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27300%27 height=%27300%27%3E %3Cfilter id=%27f%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.012 .9%27 numOctaves=%272%27 seed=%272%27 stitchTiles=%27stitch%27/%3E %3CfeColorMatrix values=%270 0 0 0 .35 0 0 0 0 .32 0 0 0 0 .28 0 0 0 -9 5.6%27/%3E%3C/filter%3E %3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url%28%23f%29%27/%3E%3C/svg%3E");
+  --tex-blend:multiply;--tex-op:.42;--mac-op:.55;
+  --f-mano:"Caveat","Bricolage Grotesque",cursive;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --matita:rgba(225,218,205,.5);--matita-2:rgba(225,218,205,.26);
+    --linea:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27600%27 height=%274%27 viewBox=%270 0 600 4%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%270%27 y=%27-50%25%27 width=%27100%25%27 height=%27200%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.35 .9%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M0 2.1 Q150 1.3 300 2.3 T600 1.7%27 stroke=%27%23cfc7b8%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");--linea-v:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%274%27 height=%27400%27 viewBox=%270 0 4 400%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%27-50%25%27 y=%270%27 width=%27200%25%27 height=%27100%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9 .35%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M2 0 Q1.4 100 2.2 200 T1.8 400%27 stroke=%27%23cfc7b8%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
+    --tex-blend:overlay;--tex-op:.32;--mac-op:.28;
+  }
+}
+:root[data-theme="dark"]{
+  --matita:rgba(225,218,205,.5);--matita-2:rgba(225,218,205,.26);
+  --linea:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27600%27 height=%274%27 viewBox=%270 0 600 4%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%270%27 y=%27-50%25%27 width=%27100%25%27 height=%27200%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.35 .9%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M0 2.1 Q150 1.3 300 2.3 T600 1.7%27 stroke=%27%23cfc7b8%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");--linea-v:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%274%27 height=%27400%27 viewBox=%270 0 4 400%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%27-50%25%27 y=%270%27 width=%27200%25%27 height=%27100%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9 .35%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M2 0 Q1.4 100 2.2 200 T1.8 400%27 stroke=%27%23cfc7b8%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
+  --tex-blend:overlay;--tex-op:.32;--mac-op:.28;
+}
+
+/* la carta: macchie di tono sotto, rilievo e fibre sopra a tutto (anche alle carte) */
+body::before{opacity:var(--mac-op);background-image:var(--macchie);background-size:640px 640px;z-index:0}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:45;
+  background-image:var(--fibre),var(--dente);background-size:300px 300px,220px 220px;
+  mix-blend-mode:var(--tex-blend);opacity:var(--tex-op)}
+.toast,.avviso,.scrim{z-index:300}
+
+/* scritte a mano per i titoli; le cifre restano nel carattere da stampa */
+.t-tit{font-family:var(--f-mano);font-size:40px;line-height:40px;font-weight:700;letter-spacing:-.01em;font-variation-settings:normal}
+.sez-t b,.passo-n b{font-family:var(--f-mano);font-size:27px;line-height:28px;font-weight:700;letter-spacing:0;font-variation-settings:normal}
+.carta-t b,.wal-t b{font-family:var(--f-mano);font-size:23px;line-height:24px;font-weight:700;letter-spacing:0}
+.dialog h3{font-family:var(--f-mano);font-size:32px;line-height:34px;letter-spacing:0;font-variation-settings:normal}
+.passo-n i{font-family:var(--f-mano);font-size:17px;font-weight:700}
+
+/* bordi a matita: il contorno vero sparisce, lo ridisegna un velo storto */
+.carta,.lista,.libro,.det,.importo,.tile,.key,.chip,.ico-btn,.pm,.btn,.campo,.acq-tit .chip{border-color:transparent!important;box-shadow:none}
+.carta,.lista,.libro,.det,.importo,.campo{position:relative}
+.carta::before,.lista::before,.libro::before,.det::before,.importo::before,.campo::before,
+.tile::before,.key::before,.chip::before,.ico-btn::before,.pm::before,.btn:not(.testo):not(.pieno)::before{
+  content:"";position:absolute;inset:1px;border:1.35px solid var(--matita);border-radius:inherit;
+  filter:url(#matita);pointer-events:none;z-index:3}
+.campo::before{border-radius:16px}
+.campo input{border-color:transparent}
+.key.op::before,.key.fn::before{border-color:var(--matita-2)}
+.seg .chip::before{display:none}
+.tile.cerca::before{border-style:dashed}
+.vuoto{border:none;position:relative}
+.vuoto::before{content:"";position:absolute;inset:1px;border:1.4px dashed var(--matita);border-radius:inherit;filter:url(#matita);pointer-events:none}
+.lista,.libro{overflow:visible}
+.lista > :first-child{border-top-left-radius:var(--r);border-top-right-radius:var(--r)}
+.lista > :last-child{border-bottom-left-radius:var(--r);border-bottom-right-radius:var(--r)}
+
+/* righe di separazione: un tratto di matita invece della riga stampata */
+.riga + .riga,.riga + .giorno,.crow + .crow,.det-r ~ .det-r,.det-r + .picker,.pf-grp,.pf-crow + .pf-crow,
+.pf-mv + .pf-mv,.riga + .pf-lgrp,.bedit + .bedit,.tbl td,.pf-stats,.libro > div{
+  border-top:none;background-image:var(--linea);background-repeat:no-repeat;background-size:100% 3px;background-position:0 0}
+.riga + .riga,.riga + .giorno,.riga + .pf-lgrp{background-size:calc(100% - 28px) 3px;background-position:14px 0}
+.libro > div:nth-child(-n+2){background-image:none}
+.libro > div:nth-child(2n){border-left:none;background-image:var(--linea),var(--linea-v);background-size:100% 3px,3px 100%;background-position:0 0,0 0}
+.libro > div:nth-child(2):nth-child(2n){background-image:var(--linea-v);background-size:3px 100%}
+.libro > div.largo{background-image:var(--linea);background-size:100% 3px}
+.pf-stats > div + div{border-left:none;background-image:var(--linea-v);background-repeat:no-repeat;background-size:3px 100%;background-position:0 0}
+.acq-row + .acq-row,.inch-nota{border-top:none;background-image:var(--linea-inch);background-repeat:no-repeat;background-size:100% 3px;background-position:0 0}
+.testa.su{box-shadow:none;background-image:linear-gradient(color-mix(in srgb,var(--paper) 90%,transparent),color-mix(in srgb,var(--paper) 90%,transparent)),var(--linea);
+  background-repeat:no-repeat;background-size:100% 100%,100% 3px;background-position:0 0,0 100%}
+.barre{border-bottom:none;background-image:var(--linea);background-repeat:no-repeat;background-size:100% 3px;background-position:0 100%}
+.barre .tetto{border-top:1.5px dashed var(--matita);filter:url(#matita)}
+
+/* evidenziatore: colore pieno ma con i bordi sbavati */
+.nav-ind,.band,.inch-bar .passo,.lg-passo{filter:url(#pennarello)}
+.tile.on,.acq-tit .chip.on,.seg.hl-on button.on,.tondo.ok,.amt .espr,.barre .tip,.tbl tr.sel td:first-child span,.temi input:checked + span{
+  background:transparent!important;isolation:isolate}
+.tile.on,.acq-tit .chip.on,.seg.hl-on button.on,.tondo.ok,.amt .espr,.tbl tr.sel td:first-child span{position:relative}
+.tile.on::before,.acq-tit .chip.on::before,.seg.hl-on button.on::before,.tondo.ok::before,.amt .espr::before,.barre .tip::before,.tbl tr.sel td:first-child span::before{
+  content:"";position:absolute;inset:0 -1px;background:var(--hl);border:none;border-radius:inherit;filter:url(#pennarello);z-index:-1}
+.tile.on::before{border-radius:14px}
+.temi input:checked + span{background:transparent!important;box-shadow:inset 0 -6px 0 -2px var(--hl)}
+
+/* barre, strisce e grafici ripassati a mano */
+.inch-bar > i,.trk i,.pf-fill,.pf-mvt .b,.strip i,.pf-comp i,.pf-brd i,.pf-split i{filter:url(#matita)}
+.barre i{background:repeating-linear-gradient(-45deg,var(--matita) 0 1.2px,transparent 1.2px 4.5px);box-shadow:inset 0 0 0 1.3px var(--matita);filter:url(#matita)}
+.barre i.sel{background:var(--ink);box-shadow:none}
+.barre i.corso{background:repeating-linear-gradient(-45deg,var(--matita-2) 0 1px,transparent 1px 6px);box-shadow:inset 0 0 0 1.3px var(--matita);border:none}
+.barre i.corso.sel{background:repeating-linear-gradient(-45deg,var(--ink) 0 2px,transparent 2px 5px);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.barre i.zero{background:var(--matita-2);box-shadow:none}
+.cbox canvas,.pf-dbox canvas{filter:url(#matita-fine)}
+.qd,.pf-av.mono,.pf-av.etf{filter:url(#matita-fine)}
+.pf-dot,.leg i{filter:url(#pennarello)}
+
+/* la carta d'inchiostro: bordi irregolari e un velo di grafite */
+.inch::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background-image:var(--dente);background-size:220px;
+  mix-blend-mode:overlay;opacity:.45;border-radius:inherit}
+.inch::after{content:"";position:absolute;inset:-2px;border:4px solid var(--paper);border-radius:inherit;filter:url(#strappo);pointer-events:none;z-index:4}
+.inch{box-shadow:0 10px 26px -12px rgba(27,26,23,.45)}
+.nav .in{box-shadow:0 10px 30px -10px rgba(27,26,23,.5)}
+.cta{box-shadow:0 10px 24px -12px rgba(27,26,23,.5)}
+
+/* ═══════════════════════════════════════════════════════════════
+   CARTA RUVIDA E MATITA
+   Sopra il tema: grana a rilievo su tutta la pagina, bordi e righe
+   tracciati a matita (leggermente storti e spezzati), evidenziatore
+   con i bordi sbavati, grafici e barre ripassati a mano.
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+  --matita:rgba(70,64,56,.62);      /* grafite */
+  --matita-2:rgba(70,64,56,.34);
+  --linea:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27600%27 height=%274%27 viewBox=%270 0 600 4%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%270%27 y=%27-50%25%27 width=%27100%25%27 height=%27200%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.35 .9%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M0 2.1 Q150 1.3 300 2.3 T600 1.7%27 stroke=%27%234a453e%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
+  --linea-v:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%274%27 height=%27400%27 viewBox=%270 0 4 400%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%27-50%25%27 y=%270%27 width=%27200%25%27 height=%27100%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9 .35%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M2 0 Q1.4 100 2.2 200 T1.8 400%27 stroke=%27%234a453e%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
+  --linea-inch:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27600%27 height=%274%27 viewBox=%270 0 600 4%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%270%27 y=%27-50%25%27 width=%27100%25%27 height=%27200%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.35 .9%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M0 2.1 Q150 1.3 300 2.3 T600 1.7%27 stroke=%27%23bdb6a8%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
+  --dente:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27220%27 height=%27220%27%3E %3Cfilter id=%27f%27 x=%270%27 y=%270%27 width=%27100%25%27 height=%27100%25%27%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.62%27 numOctaves=%274%27 seed=%274%27 stitchTiles=%27stitch%27/%3E %3CfeDiffuseLighting lighting-color=%27%23ffffff%27 surfaceScale=%272.2%27 diffuseConstant=%271.05%27%3E%3CfeDistantLight azimuth=%27225%27 elevation=%2758%27/%3E%3C/feDiffuseLighting%3E %3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url%28%23f%29%27/%3E%3C/svg%3E");--macchie:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27640%27 height=%27640%27%3E %3Cfilter id=%27f%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.006%27 numOctaves=%273%27 seed=%2711%27 stitchTiles=%27stitch%27/%3E %3CfeColorMatrix values=%270 0 0 0 .55 0 0 0 0 .47 0 0 0 0 .36 0 0 0 1.4 -.55%27/%3E%3C/filter%3E %3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url%28%23f%29%27/%3E%3C/svg%3E");--fibre:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27300%27 height=%27300%27%3E %3Cfilter id=%27f%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.04 .55%27 numOctaves=%272%27 seed=%272%27 stitchTiles=%27stitch%27/%3E %3CfeColorMatrix values=%270 0 0 0 .35 0 0 0 0 .32 0 0 0 0 .28 -14 0 0 0 5.2%27/%3E%3C/filter%3E %3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url%28%23f%29%27/%3E%3C/svg%3E");
+  --tex-blend:multiply;--tex-op:.34;--mac-op:.55;
+  --f-mano:"Caveat","Bricolage Grotesque",cursive;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --matita:rgba(225,218,205,.5);--matita-2:rgba(225,218,205,.26);
+    --linea:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27600%27 height=%274%27 viewBox=%270 0 600 4%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%270%27 y=%27-50%25%27 width=%27100%25%27 height=%27200%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.35 .9%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M0 2.1 Q150 1.3 300 2.3 T600 1.7%27 stroke=%27%23cfc7b8%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");--linea-v:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%274%27 height=%27400%27 viewBox=%270 0 4 400%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%27-50%25%27 y=%270%27 width=%27200%25%27 height=%27100%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9 .35%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M2 0 Q1.4 100 2.2 200 T1.8 400%27 stroke=%27%23cfc7b8%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
+    --tex-blend:overlay;--tex-op:.32;--mac-op:.28;
+  }
+}
+:root[data-theme="dark"]{
+  --matita:rgba(225,218,205,.5);--matita-2:rgba(225,218,205,.26);
+  --linea:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27600%27 height=%274%27 viewBox=%270 0 600 4%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%270%27 y=%27-50%25%27 width=%27100%25%27 height=%27200%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.35 .9%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M0 2.1 Q150 1.3 300 2.3 T600 1.7%27 stroke=%27%23cfc7b8%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");--linea-v:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%274%27 height=%27400%27 viewBox=%270 0 4 400%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%27-50%25%27 y=%270%27 width=%27200%25%27 height=%27100%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9 .35%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M2 0 Q1.4 100 2.2 200 T1.8 400%27 stroke=%27%23cfc7b8%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
+  --tex-blend:overlay;--tex-op:.32;--mac-op:.28;
+}
+
+/* la carta: macchie di tono sotto, rilievo e fibre sopra a tutto (anche alle carte) */
+body::before{opacity:var(--mac-op);background-image:var(--macchie);background-size:640px 640px;z-index:0}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:45;
+  background-image:var(--fibre),var(--dente);background-size:300px 300px,220px 220px;
+  mix-blend-mode:var(--tex-blend);opacity:var(--tex-op)}
+.toast,.avviso,.scrim{z-index:300}
+
+/* scritte a mano per i titoli; le cifre restano nel carattere da stampa */
+.t-tit{font-family:var(--f-mano);font-size:40px;line-height:40px;font-weight:700;letter-spacing:-.01em;font-variation-settings:normal}
+.sez-t b,.passo-n b{font-family:var(--f-mano);font-size:27px;line-height:28px;font-weight:700;letter-spacing:0;font-variation-settings:normal}
+.carta-t b,.wal-t b{font-family:var(--f-mano);font-size:23px;line-height:24px;font-weight:700;letter-spacing:0}
+.dialog h3{font-family:var(--f-mano);font-size:32px;line-height:34px;letter-spacing:0;font-variation-settings:normal}
+.passo-n i{font-family:var(--f-mano);font-size:17px;font-weight:700}
+
+/* bordi a matita: il contorno vero sparisce, lo ridisegna un velo storto */
+.carta,.lista,.libro,.det,.importo,.tile,.key,.chip,.ico-btn,.pm,.btn,.campo,.acq-tit .chip{border-color:transparent!important;box-shadow:none}
+.carta,.lista,.libro,.det,.importo,.campo{position:relative}
+.carta::before,.lista::before,.libro::before,.det::before,.importo::before,.campo::before,
+.tile::before,.key::before,.chip::before,.ico-btn::before,.pm::before,.btn:not(.testo):not(.pieno)::before{
+  content:"";position:absolute;inset:1px;border:1.35px solid var(--matita);border-radius:inherit;
+  filter:url(#matita);pointer-events:none;z-index:3}
+.campo::before{border-radius:16px}
+.campo input{border-color:transparent}
+.key.op::before,.key.fn::before{border-color:var(--matita-2)}
+.seg .chip::before{display:none}
+.tile.cerca::before{border-style:dashed}
+.vuoto{border:none;position:relative}
+.vuoto::before{content:"";position:absolute;inset:1px;border:1.4px dashed var(--matita);border-radius:inherit;filter:url(#matita);pointer-events:none}
+.lista,.libro{overflow:visible}
+.lista > :first-child{border-top-left-radius:var(--r);border-top-right-radius:var(--r)}
+.lista > :last-child{border-bottom-left-radius:var(--r);border-bottom-right-radius:var(--r)}
+
+/* righe di separazione: un tratto di matita invece della riga stampata */
+.riga + .riga,.riga + .giorno,.crow + .crow,.det-r ~ .det-r,.det-r + .picker,.pf-grp,.pf-crow + .pf-crow,
+.pf-mv + .pf-mv,.riga + .pf-lgrp,.bedit + .bedit,.tbl td,.pf-stats,.libro > div{
+  border-top:none;background-image:var(--linea);background-repeat:no-repeat;background-size:100% 3px;background-position:0 0}
+.riga + .riga,.riga + .giorno,.riga + .pf-lgrp{background-size:calc(100% - 28px) 3px;background-position:14px 0}
+.libro > div:nth-child(-n+2){background-image:none}
+.libro > div:nth-child(2n){border-left:none;background-image:var(--linea),var(--linea-v);background-size:100% 3px,3px 100%;background-position:0 0,0 0}
+.libro > div:nth-child(2):nth-child(2n){background-image:var(--linea-v);background-size:3px 100%}
+.libro > div.largo{background-image:var(--linea);background-size:100% 3px}
+.pf-stats > div + div{border-left:none;background-image:var(--linea-v);background-repeat:no-repeat;background-size:3px 100%;background-position:0 0}
+.acq-row + .acq-row,.inch-nota{border-top:none;background-image:var(--linea-inch);background-repeat:no-repeat;background-size:100% 3px;background-position:0 0}
+.testa.su{box-shadow:none;background-image:linear-gradient(color-mix(in srgb,var(--paper) 90%,transparent),color-mix(in srgb,var(--paper) 90%,transparent)),var(--linea);
+  background-repeat:no-repeat;background-size:100% 100%,100% 3px;background-position:0 0,0 100%}
+.barre{border-bottom:none;background-image:var(--linea);background-repeat:no-repeat;background-size:100% 3px;background-position:0 100%}
+.barre .tetto{border-top:1.5px dashed var(--matita);filter:url(#matita)}
+
+/* evidenziatore: colore pieno ma con i bordi sbavati */
+.nav-ind,.band,.inch-bar .passo,.lg-passo{filter:url(#pennarello)}
+.tile.on,.acq-tit .chip.on,.seg.hl-on button.on,.tondo.ok,.amt .espr,.barre .tip,.tbl tr.sel td:first-child span,.temi input:checked + span{
+  background:transparent!important;isolation:isolate}
+.tile.on,.acq-tit .chip.on,.seg.hl-on button.on,.tondo.ok,.amt .espr,.tbl tr.sel td:first-child span{position:relative}
+.tile.on::before,.acq-tit .chip.on::before,.seg.hl-on button.on::before,.tondo.ok::before,.amt .espr::before,.barre .tip::before,.tbl tr.sel td:first-child span::before{
+  content:"";position:absolute;inset:0 -1px;background:var(--hl);border:none;border-radius:inherit;filter:url(#pennarello);z-index:-1}
+.tile.on::before{border-radius:14px}
+.temi input:checked + span{background:transparent!important;box-shadow:inset 0 -6px 0 -2px var(--hl)}
+
+/* barre, strisce e grafici ripassati a mano */
+.inch-bar > i,.trk i,.pf-fill,.pf-mvt .b,.strip i,.pf-comp i,.pf-brd i,.pf-split i{filter:url(#matita)}
+.barre i{background:repeating-linear-gradient(-45deg,var(--matita) 0 1.2px,transparent 1.2px 4.5px);box-shadow:inset 0 0 0 1.3px var(--matita);filter:url(#matita)}
+.barre i.sel{background:var(--ink);box-shadow:none}
+.barre i.corso{background:repeating-linear-gradient(-45deg,var(--matita-2) 0 1px,transparent 1px 6px);box-shadow:inset 0 0 0 1.3px var(--matita);border:none}
+.barre i.corso.sel{background:repeating-linear-gradient(-45deg,var(--ink) 0 2px,transparent 2px 5px);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.barre i.zero{background:var(--matita-2);box-shadow:none}
+.cbox canvas,.pf-dbox canvas{filter:url(#matita-fine)}
+.qd,.pf-av.mono,.pf-av.etf{filter:url(#matita-fine)}
+.pf-dot,.leg i{filter:url(#pennarello)}
+
+/* la carta d'inchiostro: bordi irregolari e un velo di grafite */
+.inch::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background-image:var(--dente);background-size:220px;
+  mix-blend-mode:overlay;opacity:.45;border-radius:inherit}
+.inch::after{content:"";position:absolute;inset:-2px;border:4px solid var(--paper);border-radius:inherit;filter:url(#strappo);pointer-events:none;z-index:4}
+.inch{box-shadow:0 10px 26px -12px rgba(27,26,23,.45)}
+.nav .in{box-shadow:0 10px 30px -10px rgba(27,26,23,.5)}
+.cta{box-shadow:0 10px 24px -12px rgba(27,26,23,.5)}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <!-- tratto a matita: storto di poco e spezzato dalla grana della carta -->
+  <filter id="matita" x="-6%" y="-6%" width="112%" height="112%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="3" result="onda"/>
+    <feDisplacementMap in="SourceGraphic" in2="onda" scale="3" xChannelSelector="R" yChannelSelector="G" result="storto"/>
+    <feTurbulence type="fractalNoise" baseFrequency=".95" numOctaves="2" seed="9" result="grana"/>
+    <feColorMatrix in="grana" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1.9 0 0 0 1.75" result="buchi"/>
+    <feComposite in="storto" in2="buchi" operator="in"/>
+  </filter>
+  <filter id="matita-fine" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="7" result="onda"/>
+    <feDisplacementMap in="SourceGraphic" in2="onda" scale="1.8" xChannelSelector="R" yChannelSelector="G" result="storto"/>
+    <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="2" result="grana"/>
+    <feColorMatrix in="grana" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1.2 0 0 0 1.45" result="buchi"/>
+    <feComposite in="storto" in2="buchi" operator="in"/>
+  </filter>
+  <!-- evidenziatore: bordi sbavati, un po' di trasparenza sulla grana -->
+  <filter id="pennarello" x="-8%" y="-20%" width="116%" height="140%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency=".035 .1" numOctaves="2" seed="5" result="onda"/>
+    <feDisplacementMap in="SourceGraphic" in2="onda" scale="3.5" xChannelSelector="R" yChannelSelector="G" result="storto"/>
+    <feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" seed="1" result="grana"/>
+    <feColorMatrix in="grana" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -.8 0 0 0 1.25" result="buchi"/>
+    <feComposite in="storto" in2="buchi" operator="in"/>
+  </filter>
+  <!-- bordo della carta d'inchiostro: irregolare come un foglio tagliato a mano -->
+  <filter id="strappo" x="-3%" y="-3%" width="106%" height="106%">
+    <feTurbulence type="fractalNoise" baseFrequency=".08" numOctaves="3" seed="12" result="onda"/>
+    <feDisplacementMap in="SourceGraphic" in2="onda" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</defs></svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
+  <!-- tratto a matita: storto di poco e spezzato dalla grana della carta -->
+  <filter id="matita" x="-6%" y="-6%" width="112%" height="112%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="3" result="onda"/>
+    <feDisplacementMap in="SourceGraphic" in2="onda" scale="3" xChannelSelector="R" yChannelSelector="G" result="storto"/>
+    <feTurbulence type="fractalNoise" baseFrequency=".95" numOctaves="2" seed="9" result="grana"/>
+    <feColorMatrix in="grana" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1.9 0 0 0 1.75" result="buchi"/>
+    <feComposite in="storto" in2="buchi" operator="in"/>
+  </filter>
+  <filter id="matita-fine" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="7" result="onda"/>
+    <feDisplacementMap in="SourceGraphic" in2="onda" scale="1.8" xChannelSelector="R" yChannelSelector="G" result="storto"/>
+    <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="2" result="grana"/>
+    <feColorMatrix in="grana" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1.2 0 0 0 1.45" result="buchi"/>
+    <feComposite in="storto" in2="buchi" operator="in"/>
+  </filter>
+  <!-- evidenziatore: bordi sbavati, un po' di trasparenza sulla grana -->
+  <filter id="pennarello" x="-8%" y="-20%" width="116%" height="140%" color-interpolation-filters="sRGB">
+    <feTurbulence type="fractalNoise" baseFrequency=".03 .09" numOctaves="2" seed="5" result="onda"/>
+    <feDisplacementMap in="SourceGraphic" in2="onda" scale="5" xChannelSelector="R" yChannelSelector="G" result="storto"/>
+    <feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" seed="1" result="grana"/>
+    <feColorMatrix in="grana" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -.8 0 0 0 1.25" result="buchi"/>
+    <feComposite in="storto" in2="buchi" operator="in"/>
+  </filter>
+  <!-- bordo della carta d'inchiostro: irregolare come un foglio tagliato a mano -->
+  <filter id="strappo" x="-3%" y="-3%" width="106%" height="106%">
+    <feTurbulence type="fractalNoise" baseFrequency=".08" numOctaves="3" seed="12" result="onda"/>
+    <feDisplacementMap in="SourceGraphic" in2="onda" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</defs></svg>
 <div class="wrap">
   <header class="testa" id="appbar">
     <div class="t-sx">
