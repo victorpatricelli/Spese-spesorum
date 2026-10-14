@@ -3193,9 +3193,8 @@ function bloccoOggi(pos){
         <div class="pf-mvt"><i class="z"></i>${c ? `<i class="b ${c}" style="width:${w.toFixed(2)}%;animation-delay:${i*45}ms"></i>` : ``}</div>
         <div class="pf-mvf"><span>${fS(x[kS])}</span><span>${eur0(x.valore)}</span></div></div></div>`;
   }).join("");
-  const apri = d.length > 2 ? `<button type="button" class="btn testo altri rip" data-azione="oggi-tutti">
-      <span class="ms">${oggiTutti ? "expand_less" : "expand_more"}</span>${oggiTutti ? "Nascondi i titoli" : "Tutti i " + d.length + " titoli"}</button>` : ``;
-  return brd + top + (oggiTutti || d.length <= 2 ? `<div style="margin-top:6px">${righe}</div>` : ``) + apri;
+  // tutti i titoli, sempre: la lista completa è il punto della carta
+  return brd + top + `<div style="margin-top:6px">${righe}</div>`;
 }
 
 /* ── posizioni ── */
