@@ -735,6 +735,76 @@ body{background-color:var(--paper);background-image:var(--fibre),var(--dente),va
 /* carta d'inchiostro: bordo irregolare (poche per pagina) */
 .inch::after{content:"";position:absolute;inset:-2px;border:4px solid var(--paper);border-radius:inherit;filter:url(#strappo);pointer-events:none;z-index:4}
 .inch,.nav .in,.cta{box-shadow:0 10px 24px -12px rgba(27,26,23,.45)}
+
+/* ═══════════ NOVITÀ ottobre 2026 ═══════════ */
+/* Mese: frecce ai lati dei mesi per andare più indietro o più avanti */
+.mesi-nav{display:flex;align-items:center;gap:6px;margin-bottom:14px}
+.mesi-nav .tabmesi{flex:1;min-width:0;margin-bottom:0}
+.frec{flex:0 0 auto;width:40px;height:40px;border-radius:50%;border:none;background:var(--sheet-2);color:var(--ink-2);cursor:pointer;
+  display:flex;align-items:center;justify-content:center}
+.frec .ms{font-size:22px}
+.frec:disabled{opacity:.35;cursor:default}
+
+/* Mese: categoria che si apre sulle sottocategorie */
+.crow.apri{cursor:pointer;margin:0 -8px;padding-left:8px;padding-right:8px;border-radius:12px}
+@media (hover:hover){.crow.apri:hover{background-color:var(--sheet-2)}}
+.crow .giu{font-size:20px;color:var(--ink-3);flex:0 0 auto;margin-left:-4px;transition:transform .25s var(--ease)}
+.crow.aperta .giu{transform:rotate(180deg)}
+.csotto{margin:0 0 10px 52px;padding:2px 0 4px;animation:entra .3s var(--ease-emph)}
+.csotto + .crow{border-top:none;background-image:var(--linea);background-repeat:no-repeat;background-size:100% 3px;background-position:0 0}
+.srow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;padding:6px 0}
+.srow b{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.srow span{font-family:var(--f-num);font-variation-settings:"opsz" 20;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
+.srow .trk{grid-column:1/-1;margin-top:3px}
+.srow small{grid-column:1/-1;font-size:11.5px;color:var(--ink-3);margin-top:-1px}
+.csotto .nessuna{font-size:12.5px;color:var(--ink-3);padding:6px 0}
+
+/* Anno: dalla barra al riepilogo di quel mese */
+.apri-mese{display:flex;justify-content:center;margin-top:12px}
+.apri-mese .btn{height:38px}
+
+/* Aggiungi: tocco su una spesa registrata = compila il modulo uguale */
+.riga.ripeti{cursor:pointer}
+@media (hover:hover){.riga.ripeti:hover{background-color:var(--sheet-2)}}
+
+/* ═══════════ PC e schermi larghi ═══════════
+   Sotto i 980 px resta tutto come sul telefono. */
+@media (min-width:980px){
+  .wrap{max-width:1120px;padding:0 24px}
+
+  /* Aggiungi: modulo a sinistra, spese registrate a destra */
+  #viewAdd{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:36px;align-items:start}
+  #viewAdd > *{grid-column:1}
+  #viewAdd > section.sez{grid-column:2;grid-row:1 / span 30;margin-top:0;position:sticky;top:84px;
+    max-height:calc(100vh - 200px);overflow:auto;scrollbar-width:thin;padding:0 2px 8px}
+  #viewAdd > .quota{margin-top:0}
+  #viewAdd > .tiles{margin-left:-4px;margin-right:-4px;padding-left:4px;padding-right:4px}
+  /* il pulsante Aggiungi sta sotto la colonna del modulo, sopra la barra */
+  .cta-bar{justify-content:flex-start;padding-left:max(24px, calc((100vw - 1120px) / 2 + 24px))}
+  .cta-bar .cta{max-width:calc((min(100vw, 1120px) - 48px - 36px) / 2)}
+
+  /* Mese: numeri e grafici a sinistra, categorie e budget a destra */
+  #viewSum{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);column-gap:28px;align-items:start}
+  #viewSum > .mesi-nav{grid-column:1 / -1}
+  #viewSum > #sumbody{grid-column:1;grid-row:2 / span 3}
+  #viewSum > #sumCatSez{grid-column:2;grid-row:2;margin-top:0}
+  #viewSum > #bsec{grid-column:2;grid-row:3}
+
+  /* Anno e Portafoglio: schede su due colonne */
+  #yearbody,#portbody{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px 28px;align-items:start}
+  #yearbody > *,#portbody > *{margin-top:0}
+  #yearbody > .tabmesi{grid-column:1 / -1;margin-bottom:-8px}
+  /* Anno: a sinistra totale, barre e cumulato; a destra le categorie; sotto la tabella */
+  #yearbody > :nth-child(2){grid-column:1;grid-row:2}
+  #yearbody > :nth-child(3){grid-column:1;grid-row:3}
+  #yearbody > :nth-child(4){grid-column:1;grid-row:4}
+  #yearbody > :nth-child(5){grid-column:2;grid-row:2 / span 3}
+  #yearbody > .sez:last-child{grid-column:1 / -1;grid-row:5}
+  #portbody > .err{grid-column:1 / -1}
+
+  /* Acquisto: un modulo, resta stretto */
+  #viewBuy{max-width:600px;margin:0 auto}
+}
 </style>
 </head>
 <body>
@@ -857,7 +927,11 @@ body{background-color:var(--paper);background-image:var(--fibre),var(--dente),va
 
   <!-- ═════════ MESE ═════════ -->
   <main id="viewSum" class="view" hidden>
-    <div class="seg tabmesi" id="sumMesi"></div>
+    <div class="mesi-nav">
+      <button type="button" class="frec rip" id="mesePrima" aria-label="Mese prima"><span class="ms">chevron_left</span></button>
+      <div class="seg tabmesi" id="sumMesi"></div>
+      <button type="button" class="frec rip" id="meseDopo" aria-label="Mese dopo"><span class="ms">chevron_right</span></button>
+    </div>
     <div id="sumbody"><div class="skel" style="height:190px"></div><div class="skel" style="height:220px"></div></div>
     <section class="sez" id="sumCatSez">
       <div id="sumcat"></div>
@@ -1578,16 +1652,27 @@ $("quickAmt").onclick = e => {
 
 /* Duplica ultima: compila importo, voce e conto come l'ultima spesa registrata.
    Non la invia: la data resta quella delle rotelle e la confermi con «Aggiungi». */
-$("dupLast").onclick = () => {
-  const e = ultime[0]; if(!e) return;
+$("dupLast").onclick = () => ripeti(ultime[0]);
+/* Tocco su una spesa registrata: compila il modulo con la stessa voce, importo e conto. */
+function ripeti(e){
+  if(!e) return;
+  if(voci.length && !voceDaNome(e.desc)){ toast("La voce «" + e.desc + "» non è più nell'elenco", true); return; }
   vibra("tap");
+  if(walletCorrente){ walletCorrente = null; renderWallet(); }
   espr = String(e.v).replace(".", ",");
   $("desc").value = e.desc;
   if(e.broker && conti.indexOf(e.broker) !== -1){ broker = e.broker; renderConti(); }
   paint();
   window.scrollTo({ top: 0, behavior: "smooth" });
   toast("Compilata come «" + e.desc + "»: controlla la data e premi Aggiungi");
-};
+}
+$("list").addEventListener("click", ev => {
+  if(ev.target.closest("button")) return;                 // il tasto Annulla fa il suo
+  const r = ev.target.closest("[data-u]"); if(r) ripeti(ultime[Number(r.dataset.u)]);
+});
+$("list").addEventListener("keydown", ev => {
+  if((ev.key === "Enter" || ev.key === " ") && ev.target.matches("[data-u]")){ ev.preventDefault(); ripeti(ultime[Number(ev.target.dataset.u)]); }
+});
 
 /* Ricerca nelle spese registrate (descrizione, voce, categoria, conto, nota). */
 $("listQ").oninput = () => renderList();
@@ -1876,7 +1961,7 @@ function renderList(){
         (incompleto && chiave(e)===ultimaChiave) ? "" : `<b>${eur(somme[chiave(e)])}</b>`}</div>` : "";
 
   const scritte = filtrate.map((e,i) => testa(e,i) +
-    `<div class="riga">${icona(e.primary)}
+    `<div class="riga ripeti" data-u="${ultime.indexOf(e)}" role="button" tabindex="0" title="Tocca per registrarla di nuovo">${icona(e.primary)}
       <span class="tx"><div class="t1">${esc(e.desc)}</div>
       <div class="t2">${esc(e.secondary||e.primary)} · ${esc(e.broker)}${e.note ? " · " + esc(e.note) : ""}</div></span>
       <span class="v">${it(e.v)}</span>
@@ -2109,7 +2194,7 @@ function drena(){
         item.stato="errore"; item.errore=res.errore;
         showErr(res.errore); toast(res.errore, true); vibra("errore");
       } else {
-        if(res.mese === parseInt($("mm").value,10)) totali = res.totali;
+        if(res.mese === parseInt($("mm").value,10)){ totali = res.totali; totaliChiave = res.mese + "-" + (res.anno || item.spesa.a); }
         ultime.unshift({m:item.spesa.m,d:item.spesa.d,desc:item.spesa.desc,v:item.spesa.v,
           broker:item.spesa.broker,primary:res.primary,secondary:res.secondary,
           riga:res.riga, idem:item.spesa.idem, a:res.anno || item.spesa.a, annullabile:true,
@@ -2180,7 +2265,7 @@ function refresh(){
   const anno = getAnno();
   google.script.run
     .withSuccessHandler(st => {
-      totali=st.totali; voci=st.voci||[];
+      totali=st.totali; voci=st.voci||[]; totaliChiave = m + "-" + anno;
       // ogni spesa ricorda l'anno (cioè la scheda) da cui viene: serve per annullarla
       ultime=(st.ultime||[]).map(e => Object.assign({a: anno}, e));
       if(st.conti && st.conti.length){ conti = st.conti; renderConti(); }
@@ -2191,6 +2276,7 @@ function refresh(){
       try{ localStorage.setItem(CHIAVE_STATO, JSON.stringify({voci:voci, conti:st.conti||[],
         m:m, a:anno, totali:totali, ultime:ultime})); }catch(e){}
       clearErr(); paint();
+      if(vista === "sum" && riep && catAperte.size) sicuro(renderCategorie);   // sottocategorie aperte
       aggiornaBudgetInSottofondo();
       precaricaTutto();
     })
@@ -2377,13 +2463,36 @@ function striscia(categorie){
 function segmentiMesi(){
   const m = parseInt($("mm").value,10) || new Date().getMonth()+1, a = getAnno();
   const n = new Date(), oraIdx = n.getFullYear()*12 + n.getMonth();
-  const lista = [-2,-1,0,1].map(k => { const d = new Date(a, m-1+k, 1); return { m:d.getMonth()+1, a:d.getFullYear() }; });
+  // quanti mesi si vedono dipende dallo spazio (le frecce portano oltre)
+  const passi = window.innerWidth >= 980 ? [-4,-3,-2,-1,0,1] : window.innerWidth < 440 ? [-1,0,1] : [-2,-1,0,1];
+  const lista = passi.map(k => { const d = new Date(a, m-1+k, 1); return { m:d.getMonth()+1, a:d.getFullYear() }; });
   $("sumMesi").innerHTML = lista.map(x => {
     const futuro = x.a*12 + x.m-1 > oraIdx;
     const nome = MESI[x.m-1] + (x.a !== n.getFullYear() ? " ’" + String(x.a).slice(2) : "");
     return `<button type="button" class="${x.m===m && x.a===a ? "on" : ""}${futuro ? " fut" : ""}" data-m="${x.m}" data-a="${x.a}">${nome}</button>`;
   }).join("");
+  // avanti al massimo un anno dopo il mese in corso (le spese programmate)
+  $("meseDopo").disabled = a*12 + m-1 >= oraIdx + 12;
 }
+/* Frecce ‹ ›: un mese prima o dopo, senza limiti all'indietro. */
+function spostaMese(passo){
+  const m = parseInt($("mm").value,10) || new Date().getMonth()+1, a = getAnno();
+  const d = new Date(a, m-1+passo, 1);
+  vibra("tap");
+  vaiAlMese(d.getMonth()+1, d.getFullYear());
+  caricaRiepilogo();
+}
+$("mesePrima").onclick = () => spostaMese(-1);
+window.addEventListener("resize", () => { if(vista === "sum") sicuro(segmentiMesi); });
+/* Sul PC: frecce sinistra/destra della tastiera nella scheda Mese. */
+document.addEventListener("keydown", e => {
+  if(vista !== "sum" || e.ctrlKey || e.metaKey || e.altKey || document.querySelector(".scrim.on")) return;
+  const t = e.target;
+  if(t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+  if(e.key === "ArrowLeft"){ e.preventDefault(); $("mesePrima").click(); }
+  if(e.key === "ArrowRight"){ e.preventDefault(); $("meseDopo").click(); }
+});
+$("meseDopo").onclick = () => { if(!$("meseDopo").disabled) spostaMese(1); };
 $("sumMesi").onclick = e => {
   const b = e.target.closest("[data-m]"); if(!b || b.classList.contains("on")) return;
   vibra("tap");
@@ -2499,28 +2608,69 @@ function renderRiepilogo(){
         <span>${r.piuCaro.giorno ? "picco il " + r.piuCaro.giorno + " · " + eur0(r.piuCaro.valore) : ""}</span></div>
       <div class="cbox sm"><canvas id="cvDay" role="img" aria-label="Spese di ogni giorno di ${nomeMese}"></canvas></div>${legGiorni}</div></section>`;
 
-  /* ── categorie ── */
-  const base = r.categorie.reduce((t,c) => t + c.valore, 0);
-  const righe = r.categorie.map(c => {
-    const b = r.budget[c.nome], colore = col(c.nome), oltre = b && c.valore > b;
-    const scala = b ? Math.max(c.valore, b) : 0;
-    return `<div class="crow"><span class="qd" style="background:${colore}"><span class="ms f">${ico(c.nome)}</span></span>
-      <div class="nm"><b>${esc(c.nome)}</b><small>${base ? Math.round(c.valore/base*100) : 0}% del mese</small>
-        ${b ? `<div class="trk"><i style="width:${(c.valore/scala*100).toFixed(1)}%;background:${oltre?P.male:colore}"></i>${oltre ? `<i class="tk" style="left:${(b/scala*100).toFixed(1)}%"></i>` : ""}</div>` : ""}</div>
-      <div class="vl"><b>${eur0(c.valore)}</b>${b
-        ? `<small class="${oltre?"bad":""}">${oltre ? "+" + eur0(c.valore-b) + " su " + eur0(b) : "di " + eur0(b)}</small>`
-        : `<small>senza budget</small>`}</div></div>`;
-  }).join("");
-  $("sumcat").innerHTML = `<div class="sez-t"><b>Categorie</b><span>speso · budget</span></div>` +
-    (r.categorie.length ? `<div class="carta">${striscia(r.categorie)}<div style="margin-top:6px">${righe}</div>` +
-      (r.senzaCategoria ? `<div class="cnota">${eur0(r.senzaCategoria)} sono nel totale ma non qui: la voce scelta non ha una categoria nella scheda «Categorie Spese».</div>` : "") +
-      `</div>` : `<div class="vuoto">Nessuna spesa con categoria in questo mese.</div>`);
-
+  sicuro(renderCategorie);
   sicuro(aggiornaTesta);
   if(window.Chart){ graficoProiezione(r); graficoGiorni(r); }
   else $("sumbody").insertAdjacentHTML("beforeend",
     `<div class="err"><span>Non riesco a caricare la libreria dei grafici.</span></div>`);
 }
+/* Categorie del mese. Tocco su una categoria = si apre il dettaglio delle sottocategorie,
+   preso dai totali per sottocategoria che il foglio manda con statoIniziale
+   (gli stessi delle mattonelle in Aggiungi). Restano aperte cambiando mese. */
+const catAperte = new Set();
+let totaliChiave = "";          // mese-anno a cui si riferiscono «totali»
+function sottoDi(nome){
+  if(totaliChiave !== riepChiave) return null;               // totali di un altro mese: in arrivo
+  const ps = (totali && totali.perSotto) || {};
+  return Object.keys(ps).filter(k => k.split("|")[0] === nome && Number(ps[k]) > 0)
+    .map(k => ({ nome: k.split("|").slice(1).join("|") || "—", valore: Number(ps[k]) }))
+    .sort((x, y) => y.valore - x.valore);
+}
+function renderCategorie(){
+  const r = riep; if(!r) return;
+  const base = r.categorie.reduce((t,c) => t + c.valore, 0);
+  const righe = r.categorie.map(c => {
+    const b = r.budget[c.nome], colore = col(c.nome), oltre = b && c.valore > b;
+    const scala = b ? Math.max(c.valore, b) : 0;
+    const aperta = catAperte.has(c.nome);
+    let sotto = "";
+    if(aperta){
+      const l = sottoDi(c.nome);
+      sotto = `<div class="csotto">${!l ? `<div class="nessuna">Carico le sottocategorie…</div>`
+        : !l.length ? `<div class="nessuna">Nessuna sottocategoria per questa categoria.</div>`
+        : l.map(s => `<div class="srow"><b>${esc(s.nome)}</b><span>${eur(s.valore)}</span>
+            <div class="trk"><i style="width:${(s.valore/l[0].valore*100).toFixed(1)}%;background:${colore}"></i></div>
+            <small>${c.valore ? Math.round(s.valore/c.valore*100) : 0}% di ${esc(c.nome)}</small></div>`).join("")}</div>`;
+    }
+    return `<div class="crow apri${aperta?" aperta":""}" data-cat="${esc(c.nome)}" role="button" tabindex="0" aria-expanded="${aperta}">
+      <span class="qd" style="background:${colore}"><span class="ms f">${ico(c.nome)}</span></span>
+      <div class="nm"><b>${esc(c.nome)}</b><small>${base ? Math.round(c.valore/base*100) : 0}% del mese</small>
+        ${b ? `<div class="trk"><i style="width:${(c.valore/scala*100).toFixed(1)}%;background:${oltre?P.male:colore}"></i>${oltre ? `<i class="tk" style="left:${(b/scala*100).toFixed(1)}%"></i>` : ""}</div>` : ""}</div>
+      <div class="vl"><b>${eur0(c.valore)}</b>${b
+        ? `<small class="${oltre?"bad":""}">${oltre ? "+" + eur0(c.valore-b) + " su " + eur0(b) : "di " + eur0(b)}</small>`
+        : `<small>senza budget</small>`}</div>
+      <span class="ms giu" aria-hidden="true">expand_more</span></div>${sotto}`;
+  }).join("");
+  $("sumcat").innerHTML = `<div class="sez-t"><b>Categorie</b><span>tocca per le sottocategorie</span></div>` +
+    (r.categorie.length ? `<div class="carta">${striscia(r.categorie)}<div style="margin-top:6px">${righe}</div>` +
+      (r.senzaCategoria ? `<div class="cnota">${eur0(r.senzaCategoria)} sono nel totale ma non qui: la voce scelta non ha una categoria nella scheda «Categorie Spese».</div>` : "") +
+      `</div>` : `<div class="vuoto">Nessuna spesa con categoria in questo mese.</div>`);
+}
+function apriCategoria(nome){
+  vibra("tap");
+  if(catAperte.has(nome)) catAperte.delete(nome); else catAperte.add(nome);
+  renderCategorie();
+}
+$("sumcat").addEventListener("click", e => {
+  const c = e.target.closest("[data-cat]"); if(c) apriCategoria(c.dataset.cat);
+});
+$("sumcat").addEventListener("keydown", e => {
+  if((e.key === "Enter" || e.key === " ") && e.target.matches("[data-cat]")){
+    e.preventDefault(); apriCategoria(e.target.dataset.cat);
+    const t = $("sumcat").querySelector(`[data-cat="${CSS.escape(e.target.dataset.cat)}"]`); if(t) t.focus();
+  }
+});
+
 $("sumbody").addEventListener("click", e => {
   if(!e.target.closest('[data-azione="budget"]')) return;
   if($("bpanel").hidden) $("bopen").click();
@@ -2569,7 +2719,9 @@ function barreMesi(a){
         (i === sel && v ? `<span class="tip" style="bottom:${h + 6}px">${eur0(v)}</span>` : "") +
         `<i class="${cls.trim()}" style="height:${h}px"></i></div>`;
     }).join("")}</div>
-    <div class="mesi12">${MESI3.map((m,i) => `<span class="${i===sel?"on":""}">${m}</span>`).join("")}</div>`;
+    <div class="mesi12">${MESI3.map((m,i) => `<span class="${i===sel?"on":""}">${m}</span>`).join("")}</div>
+    ${a.mensili[sel] ? `<div class="apri-mese"><button type="button" class="btn tenue rip" data-apri="${sel}">
+      <span class="ms">calendar_month</span>Apri ${MESI[sel].toLowerCase()}${a.anno !== new Date().getFullYear() ? " " + a.anno : ""}<span class="ms">chevron_right</span></button></div>` : ""}`;
 }
 function renderAnni(){
   const s = stat, anni = s.anni;
@@ -2671,6 +2823,13 @@ function renderAnni(){
     `<span><i class="lin" style="border-top-color:${d.borderColor};border-top-style:${d.borderDash.length?"dashed":"solid"}"></i>${d.label}</span>`).join("");
 }
 $("yearbody").addEventListener("click", e => {
+  const ap = e.target.closest("[data-apri]");
+  if(ap){                                    // «Apri ottobre»: riepilogo di quel mese
+    vibra("tap");
+    vaiAlMese(Number(ap.dataset.apri) + 1, annoSel);
+    $("nav").querySelector('[data-v="sum"]').click();
+    return;
+  }
   const b = e.target.closest("[data-anno]");
   if(b){
     const n = Number(b.dataset.anno);
@@ -3438,7 +3597,7 @@ try{
     // vengono sostituiti appena risponde il foglio. Finché non arriva la risposta
     // fresca l'annullamento resta spento (il numero di riga potrebbe essere cambiato).
     if(st.totali && st.m === now.getMonth()+1 && st.a === now.getFullYear()){
-      totali = st.totali;
+      totali = st.totali; totaliChiave = st.m + "-" + st.a;
       ultime = (st.ultime || []).map(e => Object.assign({}, e, {annullabile:false}));
     }
   }
