@@ -1303,7 +1303,7 @@ const SLOT = {Travel:1,Out:2,Housing:3,Transport:4,Health:5,Groceries:6,Leisure:
 const ICONA = {Out:"restaurant",Groceries:"shopping_cart",Transport:"directions_bus",
   Leisure:"sports_esports",Travel:"flight",Housing:"home",Health:"medication",
   Subscriptions:"subscriptions",Clothing:"checkroom",Gifts:"redeem",Fees:"account_balance",
-  OtherExpenses:"more_horiz",Baby:"child_care"};
+  OtherExpenses:"more_horiz",Baby:"child_care",Education:"school"};
 
 /* Palette letta dalle variabili CSS: cambia da sola col tema chiaro/scuro. */
 let P = {};
@@ -1325,7 +1325,7 @@ function leggiPalette(){
 leggiPalette();
 
 const BROKERS = ["Revolut","Fineco","Cash","BBVA","Trading 212"];
-const PREFERITE = ["conad","bar","restaurant","food delivery","freetime","pharmacy","gift","amazon"];
+const PREFERITE = ["conad","bar","ristorante","delivery","svago","farmacia","regalo","amazon"];
 const MESI = ["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto",
   "Settembre","Ottobre","Novembre","Dicembre"];
 const MESI3 = ["gen","feb","mar","apr","mag","giu","lug","ago","set","ott","nov","dic"];
@@ -1989,41 +1989,42 @@ const walletInCoda = id => coda.some(c => c.spesa && c.spesa.walletId === id);
    Le 2) e 3) sono solo proposte: compaiono con «proposta» e le confermi tu. */
 const PAROLE_CHIAVE = [
   [/\bprime video\b|\bamazon prime\b/, "prime"],
-  [/\buber ?eats\b|\bglovo\b|\bdeliveroo\b|\bjust ?eat\b/, "food delivery"],
+  [/\buber ?eats\b|\bglovo\b|\bdeliveroo\b|\bjust ?eat\b/, "delivery"],
   [/\b(crf|carrefour)\b/, "carrefour"],
   [/\bconad\b/, "conad"],
   [/\bcoop\b/, "coop"],
   [/\bnatura ?si\b/, "natura si"],
-  [/\b(lidl|eurospin|todis|pam|esselunga|despar|ins|md|penny|tuodi|elite|sigma|crai|simply|famila|aldi|tigre|carrefour express)\b/, "market"],
+  [/\b(lidl|eurospin|todis|pam|esselunga|despar|ins|md|penny|tuodi|elite|sigma|crai|simply|famila|aldi|tigre|carrefour express)\b/, "alimentari"],
   [/\bmacelleri/, "macelleria"],
   [/\b(eni|enilive|agip|q8|ip|tamoil|esso|api|shell|repsol|carburant\w*|distributor\w*)\b/, "benzina"],
   [/\b(autostrad\w*|telepass|pedagg\w*)\b/, "autostrada"],
-  [/\b(easypark|parchegg\w*|parking|saba|apcoa|mycicero)\b/, "parking"],
+  [/\b(easypark|parchegg\w*|parking|saba|apcoa|mycicero)\b/, "parcheggio"],
   [/\b(atac|cotral|metro|metropolitana)\b/, "metro"],
   [/\b(trenitalia|italo|ntv|frecciarossa)\b/, "treno"],
   [/\b(flixbus|itabus|clickbus)\b/, "clickbus"],
   [/\b(uber|free ?now|itaxi|taxi|bolt|wetaxi)\b/, "taxi"],
-  [/\b(ryanair|easyjet|wizz\w*|ita airways|vueling|volotea|aeroport\w*)\b/, "plane"],
+  [/\b(ryanair|easyjet|wizz\w*|ita airways|vueling|volotea|aeroport\w*)\b/, "aereo"],
   [/\b(booking|airbnb|hotel|albergo)\b/, "hotel"],
-  [/\b(farmaci\w*|parafarmaci\w*|pharma\w*)\b/, "pharmacy"],
-  [/\b(mc ?donald\w*|burger king|kfc|pizzeri\w*|ristorant\w*|trattori\w*|osteri\w*|sushi|poke|kebab|trapizzino)\b/, "restaurant"],
+  [/\b(farmaci\w*|parafarmaci\w*|pharma\w*)\b/, "farmacia"],
+  [/\b(mc ?donald\w*|burger king|kfc|pizzeri\w*|ristorant\w*|trattori\w*|osteri\w*|sushi|poke|kebab|trapizzino)\b/, "ristorante"],
   [/\bpasticc\w*/, "pasticceria"],
   [/\b(bar|caffe|cafe|coffee|tabacchi|tabaccheria)\b/, "bar"],
-  [/\b(decathlon|palestr\w*|fitness|gym|mcfit|virgin active)\b/, "gym"],
+  [/\b(decathlon|palestr\w*|fitness|gym|mcfit|virgin active)\b/, "palestra"],
   [/\b(zara|h&m|primark|bershka|uniqlo|ovs|nike|adidas|foot ?locker|zalando)\b/, "shopping"],
   [/\b(amazon|amzn)\w*/, "amazon"],
-  [/\b(acqua ?& ?sapone|tigota|sephora|douglas|kiko|profumeri\w*|dm)\b/, "Care"],
-  [/\b(ikea|leroy merlin|brico\w*|jysk)\b/, "furniture"],
+  [/\b(acqua ?& ?sapone|tigota|sephora|douglas|kiko|profumeri\w*|dm)\b/, "igiene"],
+  [/\b(ikea|leroy merlin|brico\w*|jysk)\b/, "arredamento"],
   [/\b(mediaworld|unieuro|euronics|trony|apple store)\b/, "tech"],
-  [/\b(feltrinelli|mondadori|librer\w*)\b/, "books"],
-  [/\b(cinema|uci|the space|ticketone|vivaticket)\b/, "freetime"],
+  [/\b(feltrinelli|mondadori|librer\w*)\b/, "libri"],
+  [/\b(cinema|uci|the space|ticketone|vivaticket)\b/, "svago"],
+  [/\b(universit\w*|sapienza|uniroma\w*|roma ?tre|tor vergata)\b/, "università"],
   [/\bspotify\b/, "spotify"], [/\bdisney\b/, "disney"], [/\bperplexity\b/, "perplexity"],
-  [/\bgoogle\b/, "google"], [/\bvodafone\b/, "vodafone"], [/\bho ?mobile\b/, "homobile"],
+  [/\bgoogle\b/, "google"], [/\bvodafone\b/, "telefono"], [/\bho ?mobile\b/, "telefono"],
   [/\b(onedrive|microsoft)\b/, "onedrive"], [/\bgetquin\b/, "getquin"],
 ];
 // voci troppo generiche per cercarle dentro il nome di un negozio
-const VOCI_GENERICHE = ["roma","milano","other","weekend","summer","study","dinner","freetime",
-  "tech","gift","gas","tv","rent","fees","phone","internet","electricity","care","medicines","games"];
+const VOCI_GENERICHE = ["roma","milano","altro","weekend","vacanze","studio","svago",
+  "tech","regalo","tv","affitto","commissioni","telefono","internet","luce","igiene","giochi"];
 const normEsercente = s => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
   .replace(/['’`]/g, "").replace(/[^a-z0-9&]+/g, " ").trim();
 const voceDaNome = e => voci.find(v => v.entry.toLowerCase() === String(e).toLowerCase()) || null;
