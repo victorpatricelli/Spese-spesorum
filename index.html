@@ -791,8 +791,8 @@ body{background-color:var(--paper);background-image:var(--fibre),var(--dente),va
 .busta .quando{font-family:var(--f-num);font-variation-settings:"opsz" 48;font-size:24px;line-height:30px;font-weight:700;letter-spacing:-.02em;margin-top:18px}
 .busta .tra{font-size:13px;color:var(--ink-3);margin-top:2px}
 .busta .cta{margin-top:22px}
-.busta .avv{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-size:12.5px;color:var(--ink-3)}
-.busta .avv .ms{font-size:16px}
+.busta .bst-avv{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-size:12.5px;color:var(--ink-3)}
+.busta .bst-avv .ms{font-size:16px}
 .busta .ultimo{margin-top:20px;padding-top:14px;font-size:13px;color:var(--ink-3);background-image:var(--linea);background-repeat:no-repeat;background-size:100% 3px}
 .busta .ultimo b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
 .sett-giorni{display:flex;justify-content:center;gap:6px;margin-top:16px}
@@ -1470,6 +1470,7 @@ function aggiornaTesta(){
     sum:  [MESI[m-1] + (a !== n.getFullYear() ? " " + a : ""), "Riepilogo del mese"],
     year: [annoSel ? String(annoSel) : "Anno", "Spese per anno"],
     port: pagPort === 0 ? ["Portafoglio", setDati ? "Riepilogo del weekend" : "Riepilogo: sabato e domenica"]
+        : !portLibero() ? ["Portafoglio", "Una volta al giorno"]
         : ["Portafoglio", port && port.aggiornato ? "aggiornato alle " + (String(port.aggiornato).split(" ")[1] || port.aggiornato) : "Investimenti"],
     buy:  ["Acquisto", "Registra titoli comprati"]
   }[vista] || ["Spese", ""];
@@ -2944,8 +2945,8 @@ const giorniFra = (a, b) => (Date.UTC(+b.slice(0,4), +b.slice(5,7)-1, +b.slice(8
                              Date.UTC(+a.slice(0,4), +a.slice(5,7)-1, +a.slice(8,10))) / 86400000;
 
 function caricaPortafoglio(forza, sottofondo){
-  const vede = () => vista === "port" && pagPort === 1;
-  if(port && !forza){ if(!sottofondo) renderPortafoglio(); return; }
+  const vede = () => vista === "port" && pagPort === 1 && portLibero();
+  if(port && !forza){ if(!sottofondo && vede()) renderPortafoglio(); return; }
   // con dati già a schermo gira solo l'icona di aggiornamento
   if(!sottofondo){
     if(port && $("pfRef")) $("pfRef").classList.add("gira");
@@ -3455,7 +3456,7 @@ function mostraPaginaPort(){
   $("setbody").hidden = pagPort !== 0;
   $("portbody").hidden = pagPort !== 1;
   sicuro(aggiornaTesta);
-  if(pagPort === 0) caricaSettimana(); else caricaPortafoglio();
+  if(pagPort === 0) caricaSettimana(); else caricaPortaLock();
 }
 function vaiPagina(n){
   if(n === pagPort || n < 0 || n >= PAGINE_PORT.length) return;
@@ -3511,7 +3512,7 @@ function renderStatoSettimana(){
         ? "Puoi rivederlo ancora per " + r.minutiRimasti + " minut" + (r.minutiRimasti === 1 ? "o" : "i") + ", poi si richiude fino a sabato prossimo."
         : "La settimana sui mercati, il passo rispetto al piano e cosa comprare dopo. Si apre una volta sola: prenditi un momento."}</p>
       <button class="cta rip" id="setApri"><span class="ms">drafts</span><span>${r.riapri ? "Rivedi il riepilogo" : "Apri il riepilogo"}</span></button>
-      ${r.riapri ? `` : `<div class="avv"><span class="ms">lock_clock</span>dopo resta chiuso fino a sabato prossimo</div>`}
+      ${r.riapri ? `` : `<div class="bst-avv"><span class="ms">lock_clock</span>dopo resta chiuso fino a sabato prossimo</div>`}
       ${ultimo}</div>`;
   } else if(r.stato === "visto"){
     h = `<div class="carta busta st-su">
@@ -3729,6 +3730,70 @@ function graficoSetSett(){
           ticks:{padding:6, maxTicksLimit:4, callback:v => v.toLocaleString("it-IT",{maximumFractionDigits:1}) + "%"}}}}});
 }
 
+/* ══════════ «Tutto il portafoglio»: una volta al giorno ══════════
+   La seconda pagina si apre una volta al giorno (il lucchetto è nel foglio,
+   Settimana.gs). Dopo l'apertura resta visibile qualche minuto, poi si
+   richiude fino a domani. I dati si caricano lo stesso in sottofondo,
+   ma si disegnano solo a pagina aperta. */
+let portSblocco = false, portScade = 0, portTimer = null;
+const portLibero = () => portSblocco && Date.now() < portScade;
+const vedePorta = () => vista === "port" && pagPort === 1;
+
+function caricaPortaLock(){
+  if(portLibero()){ caricaPortafoglio(); return; }
+  portSblocco = false;
+  $("portbody").innerHTML = `<div class="skeleton" style="height:300px"></div>`;
+  api("settimana", ["porta-stato"]).then(r => { if(vedePorta() && !portLibero()) renderPortaLock(r); },
+    err => { if(vedePorta()) $("portbody").innerHTML = erroreSettimana(err); });
+}
+
+function renderPortaLock(r){
+  if(!r || !r.porta){
+    $("portbody").innerHTML = erroreSettimana(new Error("Funzione sconosciuta: aggiorna Settimana.gs"));
+    return;
+  }
+  if(r.stato === "errore"){ $("portbody").innerHTML = erroreSettimana(r.errore); return; }
+  const domani = r.prossimo ? r.prossimo.testo : "domani";
+  let h;
+  if(r.stato === "pronto"){
+    h = `<div class="carta busta st-su">
+      <div class="busta-ic"><span class="ms f">visibility</span></div>
+      <h3>${r.riapri ? "Il portafoglio è ancora aperto" : "Il portafoglio di oggi"}</h3>
+      <p>${r.riapri
+        ? "Puoi rivederlo ancora per " + r.minutiRimasti + " minut" + (r.minutiRimasti === 1 ? "o" : "i") + ", poi si richiude fino a domani."
+        : "Posizioni, allocazione e andamento. Si apre una volta al giorno e resta aperto pochi minuti: guarda quello che ti serve."}</p>
+      <button class="cta rip" id="portApri"><span class="ms">lock_open</span><span>${r.riapri ? "Rivedi il portafoglio" : "Apri il portafoglio"}</span></button>
+      ${r.riapri ? `` : `<div class="bst-avv"><span class="ms">lock_clock</span>dopo si riapre ${esc(domani)}</div>`}</div>`;
+  } else {
+    h = `<div class="carta busta st-su">
+      <div class="busta-ic spento"><span class="ms">visibility_off</span></div>
+      <h3>Per oggi l'hai già visto</h3>
+      <p>L'hai aperto ${esc(r.aperto || "oggi")}. Si riapre</p>
+      <div class="quando">${esc(domani)}</div>
+      <div class="tra">il riepilogo della settimana resta sulla pagina accanto</div></div>`;
+  }
+  $("portbody").innerHTML = h;
+  if($("portApri")) $("portApri").onclick = apriPorta;
+}
+
+function apriPorta(){
+  const b = $("portApri"); if(!b) return;
+  b.disabled = true; b.querySelector("span:last-child").textContent = "Apro…";
+  api("settimana", ["porta-apri"]).then(r => {
+    if(!r || !r.porta){ renderPortaLock(r); return; }
+    if(r.stato !== "aperto"){ if(vedePorta()) renderPortaLock(r); return; }
+    const min = r.minutiRimasti || 15;
+    portSblocco = true; portScade = Date.now() + min * 60000;
+    clearTimeout(portTimer);
+    portTimer = setTimeout(() => { portSblocco = false; if(vedePorta()) caricaPortaLock(); }, min * 60000 + 500);
+    if(port) renderPortafoglio(); else caricaPortafoglio();
+    toast("Aperto per " + min + " minuti");
+  }, err => {
+    b.disabled = false; b.querySelector("span:last-child").textContent = "Apri il portafoglio";
+    toast(String(err.message || err), true);
+  });
+}
+
 /* ══════════ ACQUISTO ══════════
    Registra un acquisto di titoli: il foglio aggiorna Pz. Carico e Quote in
    PORTAFOGLIO, le quote nei mesi della scheda dell'anno e, se scelto,
@@ -3931,7 +3996,7 @@ function ridisegna(){
   leggiPalette(); paint();
   if(vista==="sum" && riep) renderRiepilogo();
   if(vista==="year" && stat) renderAnni();
-  if(vista==="port" && pagPort===1 && port) renderPortafoglio();
+  if(vista==="port" && pagPort===1 && port && portLibero()) renderPortafoglio();
   if(vista==="port" && pagPort===0 && setDati) renderSettimana(false);
   if(vista==="buy" && acq) renderAcquisto();
 }
@@ -3950,6 +4015,7 @@ document.addEventListener("visibilitychange", () => {
   caricaAcquisto(true, vista!=="buy");
   caricaWallet();   // i pagamenti arrivati mentre l'app era chiusa
   if(vista==="port" && pagPort===0 && !setDati) caricaSettimana();
+  if(vista==="port" && pagPort===1 && !portLibero()) caricaPortaLock();
   const n = new Date();
   if(parseInt($("mm").value,10) !== n.getMonth()+1){
     $("mm").value = n.getMonth()+1; $("dd").value = n.getDate(); $("yy").value = n.getFullYear();
