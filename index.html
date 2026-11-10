@@ -767,6 +767,81 @@ body{background-color:var(--paper);background-image:var(--fibre),var(--dente),va
 .riga.ripeti{cursor:pointer}
 @media (hover:hover){.riga.ripeti:hover{background-color:var(--sheet-2)}}
 
+/* ═══════════ SETTIMANA · riepilogo del weekend (novembre 2026) ═══════════
+   Due pagine nel Portafoglio: la prima è il riepilogo (si apre il sabato
+   e la domenica, una volta), la seconda è il portafoglio di sempre. */
+.pg-nav{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.pg-mid{flex:1;min-width:0;text-align:center}
+.pg-mid b{display:block;font-family:var(--f-mano);font-size:25px;line-height:26px;font-weight:700}
+.pg-dots{display:flex;justify-content:center;gap:6px;margin-top:5px}
+.pg-dots i{width:6px;height:6px;border-radius:3px;background:var(--rule-2);transition:width .3s var(--ease),background-color .3s var(--ease)}
+.pg-dots i.on{width:20px;background:var(--ink)}
+
+/* la busta: chiusa, pronta o già letta */
+.busta{text-align:center;padding:30px 20px 24px}
+.busta-ic{width:88px;height:88px;margin:0 auto 14px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;isolation:isolate}
+.busta-ic::before{content:"";position:absolute;inset:0;background:var(--hl);border-radius:50%;filter:url(#pennarello);z-index:-1}
+.busta-ic .ms{font-size:42px;color:var(--on-hl)}
+.busta-ic.spento::before{background:var(--sheet-2);filter:none}
+.busta-ic.spento .ms{color:var(--ink-3)}
+.busta-ic.sm{width:58px;height:58px;margin-bottom:10px}
+.busta-ic.sm .ms{font-size:28px}
+.busta h3{font-family:var(--f-mano);font-size:34px;line-height:36px;font-weight:700;margin:0}
+.busta p{color:var(--ink-2);margin:8px auto 0;max-width:330px;font-size:14px;line-height:20px}
+.busta .quando{font-family:var(--f-num);font-variation-settings:"opsz" 48;font-size:24px;line-height:30px;font-weight:700;letter-spacing:-.02em;margin-top:18px}
+.busta .tra{font-size:13px;color:var(--ink-3);margin-top:2px}
+.busta .cta{margin-top:22px}
+.busta .avv{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-size:12.5px;color:var(--ink-3)}
+.busta .avv .ms{font-size:16px}
+.busta .ultimo{margin-top:20px;padding-top:14px;font-size:13px;color:var(--ink-3);background-image:var(--linea);background-repeat:no-repeat;background-size:100% 3px}
+.busta .ultimo b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
+.sett-giorni{display:flex;justify-content:center;gap:6px;margin-top:16px}
+.sett-giorni span{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--ink-3);background:var(--sheet-2)}
+.sett-giorni span.fine{background:transparent;color:var(--ink);border:1.5px dashed var(--ink-3)}
+.sett-giorni span.oggi{background:var(--ink);color:var(--paper);border:none}
+
+/* il riepilogo aperto */
+.st-su{animation:entra .55s var(--ease-emph) both}
+.st-verd{font-family:var(--f-mano);font-size:25px;line-height:27px;font-weight:600;color:var(--card-text);margin-top:14px}
+.st-num{font-family:var(--f-num);font-variation-settings:"opsz" 48;font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.03em;white-space:nowrap}
+.st-num small{font-family:var(--f-ui);font-size:14px;font-weight:600;letter-spacing:0;margin-left:6px;color:var(--ink-2)}
+.st-num.good{color:var(--good)}.st-num.bad{color:var(--bad)}
+.st-sub{font-size:12.5px;color:var(--ink-3);margin-top:2px}
+.st-sub b{color:var(--ink-2);font-weight:600}
+.st-leg{display:flex;gap:16px;margin-top:8px;font-size:12px;color:var(--ink-3)}
+.st-leg span{display:inline-flex;align-items:center;gap:6px}
+.st-leg i{display:inline-block;width:16px;height:3px;border-radius:2px;background:var(--ink)}
+.st-leg i.tr{background:repeating-linear-gradient(90deg,var(--ink-3) 0 4px,transparent 4px 7px)}
+.st-nota{display:flex;gap:10px;align-items:flex-start;margin-top:14px;padding-top:12px;font-size:13px;line-height:18px;color:var(--ink-2);
+  background-image:var(--linea);background-repeat:no-repeat;background-size:100% 3px}
+.st-nota .ms{font-size:19px;flex:0 0 auto;margin-top:-1px}
+.st-nota b{color:var(--ink);font-weight:600}
+.st-mesi{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;align-items:end;height:54px;margin-top:16px}
+.st-mesi div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+.st-mesi i{display:block;width:100%;max-width:18px;border-radius:3px 3px 1px 1px;background:var(--matita);min-height:2px;transform-origin:bottom;animation:crescv .8s var(--ease-emph) both}
+.st-mesi i.ora{background:var(--ink)}
+.st-mesi i.neg{background:var(--bad)}
+.st-mesi span{font-size:10px;line-height:10px;color:var(--ink-3);font-weight:600}
+@keyframes crescv{from{transform:scaleY(0)}}
+.st-mv{display:flex;align-items:center;gap:12px;padding:9px 0}
+.st-mv + .st-mv{background-image:var(--linea);background-repeat:no-repeat;background-size:100% 3px}
+.st-mv .nm{flex:1;min-width:0}
+.st-mv .nm b{display:block;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st-mv .nm small{font-size:12px;color:var(--ink-3)}
+.st-mvsep{text-align:center;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);padding:10px 0 4px}
+.st-prox{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;background:var(--sheet-2);margin-bottom:6px}
+.st-prox .ms{font-size:24px}
+.st-prox b{display:block;font-family:var(--f-mano);font-size:24px;line-height:24px;font-weight:700}
+.st-prox span{font-size:12.5px;color:var(--ink-2)}
+.st-fine{text-align:center;padding:26px 16px 8px}
+.st-fine b{display:block;font-family:var(--f-mano);font-size:30px;line-height:32px;font-weight:700}
+.st-fine p{margin:6px auto 0;color:var(--ink-2);max-width:320px;font-size:13.5px;line-height:19px}
+.st-trag{margin:18px auto 0;max-width:340px;text-align:left}
+.st-trag .pf-afoot{display:flex;justify-content:space-between;gap:8px}
+.st-rivedi{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-size:12px;color:var(--ink-3)}
+.st-rivedi .ms{font-size:15px}
+@media (min-width:980px){ #setbody{max-width:640px;margin:0 auto} }
+
 /* ═══════════ PC e schermi larghi ═══════════
    Sotto i 980 px resta tutto come sul telefono. */
 @media (min-width:980px){
@@ -958,7 +1033,13 @@ body{background-color:var(--paper);background-image:var(--fibre),var(--dente),va
 
   <!-- ═════════ PORTAFOGLIO ═════════ -->
   <main id="viewPort" class="view" hidden>
-    <div id="portbody"><div class="skel" style="height:200px"></div><div class="skel" style="height:260px"></div></div>
+    <div class="pg-nav">
+      <button type="button" class="frec rip" id="pgPrima" aria-label="Pagina prima"><span class="ms">chevron_left</span></button>
+      <div class="pg-mid"><b id="pgNome">La settimana</b><div class="pg-dots" id="pgDots"><i class="on"></i><i></i></div></div>
+      <button type="button" class="frec rip" id="pgDopo" aria-label="Pagina dopo"><span class="ms">chevron_right</span></button>
+    </div>
+    <div id="setbody"><div class="skel" style="height:320px"></div></div>
+    <div id="portbody" hidden><div class="skel" style="height:200px"></div><div class="skel" style="height:260px"></div></div>
   </main>
 
   <!-- ═════════ ACQUISTO ═════════ -->
@@ -1388,7 +1469,8 @@ function aggiornaTesta(){
     add:  ["Nuova spesa", oggiLungo],
     sum:  [MESI[m-1] + (a !== n.getFullYear() ? " " + a : ""), "Riepilogo del mese"],
     year: [annoSel ? String(annoSel) : "Anno", "Spese per anno"],
-    port: ["Portafoglio", port && port.aggiornato ? "aggiornato alle " + (String(port.aggiornato).split(" ")[1] || port.aggiornato) : "Investimenti"],
+    port: pagPort === 0 ? ["Portafoglio", setDati ? "Riepilogo del weekend" : "Riepilogo: sabato e domenica"]
+        : ["Portafoglio", port && port.aggiornato ? "aggiornato alle " + (String(port.aggiornato).split(" ")[1] || port.aggiornato) : "Investimenti"],
     buy:  ["Acquisto", "Registra titoli comprati"]
   }[vista] || ["Spese", ""];
   $("ptitle").textContent = t[0];
@@ -1415,7 +1497,7 @@ $("nav").onclick = e => {
   sicuro(() => {
     if(vista==="sum")  caricaRiepilogo();
     if(vista==="year") caricaAnni();
-    if(vista==="port") caricaPortafoglio();
+    if(vista==="port") mostraPaginaPort();
     if(vista==="buy")  caricaAcquisto();
   });
 };
@@ -2862,7 +2944,7 @@ const giorniFra = (a, b) => (Date.UTC(+b.slice(0,4), +b.slice(5,7)-1, +b.slice(8
                              Date.UTC(+a.slice(0,4), +a.slice(5,7)-1, +a.slice(8,10))) / 86400000;
 
 function caricaPortafoglio(forza, sottofondo){
-  const vede = () => vista === "port";
+  const vede = () => vista === "port" && pagPort === 1;
   if(port && !forza){ if(!sottofondo) renderPortafoglio(); return; }
   // con dati già a schermo gira solo l'icona di aggiornamento
   if(!sottofondo){
@@ -3356,6 +3438,297 @@ function renderPortafoglio(){
     `<div class="err" style="margin:0 0 12px"><span>Non riesco a caricare la libreria dei grafici.</span></div>`);
 }
 
+/* ══════════ SETTIMANA · riepilogo del weekend ══════════
+   Prima pagina del Portafoglio. Il foglio (Settimana.gs) decide se si può
+   aprire: solo sabato e domenica, una volta per weekend. Qui si chiede lo
+   «stato» (non consuma niente) e si apre solo toccando il pulsante.
+   Una volta aperto, il riepilogo resta in memoria finché l'app è aperta. */
+let pagPort = 0, setStato = null, setDati = null, setMin = 0, chSetPasso = null, chSetSett = null;
+const PAGINE_PORT = ["La settimana", "Tutto il portafoglio"];
+const GIORNI1 = ["L","M","M","G","V","S","D"];
+
+function mostraPaginaPort(){
+  $("pgNome").textContent = PAGINE_PORT[pagPort];
+  [...$("pgDots").children].forEach((d,i) => d.classList.toggle("on", i===pagPort));
+  $("pgPrima").disabled = pagPort === 0;
+  $("pgDopo").disabled = pagPort === PAGINE_PORT.length - 1;
+  $("setbody").hidden = pagPort !== 0;
+  $("portbody").hidden = pagPort !== 1;
+  sicuro(aggiornaTesta);
+  if(pagPort === 0) caricaSettimana(); else caricaPortafoglio();
+}
+function vaiPagina(n){
+  if(n === pagPort || n < 0 || n >= PAGINE_PORT.length) return;
+  pagPort = n;
+  const v = $("viewPort"); v.classList.remove("view"); void v.offsetWidth; v.classList.add("view");
+  window.scrollTo({top:0});
+  mostraPaginaPort();
+}
+$("pgPrima").onclick = () => vaiPagina(pagPort - 1);
+$("pgDopo").onclick = () => vaiPagina(pagPort + 1);
+
+const vedeSett = () => vista === "port" && pagPort === 0;
+
+function caricaSettimana(){
+  if(setDati){ renderSettimana(false); return; }
+  if(!setStato) $("setbody").innerHTML = `<div class="skeleton" style="height:340px"></div>`;
+  api("settimana", ["stato"]).then(r => {
+    setStato = r;
+    if(vedeSett() && !setDati) renderStatoSettimana();
+  }, err => {
+    if(!vedeSett()) return;
+    $("setbody").innerHTML = erroreSettimana(err);
+  });
+}
+
+function erroreSettimana(err){
+  const m = String(err && err.message || err);
+  const manca = /sconosciuta/i.test(m);
+  return `<div class="carta busta"><div class="busta-ic spento"><span class="ms">${manca ? "construction" : "cloud_off"}</span></div>
+    <h3>${manca ? "Manca un pezzo nel foglio" : "Non riesco a leggere il foglio"}</h3>
+    <p>${manca ? "Aggiungi Settimana.gs nel progetto Apps Script, la riga <b>settimana</b> in API_FUNZIONI e pubblica una nuova versione." : esc(m)}</p>
+    <button class="btn rip" style="margin-top:18px" onclick="setStato=null;caricaSettimana()"><span class="ms">refresh</span>Riprova</button></div>`;
+}
+
+/* ── busta chiusa, pronta o già letta ── */
+function renderStatoSettimana(){
+  const r = setStato || {};
+  if(r.stato === "errore"){ $("setbody").innerHTML = erroreSettimana(r.errore); return; }
+  const giorni = (() => {
+    const g = new Date().getDay(), oggi = (g + 6) % 7;
+    return `<div class="sett-giorni" aria-hidden="true">${GIORNI1.map((x,i) =>
+      `<span class="${i===oggi ? "oggi" : i >= 5 ? "fine" : ""}">${x}</span>`).join("")}</div>`;
+  })();
+  const ultimo = r.ultimo && r.ultimo.pct != null ? `<div class="ultimo">L'ultima volta, ${dataCorta(r.ultimo.da)}–${dataCorta(r.ultimo.a)}:
+      <b>${pcs(r.ultimo.pct)}</b> · <b>${segno(r.ultimo.guadagno)}</b></div>` : ``;
+  const quando = r.prossimo ? r.prossimo.testo : "sabato";
+  let h;
+  if(r.stato === "pronto"){
+    h = `<div class="carta busta st-su">
+      <div class="busta-ic"><span class="ms f">mark_email_unread</span></div>
+      <h3>${r.riapri ? "Il riepilogo è ancora aperto" : "È arrivato il riepilogo"}</h3>
+      <p>${r.riapri
+        ? "Puoi rivederlo ancora per " + r.minutiRimasti + " minut" + (r.minutiRimasti === 1 ? "o" : "i") + ", poi si richiude fino a sabato prossimo."
+        : "La settimana sui mercati, il passo rispetto al piano e cosa comprare dopo. Si apre una volta sola: prenditi un momento."}</p>
+      <button class="cta rip" id="setApri"><span class="ms">drafts</span><span>${r.riapri ? "Rivedi il riepilogo" : "Apri il riepilogo"}</span></button>
+      ${r.riapri ? `` : `<div class="avv"><span class="ms">lock_clock</span>dopo resta chiuso fino a sabato prossimo</div>`}
+      ${ultimo}</div>`;
+  } else if(r.stato === "visto"){
+    h = `<div class="carta busta st-su">
+      <div class="busta-ic spento"><span class="ms">drafts</span></div>
+      <h3>Riepilogo già letto</h3>
+      <p>L'hai aperto ${esc(r.aperto || "questo weekend")}. Il prossimo arriva</p>
+      <div class="quando">${esc(quando)}</div>
+      ${giorni}${ultimo}</div>`;
+  } else {
+    const n = r.giorniMancanti;
+    h = `<div class="carta busta st-su">
+      <div class="busta-ic"><span class="ms">lock_clock</span></div>
+      <h3>Il riepilogo si apre nel weekend</h3>
+      <p>Durante la settimana il mercato fa il suo lavoro anche senza di te. Il prossimo riepilogo arriva</p>
+      <div class="quando">${esc(quando)}</div>
+      ${n != null ? `<div class="tra">${n === 1 ? "domani" : "tra " + n + " giorni"}</div>` : ``}
+      ${giorni}${ultimo}</div>`;
+  }
+  $("setbody").innerHTML = h;
+  if($("setApri")) $("setApri").onclick = apriSettimana;
+  sicuro(aggiornaTesta);
+}
+
+function apriSettimana(){
+  const b = $("setApri"); if(!b) return;
+  b.disabled = true; b.querySelector("span:last-child").textContent = "Apro la busta…";
+  api("settimana", ["apri"]).then(r => {
+    if(r.stato === "aperto"){ setDati = r.dati; setMin = r.minutiRimasti || 0; if(vedeSett()) renderSettimana(true); }
+    else { setStato = r; if(vedeSett()) renderStatoSettimana(); }
+  }, err => {
+    b.disabled = false; b.querySelector("span:last-child").textContent = "Apri il riepilogo";
+    toast(String(err.message || err), true);
+  });
+}
+
+/* ── il riepilogo aperto ── */
+function verdettoSettimana(s, passo){
+  const p = s ? s.pct : 0;
+  const a = p > 0.015 ? "Settimana forte." : p > 0.002 ? "Settimana positiva." : p > -0.002 ? "Settimana quasi ferma."
+          : p > -0.015 ? "Settimana in calo, niente di strano." : "Settimana pesante: capita, si guarda lontano.";
+  if(!passo || passo.scarto == null) return a;
+  const b = Math.abs(passo.scarto) < 250 ? " Sei praticamente sul piano."
+          : passo.scarto > 0 ? " E sei sopra il piano." : " Sei un po' sotto il piano.";
+  return a + b;
+}
+
+function renderSettimana(animata){
+  const d = setDati, s = d.settimana, passo = d.passo, ver = d.versato, ren = d.rendimento || {};
+  const ritardo = i => animata ? ` style="animation-delay:${i*110}ms"` : ``;
+  const cls = animata ? "sez st-su" : "sez";
+  const errori = (d.errori || []).map(e => `<div class="err" style="margin:0 0 12px"><span>${esc(e)}</span></div>`).join("");
+
+  // 1. la settimana in una carta
+  const hero = s ? `<div class="inch${animata ? " st-su" : ""}">
+      <div class="inch-sopra"><span>Settimana ${dataCorta(s.da)} – ${dataCorta(s.a)}</span><span>${esc(String(d.creato||"").slice(11))}</span></div>
+      <div class="inch-big">${segno(s.guadagno)}</div>
+      <div class="pf-chips">
+        <span class="pill ${s.pct >= 0 ? "good" : "bad"}"><span class="ms">${s.pct >= 0 ? "trending_up" : "trending_down"}</span>${pcs(s.pct)} in una settimana</span>
+        ${s.flussi ? `<span class="pill neu"><span class="ms">add_card</span>versati ${eur0(s.flussi)}</span>` : ``}
+      </div>
+      <div class="st-verd">${esc(verdettoSettimana(s, passo))}</div>
+      <div class="inch-righe"><span>Valore investito <b>${eur0(s.v1)}</b></span><span>una settimana fa <b>${eur0(s.v0)}</b></span></div>
+    </div>` : `<div class="err"><span>Non ho abbastanza giorni nella scheda XIRR per la settimana.</span></div>`;
+
+  // 2. il passo rispetto al piano
+  let passoH = ``;
+  if(passo && passo.scarto != null){
+    const su = passo.scarto >= 0;
+    let nota = ``;
+    if(passo.scartoPrima != null && s){
+      const mosso = passo.scarto - passo.scartoPrima;
+      const crescita = passo.piano - (s.v0 - passo.scartoPrima);
+      nota = `<div class="st-nota"><span class="ms">${mosso >= 0 ? "north_east" : "south_east"}</span><span>
+        In una settimana lo scarto è ${mosso >= 0 ? "migliorato" : "peggiorato"} di <b>${eur0(Math.abs(mosso))}</b>.
+        Il piano sale di circa <b>${eur0(crescita)}</b> a settimana tra versamenti e rendimento: per tenere il passo
+        bastano quelli.</span></div>`;
+    }
+    passoH = `<section class="${cls}"${ritardo(1)}><div class="sez-t"><b>Il passo</b><span>reale contro piano ${passo.anno || ""}</span></div><div class="carta">
+      <div class="st-num ${su ? "good" : "bad"}">${su ? "+" : "−"}${eur0(Math.abs(passo.scarto))}<small>${su ? "sopra" : "sotto"} il piano</small></div>
+      <div class="st-sub">oggi il piano dice <b>${eur0(passo.piano)}</b>, hai <b>${eur0(passo.reale)}</b> · ${pcs(passo.scartoPct)}</div>
+      <div class="cbox" style="height:190px;margin-top:12px"><canvas id="cvSetPasso" role="img" aria-label="Valore reale e piano nelle ultime settimane"></canvas></div>
+      <div class="st-leg"><span><i></i>Reale</span><span><i class="tr"></i>Piano</span></div>
+      ${nota}</div></section>`;
+  }
+
+  // 3. versamenti dell'anno
+  let versH = ``;
+  if(ver && ver.obiettivo){
+    const anno = String(d.creato || "").slice(0,4);
+    const quota = Math.max(0, Math.min(100, ver.reale / ver.obiettivo * 100));
+    const diff = ver.reale - ver.piano;
+    const mesi = ver.perMese || [];
+    const max = Math.max(1, ...mesi.map(Math.abs));
+    const meseOra = Number(String(d.creato || "").slice(5,7)) - 1;
+    const barre = mesi.length ? `<div class="st-mesi" aria-hidden="true">${mesi.map((x,i) =>
+      `<div><i class="${x < 0 ? "neg" : i === meseOra ? "ora" : ""}" style="height:${Math.max(3, Math.abs(x)/max*40)}px;animation-delay:${i*40}ms"></i>
+       <span>${MESI3[i][0].toUpperCase()}</span></div>`).join("")}</div>` : ``;
+    versH = `<section class="${cls}"${ritardo(2)}><div class="sez-t"><b>Versamenti ${anno}</b><span>obiettivo ${eur0(ver.obiettivo)} l'anno</span></div><div class="carta">
+      <div class="st-num">${eur0(ver.reale)}<small>di ${eur0(ver.obiettivo)} · ${Math.round(quota)}%</small></div>
+      <div class="pf-track" style="height:8px;margin-top:14px"><div class="pf-fill" style="width:${quota}%;background:var(--ink)"></div>
+        <div class="pf-tick" style="left:${Math.min(100, ver.frazioneAnno*100)}%;background:var(--hl);width:4px"></div></div>
+      <div class="pf-afoot">La tacca gialla è dove saresti a ritmo costante (${eur0(ver.piano)}):
+        <b>${diff >= 0 ? "avanti di " + eur0(diff) : "indietro di " + eur0(-diff)}</b> · mancano ${eur0(Math.max(0, ver.obiettivo - ver.reale))} a fine anno</div>
+      ${barre}</div></section>`;
+  }
+
+  // 4. settimana per settimana + rendimento
+  const sett = d.storicoSett || [];
+  const tile = (k, v, nota) => `<div><div class="k">${k}</div><div class="v">${v}</div><div class="d">${nota}</div></div>`;
+  const pv = x => x == null ? "—" : pcs(x);
+  const rendH = `<section class="${cls}"${ritardo(3)}><div class="sez-t"><b>Settimana per settimana</b><span>${sett.length > 1 ? "ultime " + sett.length : "si riempie col tempo"}</span></div><div class="carta">
+      ${sett.length > 1 ? `<div class="cbox sm"><canvas id="cvSetSett" role="img" aria-label="Rendimento di ogni settimana"></canvas></div>` :
+        `<div class="pf-afoot" style="margin-bottom:6px">Le settimane si contano da quando gli acquisti sono nella scheda «Movimenti»: il grafico cresce da solo.</div>`}
+      <div class="pf-stats">${tile("Settimana", pv(ren.settimana), "al netto dei versamenti")}${tile("Da inizio anno", pv(ren.ytd), "rendimento " + String(d.creato||"").slice(0,4))}${tile("XIRR anno", pv(ren.xirr), "annualizzato")}</div>
+    </div></section>`;
+
+  // 5. chi ha mosso la settimana
+  let mvH;
+  const mv = d.movers;
+  if(mv && mv.lista && mv.lista.length){
+    const riga = x => `<div class="st-mv">${avatar(x).replace('class="pf-av', 'class="pf-av sm')}
+        <div class="nm"><b>${esc(x.nome)}</b><small>${segno(x.eur)} sulla tua posizione</small></div>
+        <span class="pf-pill ${x.pct >= 0 ? "up" : "down"}">${pcs(x.pct)}</span></div>`;
+    const L = mv.lista;
+    const corpo = L.length <= 6 ? L.map(riga).join("")
+      : L.slice(0,3).map(riga).join("") + `<div class="st-mvsep">· · ·</div>` + L.slice(-3).map(riga).join("");
+    mvH = `<section class="${cls}"${ritardo(4)}><div class="sez-t"><b>Chi ha mosso la settimana</b><span>prezzi dal ${dataCorta(mv.da)}</span></div>
+      <div class="carta">${corpo}</div></section>`;
+  } else {
+    mvH = `<section class="${cls}"${ritardo(4)}><div class="sez-t"><b>Chi ha mosso la settimana</b></div>
+      <div class="vuoto"><span class="ms">photo_camera</span>Ho appena fotografato i prezzi: dal prossimo weekend qui vedi chi è salito e chi è sceso.</div></section>`;
+  }
+
+  // 6. allocazione e prossimo acquisto
+  let allH = ``;
+  const a = d.allocazione;
+  if(a && a.classi && a.classi.length){
+    const voci = vociFinali(a, a.totale);
+    const tot = a.totale || 1;
+    // il prossimo acquisto fra le voci su cui investi già (una classe mai avviata, es. Bonds, non conta)
+    const prox = voci.filter(v => v.modo !== "set" && v.attuale > 0).sort((x,y) => (y.obiettivo - y.attuale) - (x.obiettivo - x.attuale))[0];
+    const scala = Math.max(...voci.map(v => Math.max(v.attuale, v.obiettivo))) / tot * 1.12 || 1;
+    let k = 0;
+    const righe = voci.map(v => {
+      const att = v.attuale / tot, ob = v.obiettivo / tot, delta = v.obiettivo - v.attuale;
+      const chip = Math.abs(delta) < tot * 0.005 ? `<span class="pf-chip ok">in linea</span>`
+        : delta > 0 ? `<span class="pf-chip warn">−${eur0(delta)}</span>` : `<span class="pf-chip over">+${eur0(-delta)}</span>`;
+      const c = P.slot[ORDINE_COLORI[(k++) % ORDINE_COLORI.length]];
+      return `<div class="pf-arow"><div class="pf-ahead"><span class="pf-dot" style="background:${c}"></span><span class="nm">${esc(v.nome)}</span>${chip}</div>
+        <div class="pf-track"><div class="pf-fill" style="width:${Math.min(100, att/scala*100)}%;background:${c}"></div>
+          <div class="pf-tick" style="left:${Math.min(100, ob/scala*100)}%"></div></div>
+        <div class="pf-afoot"><b>${pc1(att)}</b> del totale · obiettivo ${pc1(ob)}</div></div>`;
+    }).join("");
+    allH = `<section class="${cls}"${ritardo(5)}><div class="sez-t"><b>Allocazione</b><span>patrimonio ${eur0(a.totale)}</span></div><div class="carta">
+      ${prox && prox.obiettivo > prox.attuale ? `<div class="st-prox"><span class="ms">shopping_bag</span><div>
+        <b>Prossimo acquisto: ${esc(prox.nome)}</b><span>mancano ${eur0(prox.obiettivo - prox.attuale)} per tornare in linea</span></div></div>` : ``}
+      ${righe}</div></section>`;
+  }
+
+  // 7. chiusura
+  const tg = d.traguardo;
+  const trag = tg ? `<div class="st-trag"><div class="pf-track" style="height:8px"><div class="pf-fill" style="width:${
+      Math.max(2, Math.min(100, (1 - tg.manca/(tg.soglia - tg.da))*100))}%;background:var(--ink)"></div></div>
+      <div class="pf-afoot"><span>Prossimo traguardo <b>${eur0(tg.soglia)}</b></span><span>mancano <b>${eur0(tg.manca)}</b></span></div></div>` : ``;
+  const fine = `<section class="${cls}"${ritardo(6)}><div class="st-fine">
+      <div class="busta-ic sm"><span class="ms">event_available</span></div>
+      <b>Ci rivediamo ${esc(d.prossimo ? d.prossimo.testo : "sabato prossimo")}</b>
+      <p>Fino ad allora non c'è niente da controllare: il PAC compra da solo e la fine del mese si chiude da sola.</p>
+      ${trag}
+      ${setMin ? `<div class="st-rivedi"><span class="ms">lock_clock</span>resta apribile ancora per ${setMin} minuti, poi si richiude</div>` : ``}
+    </div></section>`;
+
+  $("setbody").innerHTML = errori + hero + passoH + versH + rendH + mvH + allH + fine;
+  sicuro(aggiornaTesta);
+  graficoSetPasso(); graficoSetSett();
+}
+
+function graficoSetPasso(){
+  const cv = $("cvSetPasso"), passo = setDati && setDati.passo;
+  if(!cv || !passo || !passo.serie || passo.serie.length < 2 || !chartDefaults()) return;
+  const S = passo.serie, n = S.length, tinta = P.primario;
+  if(chSetPasso) chSetPasso.destroy();
+  chSetPasso = new Chart(cv, {type:"line",
+    data:{labels:S.map(x => dataCorta(x[0])), datasets:[
+      {label:"Reale", data:S.map(x => x[1]), borderColor:tinta, borderWidth:2.5, tension:.3,
+       pointRadius:c => c.dataIndex === n-1 ? 4 : 0, pointBackgroundColor:tinta, pointBorderColor:P.superficie, pointBorderWidth:2,
+       pointHoverRadius:5, fill:true, backgroundColor:c => sfuma(c.chart.ctx, c.chart.chartArea, tinta)},
+      {label:"Piano", data:S.map(x => x[2]), borderColor:P.testo3, borderWidth:2, borderDash:[5,4], tension:.2,
+       pointRadius:0, pointHoverRadius:4, fill:false, spanGaps:true}]},
+    options:{maintainAspectRatio:false, interaction:{mode:"index", intersect:false}, layout:{padding:{top:8,right:6}},
+      plugins:{legend:{display:false}, tooltip:{...tip(), callbacks:{
+        title:t => dataLunga(S[t[0].dataIndex][0]),
+        label:c => c.raw == null ? null : c.dataset.label + "  " + eur0(c.raw),
+        afterBody:t => { const r = S[t[0].dataIndex]; return r[2] == null ? "" : "scarto " + segno(r[1] - r[2]); }}}},
+      scales:{x:{grid:{display:false}, border:{display:false}, ticks:{maxTicksLimit:4, padding:6, maxRotation:0}},
+        y:{grid:grid(), border:{display:false}, grace:"6%", position:"right",
+          ticks:{padding:6, maxTicksLimit:4, callback:v => (v/1000).toLocaleString("it-IT",{maximumFractionDigits:1}) + "k"}}}}});
+}
+
+function graficoSetSett(){
+  const cv = $("cvSetSett"), L = setDati && setDati.storicoSett;
+  if(!cv || !L || L.length < 2 || !chartDefaults()) return;
+  const n = L.length;
+  const col = (x, i) => (x.pct >= 0 ? P.bene : P.male) + (i === n-1 ? "" : "8C");
+  if(chSetSett) chSetSett.destroy();
+  chSetSett = new Chart(cv, {type:"bar",
+    data:{labels:L.map(x => dataCorta(x.a)), datasets:[{data:L.map(x => x.pct*100),
+      backgroundColor:L.map(col), borderRadius:4, borderSkipped:false, maxBarThickness:26}]},
+    options:{maintainAspectRatio:false, layout:{padding:{top:6,right:6}},
+      plugins:{legend:{display:false}, tooltip:{...tip(), callbacks:{
+        title:t => { const x = L[t[0].dataIndex]; return dataCorta(x.da) + " – " + dataCorta(x.a); },
+        label:c => { const x = L[c.dataIndex]; return pcs(x.pct) + "  ·  " + segno(x.guadagno); }}}},
+      scales:{x:{grid:{display:false}, border:{display:false}, ticks:{maxTicksLimit:6, maxRotation:0, padding:4}},
+        y:{grid:grid(), border:{display:false}, position:"right", grace:"15%",
+          ticks:{padding:6, maxTicksLimit:4, callback:v => v.toLocaleString("it-IT",{maximumFractionDigits:1}) + "%"}}}}});
+}
+
 /* ══════════ ACQUISTO ══════════
    Registra un acquisto di titoli: il foglio aggiorna Pz. Carico e Quote in
    PORTAFOGLIO, le quote nei mesi della scheda dell'anno e, se scelto,
@@ -3558,7 +3931,8 @@ function ridisegna(){
   leggiPalette(); paint();
   if(vista==="sum" && riep) renderRiepilogo();
   if(vista==="year" && stat) renderAnni();
-  if(vista==="port" && port) renderPortafoglio();
+  if(vista==="port" && pagPort===1 && port) renderPortafoglio();
+  if(vista==="port" && pagPort===0 && setDati) renderSettimana(false);
   if(vista==="buy" && acq) renderAcquisto();
 }
 if(window.matchMedia){
@@ -3575,6 +3949,7 @@ document.addEventListener("visibilitychange", () => {
   caricaPortafoglio(true, vista!=="port");
   caricaAcquisto(true, vista!=="buy");
   caricaWallet();   // i pagamenti arrivati mentre l'app era chiusa
+  if(vista==="port" && pagPort===0 && !setDati) caricaSettimana();
   const n = new Date();
   if(parseInt($("mm").value,10) !== n.getMonth()+1){
     $("mm").value = n.getMonth()+1; $("dd").value = n.getDate(); $("yy").value = n.getFullYear();
