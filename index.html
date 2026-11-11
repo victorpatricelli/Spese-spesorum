@@ -2,12 +2,12 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Spese</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<meta name="theme-color" content="#F3EEE5" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F4F5F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0A0B0D" media="(prefers-color-scheme: dark)">
 <meta name="color-scheme" content="light dark">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -43,84 +43,83 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Bricolage Grotesque per titoli e cifre, Instrument Sans per il resto, icone Material Symbols -->
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Caveat:wght@500..700&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+<!-- Geist per testo e cifre, icone Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400..800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,400..600,0..1,0&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════════
-   CARTA E INCHIOSTRO
-   Fondo carta, testo e carte d'inchiostro, un evidenziatore giallo
-   per ciò che è scelto o "adesso". Il colore vero è solo per i dati
-   (categorie) e per lo stato (bene / attenzione / sforato).
+   GRAFITE
+   Superfici neutre e pulite, testo quasi nero, una sola tinta d'accento
+   (lime) per ciò che è scelto o "adesso". Le cifre sono sempre tabellari.
+   Il colore vero resta per i dati (categorie) e per lo stato
+   (bene / attenzione / sforato). Niente trame, niente filtri.
    ═══════════════════════════════════════════════════════════════ */
 :root{
   color-scheme:light;
-  --paper:#F3EEE5;          /* fondo */
-  --sheet:#FBF8F2;          /* fogli e carte */
-  --sheet-2:#EDE6DA;        /* campi, tasti, incassi */
-  --sheet-3:#E2D9CA;        /* tasti premuti, tracce */
-  --rule:#DDD3C3;           /* righe sottili */
-  --rule-2:#C9BEAB;
-  --ink:#1B1A17;            /* testo */
-  --ink-2:#5E584E;          /* testo secondario */
-  --ink-3:#736C60;          /* testo tenue */
-  --hl:#F4D84A;             /* evidenziatore */
-  --on-hl:#1B1A17;
-  --card:#1D1C1A;           /* carta d'inchiostro */
-  --card-2:#2B2926;
-  --card-rule:#3A3733;
-  --card-text:#F5F0E7;
-  --card-text-2:#B9B2A5;
-  --good:#2F7A4F;--good-s:#DCEFE1;--on-good-s:#0E2A19;
-  --warn:#9A6200;--warn-s:#F8E6C2;--on-warn-s:#3A2600;
-  --bad:#B42318; --bad-s:#FBE1DD; --on-bad-s:#4A0E08;
-  /* su carta d'inchiostro gli stati vanno schiariti */
-  --good-c:#8FD3A8;--warn-c:#EBC27A;--bad-c:#F2A49C;
+  --paper:#F4F5F7;          /* fondo */
+  --sheet:#FFFFFF;          /* schede */
+  --sheet-2:#ECEEF2;        /* campi, tasti, incassi */
+  --sheet-3:#DFE2E8;        /* tasti premuti, tracce */
+  --rule:#E3E6EB;           /* righe sottili */
+  --rule-2:#C9CED6;
+  --ink:#0E1014;            /* testo */
+  --ink-2:#454B55;          /* testo secondario */
+  --ink-3:#666D78;          /* testo tenue */
+  --hl:#C9F35C;             /* accento */
+  --on-hl:#10140A;
+  --card:#0F1115;           /* scheda scura (i numeri grandi) */
+  --card-2:#1C1F25;
+  --card-rule:#2B2F37;
+  --card-text:#F5F7FA;
+  --card-text-2:#A6ADB8;
+  --good:#15784A;--good-s:#DCF3E5;--on-good-s:#0A2A18;
+  --warn:#955800;--warn-s:#FBEACB;--on-warn-s:#3A2400;
+  --bad:#C4281C; --bad-s:#FCE3E0; --on-bad-s:#4A0E08;
+  /* sulla scheda scura gli stati vanno schiariti */
+  --good-c:#7EE0A5;--warn-c:#F2C46D;--bad-c:#FF9F95;
   /* categorie: le prime sette hanno un colore, le altre il grigio «altro» */
-  --c1:#2a78d6;--c2:#eb6834;--c3:#1baf7a;--c4:#eda100;--c5:#e87ba4;--c6:#008300;--c7:#6250d6;--c-altro:#A39A8B;
-  --scrim:rgba(27,26,23,.42);
-  --sh-1:0 1px 0 rgba(255,255,255,.7) inset,0 1px 2px rgba(60,50,30,.05);
-  --sh-2:0 1px 2px rgba(60,50,30,.06),0 8px 24px rgba(60,50,30,.08);
-  --sh-3:0 6px 16px rgba(27,26,23,.16),0 22px 44px rgba(27,26,23,.18);
-  --f-ui:"Instrument Sans",system-ui,-apple-system,sans-serif;
-  --f-num:"Bricolage Grotesque","Instrument Sans",system-ui,sans-serif;
+  --c1:#2a78d6;--c2:#eb6834;--c3:#1baf7a;--c4:#eda100;--c5:#e87ba4;--c6:#008300;--c7:#6250d6;--c-altro:#9AA1AC;
+  --scrim:rgba(14,16,20,.46);
+  --sh-1:0 1px 2px rgba(16,18,24,.04);
+  --sh-2:0 1px 2px rgba(16,18,24,.05),0 10px 28px rgba(16,18,24,.07);
+  --sh-3:0 8px 20px rgba(16,18,24,.16),0 24px 48px rgba(16,18,24,.18);
+  --f-ui:"Geist","Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-num:"Geist","Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mano:var(--f-num);
   --ease:cubic-bezier(.2,0,0,1);--ease-emph:cubic-bezier(.05,.7,.1,1);
-  --r:22px;
-  --grana:.05;
+  --r:20px;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     color-scheme:dark;
-    --paper:#141312;--sheet:#1C1B19;--sheet-2:#272522;--sheet-3:#33302C;--rule:#2F2C28;--rule-2:#45413B;
-    --ink:#F1ECE3;--ink-2:#B1AA9D;--ink-3:#958E82;
-    --hl:#E9CC3F;--on-hl:#16150F;
-    --card:#25231F;--card-2:#312E2A;--card-rule:#403C36;--card-text:#F5F0E7;--card-text-2:#B1AA9D;
-    --good:#7FC79A;--good-s:#1F3A2A;--on-good-s:#DCEFE1;
-    --warn:#E8B866;--warn-s:#43341A;--on-warn-s:#F8E6C2;
-    --bad:#F2928A; --bad-s:#4A1B16; --on-bad-s:#FBE1DD;
-    --c1:#3987e5;--c2:#d95926;--c3:#199e70;--c4:#c98500;--c5:#d55181;--c6:#2f9a2f;--c7:#9085e9;--c-altro:#6f685d;
-    --scrim:rgba(0,0,0,.6);
-    --sh-1:0 1px 0 rgba(255,255,255,.03) inset;
-    --sh-2:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
-    --sh-3:0 8px 24px rgba(0,0,0,.5);
-    --grana:.035;
+    --paper:#0A0B0D;--sheet:#131518;--sheet-2:#1C1F23;--sheet-3:#292D33;--rule:#212429;--rule-2:#3A3F47;
+    --ink:#F3F5F8;--ink-2:#B1B7C1;--ink-3:#8B929D;
+    --hl:#C9F35C;--on-hl:#10140A;
+    --card:#181B1F;--card-2:#23272D;--card-rule:#333840;--card-text:#F5F7FA;--card-text-2:#A6ADB8;
+    --good:#6FD899;--good-s:#12301F;--on-good-s:#DDF3E6;
+    --warn:#F0BC62;--warn-s:#3B2C10;--on-warn-s:#FBEACB;
+    --bad:#FF8F85; --bad-s:#451818; --on-bad-s:#FCE3E0;
+    --c1:#3987e5;--c2:#d95926;--c3:#199e70;--c4:#c98500;--c5:#d55181;--c6:#2f9a2f;--c7:#9085e9;--c-altro:#676D77;
+    --scrim:rgba(0,0,0,.62);
+    --sh-1:0 0 0 1px rgba(255,255,255,.02) inset;
+    --sh-2:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.28);
+    --sh-3:0 10px 28px rgba(0,0,0,.55);
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --paper:#141312;--sheet:#1C1B19;--sheet-2:#272522;--sheet-3:#33302C;--rule:#2F2C28;--rule-2:#45413B;
-  --ink:#F1ECE3;--ink-2:#B1AA9D;--ink-3:#958E82;
-  --hl:#E9CC3F;--on-hl:#16150F;
-  --card:#25231F;--card-2:#312E2A;--card-rule:#403C36;--card-text:#F5F0E7;--card-text-2:#B1AA9D;
-  --good:#7FC79A;--good-s:#1F3A2A;--on-good-s:#DCEFE1;
-  --warn:#E8B866;--warn-s:#43341A;--on-warn-s:#F8E6C2;
-  --bad:#F2928A; --bad-s:#4A1B16; --on-bad-s:#FBE1DD;
-  --c1:#3987e5;--c2:#d95926;--c3:#199e70;--c4:#c98500;--c5:#d55181;--c6:#2f9a2f;--c7:#9085e9;--c-altro:#6f685d;
-  --scrim:rgba(0,0,0,.6);
-  --sh-1:0 1px 0 rgba(255,255,255,.03) inset;
-  --sh-2:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
-  --sh-3:0 8px 24px rgba(0,0,0,.5);
-  --grana:.035;
+  --paper:#0A0B0D;--sheet:#131518;--sheet-2:#1C1F23;--sheet-3:#292D33;--rule:#212429;--rule-2:#3A3F47;
+  --ink:#F3F5F8;--ink-2:#B1B7C1;--ink-3:#8B929D;
+  --hl:#C9F35C;--on-hl:#10140A;
+  --card:#181B1F;--card-2:#23272D;--card-rule:#333840;--card-text:#F5F7FA;--card-text-2:#A6ADB8;
+  --good:#6FD899;--good-s:#12301F;--on-good-s:#DDF3E6;
+  --warn:#F0BC62;--warn-s:#3B2C10;--on-warn-s:#FBEACB;
+  --bad:#FF8F85; --bad-s:#451818; --on-bad-s:#FCE3E0;
+  --c1:#3987e5;--c2:#d95926;--c3:#199e70;--c4:#c98500;--c5:#d55181;--c6:#2f9a2f;--c7:#9085e9;--c-altro:#676D77;
+  --scrim:rgba(0,0,0,.62);
+  --sh-1:0 0 0 1px rgba(255,255,255,.02) inset;
+  --sh-2:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.28);
+  --sh-3:0 10px 28px rgba(0,0,0,.55);
 }
 :root[data-theme="light"]{color-scheme:light}
 
@@ -131,9 +130,6 @@ html,body{margin:0;padding:0;background:var(--paper)}
 body{color:var(--ink);font-family:var(--f-ui);font-size:14px;line-height:20px;min-height:100vh;
   padding-bottom:calc(96px + env(safe-area-inset-bottom));-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 body.con-cta{padding-bottom:calc(164px + env(safe-area-inset-bottom))}
-/* grana della carta: un velo di rumore fisso, quasi invisibile */
-body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:var(--grana);
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .wrap{max-width:560px;margin:0 auto;padding:0 16px;position:relative;z-index:1}
 button{font-family:inherit;color:inherit}
 button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
@@ -224,7 +220,7 @@ button.pill{border:none;cursor:pointer;font-family:inherit}
 .seg::-webkit-scrollbar{display:none}
 .seg button,.seg .chip{flex:1 0 auto;height:34px;padding:0 12px;border:none;border-radius:11px;background:transparent;color:var(--ink-2);
   font:600 13.5px var(--f-ui);cursor:pointer;white-space:nowrap;transition:background .2s var(--ease),color .2s,box-shadow .2s}
-.seg button.on,.seg .chip.on{background:var(--sheet);color:var(--ink);box-shadow:0 1px 3px rgba(60,50,30,.16)}
+.seg button.on,.seg .chip.on{background:var(--sheet);color:var(--ink);box-shadow:0 1px 3px rgba(16,18,24,.16)}
 .seg button.fut{color:var(--ink-3)}
 .seg.hl-on button.on{background:var(--hl);color:var(--on-hl);box-shadow:none}
 /* chip */
@@ -643,98 +639,9 @@ body.con-cta .toast{bottom:calc(160px + env(safe-area-inset-bottom))}
 .temi input{position:absolute;opacity:0}
 .temi span{display:flex;align-items:center;justify-content:center;gap:6px;height:36px;border-radius:11px;font-size:13.5px;font-weight:600;color:var(--ink-2);cursor:pointer}
 .temi span .ms{font-size:17px}
-.temi input:checked + span{background:var(--sheet);color:var(--ink);box-shadow:0 1px 3px rgba(60,50,30,.16)}
+.temi input:checked + span{background:var(--sheet);color:var(--ink);box-shadow:0 1px 3px rgba(16,18,24,.16)}
 .temi input:focus-visible + span{outline:2px solid var(--ink)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-
-/* ═══════════════════════════════════════════════════════════════
-   CARTA RUVIDA E MATITA (versione leggera)
-   La grana è nello sfondo della pagina e delle carte (dipinta una volta),
-   i contorni a matita sono immagini, i filtri solo su pochi elementi piccoli:
-   il telefono non deve tenere in memoria strati grandi quanto tutta la pagina.
-   ═══════════════════════════════════════════════════════════════ */
-:root{
-  --matita:rgba(70,64,56,.62);--matita-2:rgba(70,64,56,.34);
-  --linea:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27600%27 height=%274%27 viewBox=%270 0 600 4%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%270%27 y=%27-50%25%27 width=%27100%25%27 height=%27200%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.35 .9%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M0 2.1 Q150 1.3 300 2.3 T600 1.7%27 stroke=%27%234a453e%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");--linea-v:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%274%27 height=%27400%27 viewBox=%270 0 4 400%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%27-50%25%27 y=%270%27 width=%27200%25%27 height=%27100%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9 .35%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M2 0 Q1.4 100 2.2 200 T1.8 400%27 stroke=%27%234a453e%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");--linea-inch:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27600%27 height=%274%27 viewBox=%270 0 600 4%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%270%27 y=%27-50%25%27 width=%27100%25%27 height=%27200%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.35 .9%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M0 2.1 Q150 1.3 300 2.3 T600 1.7%27 stroke=%27%23bdb6a8%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
-  --cornice:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2796%27 height=%2796%27 viewBox=%270 0 96 96%27%3E%3Cfilter id=%27g%27 x=%27-10%25%27 y=%27-10%25%27 width=%27120%25%27 height=%27120%25%27%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.05%27 numOctaves=%272%27 seed=%273%27 result=%27o%27/%3E %3CfeDisplacementMap in=%27SourceGraphic%27 in2=%27o%27 scale=%272.6%27 xChannelSelector=%27R%27 yChannelSelector=%27G%27 result=%27s%27/%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.95%27 numOctaves=%272%27 seed=%279%27 result=%27n%27/%3E %3CfeColorMatrix in=%27n%27 values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.9 0 0 0 1.75%27 result=%27b%27/%3E %3CfeComposite in=%27s%27 in2=%27b%27 operator=%27in%27/%3E%3C/filter%3E %3Crect x=%272.2%27 y=%272.2%27 width=%2791.6%27 height=%2791.6%27 rx=%2719%27 fill=%27none%27 stroke=%27rgba%2870%2C64%2C56%2C.66%29%27 stroke-width=%271.5%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");--cornice-t:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2796%27 height=%2796%27 viewBox=%270 0 96 96%27%3E%3Cfilter id=%27g%27 x=%27-10%25%27 y=%27-10%25%27 width=%27120%25%27 height=%27120%25%27%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.05%27 numOctaves=%272%27 seed=%273%27 result=%27o%27/%3E %3CfeDisplacementMap in=%27SourceGraphic%27 in2=%27o%27 scale=%272.6%27 xChannelSelector=%27R%27 yChannelSelector=%27G%27 result=%27s%27/%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.95%27 numOctaves=%272%27 seed=%279%27 result=%27n%27/%3E %3CfeColorMatrix in=%27n%27 values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.9 0 0 0 1.75%27 result=%27b%27/%3E %3CfeComposite in=%27s%27 in2=%27b%27 operator=%27in%27/%3E%3C/filter%3E %3Crect x=%272.2%27 y=%272.2%27 width=%2791.6%27 height=%2791.6%27 rx=%2719%27 fill=%27none%27 stroke=%27rgba%2870%2C64%2C56%2C.66%29%27 stroke-width=%271.5%27 stroke-dasharray=%277 5%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");--cerchio:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2796%27 height=%2796%27 viewBox=%270 0 96 96%27%3E%3Cfilter id=%27g%27 x=%27-10%25%27 y=%27-10%25%27 width=%27120%25%27 height=%27120%25%27%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.05%27 numOctaves=%272%27 seed=%273%27 result=%27o%27/%3E %3CfeDisplacementMap in=%27SourceGraphic%27 in2=%27o%27 scale=%272.6%27 xChannelSelector=%27R%27 yChannelSelector=%27G%27 result=%27s%27/%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.95%27 numOctaves=%272%27 seed=%279%27 result=%27n%27/%3E %3CfeColorMatrix in=%27n%27 values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.9 0 0 0 1.75%27 result=%27b%27/%3E %3CfeComposite in=%27s%27 in2=%27b%27 operator=%27in%27/%3E%3C/filter%3E %3Ccircle cx=%2748%27 cy=%2748%27 r=%2745.5%27 fill=%27none%27 stroke=%27rgba%2870%2C64%2C56%2C.66%29%27 stroke-width=%272.4%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
-  --dente:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27220%27 height=%27220%27%3E %3Cfilter id=%27f%27 x=%270%27 y=%270%27 width=%27100%25%27 height=%27100%25%27 color-interpolation-filters=%27sRGB%27%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.62%27 numOctaves=%274%27 seed=%274%27 stitchTiles=%27stitch%27/%3E %3CfeDiffuseLighting lighting-color=%27%23ffffff%27 surfaceScale=%272.2%27 diffuseConstant=%271.05%27%3E%3CfeDistantLight azimuth=%27225%27 elevation=%2758%27/%3E%3C/feDiffuseLighting%3E %3CfeComponentTransfer%3E%3CfeFuncR type=%27linear%27 slope=%270.2%27 intercept=%270.82%27/%3E%3CfeFuncG type=%27linear%27 slope=%270.2%27 intercept=%270.82%27/%3E%3CfeFuncB type=%27linear%27 slope=%270.2%27 intercept=%270.82%27/%3E%3C/feComponentTransfer%3E %3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url%28%23f%29%27/%3E%3C/svg%3E");--dente-inch:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27220%27 height=%27220%27%3E %3Cfilter id=%27f%27 x=%270%27 y=%270%27 width=%27100%25%27 height=%27100%25%27 color-interpolation-filters=%27sRGB%27%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.62%27 numOctaves=%274%27 seed=%274%27 stitchTiles=%27stitch%27/%3E %3CfeDiffuseLighting lighting-color=%27%23ffffff%27 surfaceScale=%272.2%27 diffuseConstant=%271.05%27%3E%3CfeDistantLight azimuth=%27225%27 elevation=%2758%27/%3E%3C/feDiffuseLighting%3E %3CfeComponentTransfer%3E%3CfeFuncR type=%27linear%27 slope=%270.3%27 intercept=%270.36%27/%3E%3CfeFuncG type=%27linear%27 slope=%270.3%27 intercept=%270.36%27/%3E%3CfeFuncB type=%27linear%27 slope=%270.3%27 intercept=%270.36%27/%3E%3C/feComponentTransfer%3E %3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url%28%23f%29%27/%3E%3C/svg%3E");--macchie:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27640%27 height=%27640%27%3E %3Cfilter id=%27f%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.006%27 numOctaves=%273%27 seed=%2711%27 stitchTiles=%27stitch%27/%3E %3CfeColorMatrix values=%270 0 0 0 .55 0 0 0 0 .47 0 0 0 0 .36 0 0 0 1.1 -.5%27/%3E%3C/filter%3E %3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url%28%23f%29%27/%3E%3C/svg%3E");--fibre:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27300%27 height=%27300%27%3E %3Cfilter id=%27f%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.04 .55%27 numOctaves=%272%27 seed=%272%27 stitchTiles=%27stitch%27/%3E %3CfeColorMatrix values=%270 0 0 0 .62 0 0 0 0 .58 0 0 0 0 .52 -12 0 0 0 3.5%27/%3E%3C/filter%3E %3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url%28%23f%29%27/%3E%3C/svg%3E");
-  --tex-blend:multiply;
-  --f-mano:"Caveat","Bricolage Grotesque",cursive;
-}
-@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){ --matita:rgba(225,218,205,.5);--matita-2:rgba(225,218,205,.26);
-    --linea:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27600%27 height=%274%27 viewBox=%270 0 600 4%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%270%27 y=%27-50%25%27 width=%27100%25%27 height=%27200%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.35 .9%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M0 2.1 Q150 1.3 300 2.3 T600 1.7%27 stroke=%27%23cfc7b8%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");--linea-v:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%274%27 height=%27400%27 viewBox=%270 0 4 400%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%27-50%25%27 y=%270%27 width=%27200%25%27 height=%27100%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9 .35%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M2 0 Q1.4 100 2.2 200 T1.8 400%27 stroke=%27%23cfc7b8%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
-    --cornice:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2796%27 height=%2796%27 viewBox=%270 0 96 96%27%3E%3Cfilter id=%27g%27 x=%27-10%25%27 y=%27-10%25%27 width=%27120%25%27 height=%27120%25%27%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.05%27 numOctaves=%272%27 seed=%273%27 result=%27o%27/%3E %3CfeDisplacementMap in=%27SourceGraphic%27 in2=%27o%27 scale=%272.6%27 xChannelSelector=%27R%27 yChannelSelector=%27G%27 result=%27s%27/%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.95%27 numOctaves=%272%27 seed=%279%27 result=%27n%27/%3E %3CfeColorMatrix in=%27n%27 values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.9 0 0 0 1.75%27 result=%27b%27/%3E %3CfeComposite in=%27s%27 in2=%27b%27 operator=%27in%27/%3E%3C/filter%3E %3Crect x=%272.2%27 y=%272.2%27 width=%2791.6%27 height=%2791.6%27 rx=%2719%27 fill=%27none%27 stroke=%27rgba%28225%2C218%2C205%2C.5%29%27 stroke-width=%271.5%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");--cornice-t:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2796%27 height=%2796%27 viewBox=%270 0 96 96%27%3E%3Cfilter id=%27g%27 x=%27-10%25%27 y=%27-10%25%27 width=%27120%25%27 height=%27120%25%27%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.05%27 numOctaves=%272%27 seed=%273%27 result=%27o%27/%3E %3CfeDisplacementMap in=%27SourceGraphic%27 in2=%27o%27 scale=%272.6%27 xChannelSelector=%27R%27 yChannelSelector=%27G%27 result=%27s%27/%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.95%27 numOctaves=%272%27 seed=%279%27 result=%27n%27/%3E %3CfeColorMatrix in=%27n%27 values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.9 0 0 0 1.75%27 result=%27b%27/%3E %3CfeComposite in=%27s%27 in2=%27b%27 operator=%27in%27/%3E%3C/filter%3E %3Crect x=%272.2%27 y=%272.2%27 width=%2791.6%27 height=%2791.6%27 rx=%2719%27 fill=%27none%27 stroke=%27rgba%28225%2C218%2C205%2C.5%29%27 stroke-width=%271.5%27 stroke-dasharray=%277 5%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");--cerchio:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2796%27 height=%2796%27 viewBox=%270 0 96 96%27%3E%3Cfilter id=%27g%27 x=%27-10%25%27 y=%27-10%25%27 width=%27120%25%27 height=%27120%25%27%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.05%27 numOctaves=%272%27 seed=%273%27 result=%27o%27/%3E %3CfeDisplacementMap in=%27SourceGraphic%27 in2=%27o%27 scale=%272.6%27 xChannelSelector=%27R%27 yChannelSelector=%27G%27 result=%27s%27/%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.95%27 numOctaves=%272%27 seed=%279%27 result=%27n%27/%3E %3CfeColorMatrix in=%27n%27 values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.9 0 0 0 1.75%27 result=%27b%27/%3E %3CfeComposite in=%27s%27 in2=%27b%27 operator=%27in%27/%3E%3C/filter%3E %3Ccircle cx=%2748%27 cy=%2748%27 r=%2745.5%27 fill=%27none%27 stroke=%27rgba%28225%2C218%2C205%2C.5%29%27 stroke-width=%272.4%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
-    --dente:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27220%27 height=%27220%27%3E %3Cfilter id=%27f%27 x=%270%27 y=%270%27 width=%27100%25%27 height=%27100%25%27 color-interpolation-filters=%27sRGB%27%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.62%27 numOctaves=%274%27 seed=%274%27 stitchTiles=%27stitch%27/%3E %3CfeDiffuseLighting lighting-color=%27%23ffffff%27 surfaceScale=%272.2%27 diffuseConstant=%271.05%27%3E%3CfeDistantLight azimuth=%27225%27 elevation=%2758%27/%3E%3C/feDiffuseLighting%3E %3CfeComponentTransfer%3E%3CfeFuncR type=%27linear%27 slope=%270.3%27 intercept=%270.34%27/%3E%3CfeFuncG type=%27linear%27 slope=%270.3%27 intercept=%270.34%27/%3E%3CfeFuncB type=%27linear%27 slope=%270.3%27 intercept=%270.34%27/%3E%3C/feComponentTransfer%3E %3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url%28%23f%29%27/%3E%3C/svg%3E");--tex-blend:overlay; } }
-:root[data-theme="dark"]{ --matita:rgba(225,218,205,.5);--matita-2:rgba(225,218,205,.26);
-    --linea:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27600%27 height=%274%27 viewBox=%270 0 600 4%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%270%27 y=%27-50%25%27 width=%27100%25%27 height=%27200%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.35 .9%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M0 2.1 Q150 1.3 300 2.3 T600 1.7%27 stroke=%27%23cfc7b8%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");--linea-v:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%274%27 height=%27400%27 viewBox=%270 0 4 400%27 preserveAspectRatio=%27none%27%3E %3Cfilter id=%27g%27 x=%27-50%25%27 y=%270%27 width=%27200%25%27 height=%27100%25%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9 .35%27 numOctaves=%272%27 seed=%275%27/%3E %3CfeColorMatrix values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.4 0 0 0 1.9%27 result=%27n%27/%3E%3CfeComposite in=%27SourceGraphic%27 in2=%27n%27 operator=%27in%27/%3E%3C/filter%3E %3Cpath d=%27M2 0 Q1.4 100 2.2 200 T1.8 400%27 stroke=%27%23cfc7b8%27 stroke-width=%271.3%27 fill=%27none%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
-    --cornice:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2796%27 height=%2796%27 viewBox=%270 0 96 96%27%3E%3Cfilter id=%27g%27 x=%27-10%25%27 y=%27-10%25%27 width=%27120%25%27 height=%27120%25%27%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.05%27 numOctaves=%272%27 seed=%273%27 result=%27o%27/%3E %3CfeDisplacementMap in=%27SourceGraphic%27 in2=%27o%27 scale=%272.6%27 xChannelSelector=%27R%27 yChannelSelector=%27G%27 result=%27s%27/%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.95%27 numOctaves=%272%27 seed=%279%27 result=%27n%27/%3E %3CfeColorMatrix in=%27n%27 values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.9 0 0 0 1.75%27 result=%27b%27/%3E %3CfeComposite in=%27s%27 in2=%27b%27 operator=%27in%27/%3E%3C/filter%3E %3Crect x=%272.2%27 y=%272.2%27 width=%2791.6%27 height=%2791.6%27 rx=%2719%27 fill=%27none%27 stroke=%27rgba%28225%2C218%2C205%2C.5%29%27 stroke-width=%271.5%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");--cornice-t:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2796%27 height=%2796%27 viewBox=%270 0 96 96%27%3E%3Cfilter id=%27g%27 x=%27-10%25%27 y=%27-10%25%27 width=%27120%25%27 height=%27120%25%27%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.05%27 numOctaves=%272%27 seed=%273%27 result=%27o%27/%3E %3CfeDisplacementMap in=%27SourceGraphic%27 in2=%27o%27 scale=%272.6%27 xChannelSelector=%27R%27 yChannelSelector=%27G%27 result=%27s%27/%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.95%27 numOctaves=%272%27 seed=%279%27 result=%27n%27/%3E %3CfeColorMatrix in=%27n%27 values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.9 0 0 0 1.75%27 result=%27b%27/%3E %3CfeComposite in=%27s%27 in2=%27b%27 operator=%27in%27/%3E%3C/filter%3E %3Crect x=%272.2%27 y=%272.2%27 width=%2791.6%27 height=%2791.6%27 rx=%2719%27 fill=%27none%27 stroke=%27rgba%28225%2C218%2C205%2C.5%29%27 stroke-width=%271.5%27 stroke-dasharray=%277 5%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");--cerchio:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2796%27 height=%2796%27 viewBox=%270 0 96 96%27%3E%3Cfilter id=%27g%27 x=%27-10%25%27 y=%27-10%25%27 width=%27120%25%27 height=%27120%25%27%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.05%27 numOctaves=%272%27 seed=%273%27 result=%27o%27/%3E %3CfeDisplacementMap in=%27SourceGraphic%27 in2=%27o%27 scale=%272.6%27 xChannelSelector=%27R%27 yChannelSelector=%27G%27 result=%27s%27/%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.95%27 numOctaves=%272%27 seed=%279%27 result=%27n%27/%3E %3CfeColorMatrix in=%27n%27 values=%270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.9 0 0 0 1.75%27 result=%27b%27/%3E %3CfeComposite in=%27s%27 in2=%27b%27 operator=%27in%27/%3E%3C/filter%3E %3Ccircle cx=%2748%27 cy=%2748%27 r=%2745.5%27 fill=%27none%27 stroke=%27rgba%28225%2C218%2C205%2C.5%29%27 stroke-width=%272.4%27 filter=%27url%28%23g%29%27/%3E%3C/svg%3E");
-    --dente:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27220%27 height=%27220%27%3E %3Cfilter id=%27f%27 x=%270%27 y=%270%27 width=%27100%25%27 height=%27100%25%27 color-interpolation-filters=%27sRGB%27%3E %3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.62%27 numOctaves=%274%27 seed=%274%27 stitchTiles=%27stitch%27/%3E %3CfeDiffuseLighting lighting-color=%27%23ffffff%27 surfaceScale=%272.2%27 diffuseConstant=%271.05%27%3E%3CfeDistantLight azimuth=%27225%27 elevation=%2758%27/%3E%3C/feDiffuseLighting%3E %3CfeComponentTransfer%3E%3CfeFuncR type=%27linear%27 slope=%270.3%27 intercept=%270.34%27/%3E%3CfeFuncG type=%27linear%27 slope=%270.3%27 intercept=%270.34%27/%3E%3CfeFuncB type=%27linear%27 slope=%270.3%27 intercept=%270.34%27/%3E%3C/feComponentTransfer%3E %3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url%28%23f%29%27/%3E%3C/svg%3E");--tex-blend:overlay; }
-
-/* la carta: grana, fibre e macchie dipinte nello sfondo (scorrono con la pagina, nessuno strato fisso) */
-body::before{content:none}
-.wrap{z-index:auto}
-body{background-color:var(--paper);background-image:var(--fibre),var(--dente),var(--macchie);
-  background-size:300px 300px,220px 220px,640px 640px;background-blend-mode:var(--tex-blend)}
-.carta,.lista,.libro,.det,.importo,.tile:not(.cerca),.key,.rapidi .chip,.acq-tit .chip,.btn:not(.testo),.ico-btn,.seg,.pf-in,.campo input,.dialog{
-  background-image:var(--dente);background-size:220px 220px;background-blend-mode:var(--tex-blend)}
-.inch,.nav .in,.cta:not(:disabled),.btn.pieno,.chip.on{background-image:var(--dente-inch);background-size:220px 220px;background-blend-mode:overlay}
-.testa{backdrop-filter:none;-webkit-backdrop-filter:none;background-color:var(--paper);background-image:var(--fibre),var(--dente),var(--macchie);
-  background-size:300px 300px,220px 220px,640px 640px;background-blend-mode:var(--tex-blend);background-attachment:scroll}
-
-/* scritte a mano per i titoli; le cifre restano nel carattere da stampa */
-.t-tit{font-family:var(--f-mano);font-size:40px;line-height:40px;font-weight:700;letter-spacing:-.01em;font-variation-settings:normal}
-.sez-t b,.passo-n b{font-family:var(--f-mano);font-size:27px;line-height:28px;font-weight:700;letter-spacing:0;font-variation-settings:normal}
-.carta-t b,.wal-t b{font-family:var(--f-mano);font-size:23px;line-height:24px;font-weight:700;letter-spacing:0}
-.dialog h3{font-family:var(--f-mano);font-size:32px;line-height:34px;letter-spacing:0;font-variation-settings:normal}
-.passo-n i{font-family:var(--f-mano);font-size:17px;font-weight:700}
-
-/* contorni a matita: un'immagine a 9 fette, nessun filtro dal vivo */
-.carta,.lista,.libro,.det,.importo,.tile,.key,.chip,.btn:not(.testo):not(.pieno),.campo input{
-  border:1px solid transparent;border-image:var(--cornice) 24 / 20px round;box-shadow:none}
-.chip,.key,.campo input{border-image-width:14px}
-.key.op,.key.fn{border-image:none;border-color:transparent}
-.ico-btn,.pm{border:1px solid transparent;border-image:var(--cerchio) 48 / 50% stretch;box-shadow:none}
-.vuoto{border:1px solid transparent;border-image:var(--cornice-t) 24 / 20px round}
-.tile.cerca{border:1px solid transparent;border-image:var(--cornice-t) 24 / 16px round}
-.tile.on,.acq-tit .chip.on,.seg .chip,.chip.on{border-image:none}
-.seg .chip{background-image:none}
-
-/* righe di separazione: un tratto di matita (immagine) invece della riga stampata */
-.riga + .riga,.riga + .giorno,.crow + .crow,.det-r ~ .det-r,.det-r + .picker,.pf-grp,.pf-crow + .pf-crow,
-.pf-mv + .pf-mv,.riga + .pf-lgrp,.bedit + .bedit,.tbl td,.pf-stats,.libro > div{
-  border-top:none;background-image:var(--linea);background-repeat:no-repeat;background-size:100% 3px;background-position:0 0}
-.riga + .riga,.riga + .giorno,.riga + .pf-lgrp{background-size:calc(100% - 28px) 3px;background-position:14px 0}
-.libro > div:nth-child(-n+2){background-image:none}
-.libro > div:nth-child(2n){border-left:none;background-image:var(--linea),var(--linea-v);background-size:100% 3px,3px 100%;background-position:0 0,0 0}
-.libro > div:nth-child(2):nth-child(2n){background-image:var(--linea-v);background-size:3px 100%}
-.libro > div.largo{background-image:var(--linea);background-size:100% 3px}
-.pf-stats > div + div{border-left:none;background-image:var(--linea-v);background-repeat:no-repeat;background-size:3px 100%;background-position:0 0}
-.acq-row + .acq-row,.inch-nota{border-top:none;background-image:var(--linea-inch);background-repeat:no-repeat;background-size:100% 3px;background-position:0 0}
-.testa.su{box-shadow:none;background-image:var(--linea),var(--fibre),var(--dente),var(--macchie);background-repeat:no-repeat,repeat,repeat,repeat;
-  background-size:100% 3px,300px 300px,220px 220px,640px 640px;background-position:0 100%,0 0,0 0,0 0;background-blend-mode:normal,var(--tex-blend),var(--tex-blend),var(--tex-blend)}
-.barre{border-bottom:none;background-image:var(--linea);background-repeat:no-repeat;background-size:100% 3px;background-position:0 100%}
-.barre .tetto{border-top:1.5px dashed var(--matita)}
-
-/* evidenziatore con i bordi sbavati (filtro solo su pezzi piccoli) */
-.nav-ind,.band,.inch-bar .passo{filter:url(#pennarello)}
-.tile.on,.acq-tit .chip.on,.seg.hl-on button.on,.tondo.ok,.amt .espr,.barre .tip,.tbl tr.sel td:first-child span{background:transparent!important;isolation:isolate}
-.tile.on,.acq-tit .chip.on,.seg.hl-on button.on,.tondo.ok,.amt .espr,.tbl tr.sel td:first-child span{position:relative}
-.tile.on::before,.acq-tit .chip.on::before,.seg.hl-on button.on::before,.tondo.ok::before,.amt .espr::before,.barre .tip::before,.tbl tr.sel td:first-child span::before{
-  content:"";position:absolute;inset:0 -1px;background:var(--hl);border-radius:inherit;filter:url(#pennarello);z-index:-1}
-.tile.on::before{border-radius:14px}
-.temi input:checked + span{box-shadow:inset 0 -6px 0 -2px var(--hl)}
-
-/* barre e strisce ripassate a mano */
-.inch-bar > i,.trk i,.pf-fill,.strip i,.pf-comp i,.barre i{filter:url(#matita)}
-.barre i{background:repeating-linear-gradient(-45deg,var(--matita) 0 1.2px,transparent 1.2px 4.5px);box-shadow:inset 0 0 0 1.3px var(--matita)}
-.barre i.sel{background:var(--ink);box-shadow:none}
-.barre i.corso{background:repeating-linear-gradient(-45deg,var(--matita-2) 0 1px,transparent 1px 6px);box-shadow:inset 0 0 0 1.3px var(--matita);border:none}
-.barre i.corso.sel{background:repeating-linear-gradient(-45deg,var(--ink) 0 2px,transparent 2px 5px);box-shadow:inset 0 0 0 1.5px var(--ink)}
-.barre i.zero{background:var(--matita-2);box-shadow:none;filter:none}
-
-/* carta d'inchiostro: bordo irregolare (poche per pagina) */
-.inch::after{content:"";position:absolute;inset:-2px;border:4px solid var(--paper);border-radius:inherit;filter:url(#strappo);pointer-events:none;z-index:4}
-.inch,.nav .in,.cta{box-shadow:0 10px 24px -12px rgba(27,26,23,.45)}
 
 /* ═══════════ NOVITÀ ottobre 2026 ═══════════ */
 /* Mese: frecce ai lati dei mesi per andare più indietro o più avanti */
@@ -751,7 +658,7 @@ body{background-color:var(--paper);background-image:var(--fibre),var(--dente),va
 .crow .giu{font-size:20px;color:var(--ink-3);flex:0 0 auto;margin-left:-4px;transition:transform .25s var(--ease)}
 .crow.aperta .giu{transform:rotate(180deg)}
 .csotto{margin:0 0 10px 52px;padding:2px 0 4px;animation:entra .3s var(--ease-emph)}
-.csotto + .crow{border-top:none;background-image:var(--linea);background-repeat:no-repeat;background-size:100% 3px;background-position:0 0}
+.csotto + .crow{border-top:1px solid var(--rule)}
 .srow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;padding:6px 0}
 .srow b{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .srow span{font-family:var(--f-num);font-variation-settings:"opsz" 20;font-size:14px;font-weight:600;font-variant-numeric:tabular-nums;text-align:right}
@@ -780,7 +687,7 @@ body{background-color:var(--paper);background-image:var(--fibre),var(--dente),va
 /* la busta: chiusa, pronta o già letta */
 .busta{text-align:center;padding:30px 20px 24px}
 .busta-ic{width:88px;height:88px;margin:0 auto 14px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;isolation:isolate}
-.busta-ic::before{content:"";position:absolute;inset:0;background:var(--hl);border-radius:50%;filter:url(#pennarello);z-index:-1}
+.busta-ic::before{content:"";position:absolute;inset:0;background:var(--hl);border-radius:50%;z-index:-1}
 .busta-ic .ms{font-size:42px;color:var(--on-hl)}
 .busta-ic.spento::before{background:var(--sheet-2);filter:none}
 .busta-ic.spento .ms{color:var(--ink-3)}
@@ -793,7 +700,7 @@ body{background-color:var(--paper);background-image:var(--fibre),var(--dente),va
 .busta .cta{margin-top:22px}
 .busta .bst-avv{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-size:12.5px;color:var(--ink-3)}
 .busta .bst-avv .ms{font-size:16px}
-.busta .ultimo{margin-top:20px;padding-top:14px;font-size:13px;color:var(--ink-3);background-image:var(--linea);background-repeat:no-repeat;background-size:100% 3px}
+.busta .ultimo{margin-top:20px;padding-top:14px;font-size:13px;color:var(--ink-3);border-top:1px solid var(--rule)}
 .busta .ultimo b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
 .sett-giorni{display:flex;justify-content:center;gap:6px;margin-top:16px}
 .sett-giorni span{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--ink-3);background:var(--sheet-2)}
@@ -813,18 +720,18 @@ body{background-color:var(--paper);background-image:var(--fibre),var(--dente),va
 .st-leg i{display:inline-block;width:16px;height:3px;border-radius:2px;background:var(--ink)}
 .st-leg i.tr{background:repeating-linear-gradient(90deg,var(--ink-3) 0 4px,transparent 4px 7px)}
 .st-nota{display:flex;gap:10px;align-items:flex-start;margin-top:14px;padding-top:12px;font-size:13px;line-height:18px;color:var(--ink-2);
-  background-image:var(--linea);background-repeat:no-repeat;background-size:100% 3px}
+  border-top:1px solid var(--rule)}
 .st-nota .ms{font-size:19px;flex:0 0 auto;margin-top:-1px}
 .st-nota b{color:var(--ink);font-weight:600}
 .st-mesi{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;align-items:end;height:54px;margin-top:16px}
 .st-mesi div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
-.st-mesi i{display:block;width:100%;max-width:18px;border-radius:3px 3px 1px 1px;background:var(--matita);min-height:2px;transform-origin:bottom;animation:crescv .8s var(--ease-emph) both}
+.st-mesi i{display:block;width:100%;max-width:18px;border-radius:3px 3px 1px 1px;background:var(--rule-2);min-height:2px;transform-origin:bottom;animation:crescv .8s var(--ease-emph) both}
 .st-mesi i.ora{background:var(--ink)}
 .st-mesi i.neg{background:var(--bad)}
 .st-mesi span{font-size:10px;line-height:10px;color:var(--ink-3);font-weight:600}
 @keyframes crescv{from{transform:scaleY(0)}}
 .st-mv{display:flex;align-items:center;gap:12px;padding:9px 0}
-.st-mv + .st-mv{background-image:var(--linea);background-repeat:no-repeat;background-size:100% 3px}
+.st-mv + .st-mv{border-top:1px solid var(--rule)}
 .st-mv .nm{flex:1;min-width:0}
 .st-mv .nm b{display:block;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .st-mv .nm small{font-size:12px;color:var(--ink-3)}
@@ -880,56 +787,26 @@ body{background-color:var(--paper);background-image:var(--fibre),var(--dente),va
   /* Acquisto: un modulo, resta stretto */
   #viewBuy{max-width:600px;margin:0 auto}
 }
+
+/* ═══════════ GRAFITE · rifiniture ═══════════ */
+body{font-feature-settings:"ss01","cv11";letter-spacing:-.005em}
+.t-tit,.sez-t b,.inch-big,.amt .nm,.key,.riga .v,.st-num,.busta .quando{font-variant-numeric:tabular-nums}
+.ric-poi{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;border:none;border-top:1px solid var(--rule);
+  background:transparent;padding:10px 14px;font-size:12.5px;line-height:17px;color:var(--ink-3);text-align:left;cursor:pointer}
+.ric-poi span:first-child{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ric-poi .ms{font-size:20px;flex:0 0 auto}
+#ricBox .riga,#walletBox .riga{cursor:pointer}
+#ricBox:not(:empty){margin-top:12px}
+.dialog .azioni{flex-wrap:wrap}
+/* titoli che prima erano scritti a mano */
+.pg-mid b{font-size:17px;line-height:22px;letter-spacing:-.02em}
+.busta h3{font-size:24px;line-height:30px;letter-spacing:-.03em}
+.st-verd{font-family:var(--f-ui);font-size:17px;line-height:23px;font-weight:600;letter-spacing:-.01em}
+.st-prox b{font-size:16px;line-height:20px;letter-spacing:-.01em}
+.st-fine b{font-size:22px;line-height:28px;letter-spacing:-.03em}
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
-  <filter id="matita" x="-6%" y="-30%" width="112%" height="160%" color-interpolation-filters="sRGB">
-    <feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="3" result="onda"/>
-    <feDisplacementMap in="SourceGraphic" in2="onda" scale="2.4" xChannelSelector="R" yChannelSelector="G" result="storto"/>
-    <feTurbulence type="fractalNoise" baseFrequency=".95" numOctaves="1" seed="9" result="grana"/>
-    <feColorMatrix in="grana" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1.6 0 0 0 1.65" result="buchi"/>
-    <feComposite in="storto" in2="buchi" operator="in"/>
-  </filter>
-  <filter id="pennarello" x="-8%" y="-20%" width="116%" height="140%" color-interpolation-filters="sRGB">
-    <feTurbulence type="fractalNoise" baseFrequency=".035 .1" numOctaves="2" seed="5" result="onda"/>
-    <feDisplacementMap in="SourceGraphic" in2="onda" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-  <filter id="strappo" x="-3%" y="-3%" width="106%" height="106%">
-    <feTurbulence type="fractalNoise" baseFrequency=".08" numOctaves="2" seed="12" result="onda"/>
-    <feDisplacementMap in="SourceGraphic" in2="onda" scale="4" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</defs></svg>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs>
-  <!-- tratto a matita: storto di poco e spezzato dalla grana della carta -->
-  <filter id="matita" x="-6%" y="-6%" width="112%" height="112%" color-interpolation-filters="sRGB">
-    <feTurbulence type="fractalNoise" baseFrequency=".045" numOctaves="2" seed="3" result="onda"/>
-    <feDisplacementMap in="SourceGraphic" in2="onda" scale="3" xChannelSelector="R" yChannelSelector="G" result="storto"/>
-    <feTurbulence type="fractalNoise" baseFrequency=".95" numOctaves="2" seed="9" result="grana"/>
-    <feColorMatrix in="grana" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1.9 0 0 0 1.75" result="buchi"/>
-    <feComposite in="storto" in2="buchi" operator="in"/>
-  </filter>
-  <filter id="matita-fine" x="-4%" y="-4%" width="108%" height="108%" color-interpolation-filters="sRGB">
-    <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="7" result="onda"/>
-    <feDisplacementMap in="SourceGraphic" in2="onda" scale="1.8" xChannelSelector="R" yChannelSelector="G" result="storto"/>
-    <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="1" seed="2" result="grana"/>
-    <feColorMatrix in="grana" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -1.2 0 0 0 1.45" result="buchi"/>
-    <feComposite in="storto" in2="buchi" operator="in"/>
-  </filter>
-  <!-- evidenziatore: bordi sbavati, un po' di trasparenza sulla grana -->
-  <filter id="pennarello" x="-8%" y="-20%" width="116%" height="140%" color-interpolation-filters="sRGB">
-    <feTurbulence type="fractalNoise" baseFrequency=".03 .09" numOctaves="2" seed="5" result="onda"/>
-    <feDisplacementMap in="SourceGraphic" in2="onda" scale="5" xChannelSelector="R" yChannelSelector="G" result="storto"/>
-    <feTurbulence type="fractalNoise" baseFrequency=".7" numOctaves="2" seed="1" result="grana"/>
-    <feColorMatrix in="grana" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -.8 0 0 0 1.25" result="buchi"/>
-    <feComposite in="storto" in2="buchi" operator="in"/>
-  </filter>
-  <!-- bordo della carta d'inchiostro: irregolare come un foglio tagliato a mano -->
-  <filter id="strappo" x="-3%" y="-3%" width="106%" height="106%">
-    <feTurbulence type="fractalNoise" baseFrequency=".08" numOctaves="3" seed="12" result="onda"/>
-    <feDisplacementMap in="SourceGraphic" in2="onda" scale="4" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</defs></svg>
 <div class="wrap">
   <header class="testa" id="appbar">
     <div class="t-sx">
@@ -943,6 +820,7 @@ body{background-color:var(--paper);background-image:var(--fibre),var(--dente),va
   <main id="viewAdd" class="view">
     <div class="inch quota" id="qcard"></div>
     <div id="walletBox"></div>
+    <div id="ricBox"></div>
 
     <div class="importo">
       <div class="imp-row">
@@ -1102,6 +980,7 @@ body{background-color:var(--paper);background-image:var(--fibre),var(--dente),va
   <div class="grp">Avvisi</div>
   <label class="opz"><input type="checkbox" id="optVibra"><span>Vibrazione<small>Tasti, salvataggio e budget</small></span></label>
   <label class="opz"><input type="checkbox" id="optNotif"><span>Notifiche di sistema<small>Quando superi un budget</small></span></label>
+  <label class="opz"><input type="checkbox" id="optBadge"><span>Numero sull'icona<small>Una notifica silenziosa per ogni pagamento o ricorrente da confermare</small></span></label>
   <div class="grp">Tema</div>
   <div class="seg temi" role="radiogroup">
     <label><input type="radio" name="tema" value="system" id="temaSys"><span><span class="ms">contrast</span>Sistema</span></label>
@@ -1114,7 +993,7 @@ body{background-color:var(--paper);background-image:var(--fibre),var(--dente),va
 <div class="scrim" id="scrim"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgt">
   <div class="dic"><span class="ms" id="dlgic">undo</span></div>
   <h3 id="dlgt"></h3><p id="dlgp"></p>
-  <div class="azioni"><button class="btn testo rip" id="dlgno">Indietro</button><button class="btn pieno rip" id="dlgsi">Conferma</button></div>
+  <div class="azioni"><button class="btn testo rip" id="dlgalt" hidden></button><button class="btn testo rip" id="dlgno">Indietro</button><button class="btn pieno rip" id="dlgsi">Conferma</button></div>
 </div></div>
 
 <script>
@@ -1230,6 +1109,7 @@ document.getElementById("cfgSi").onclick = async () => {
     await api("ping", [], nuovo);
     cfg = nuovo;
     try{ localStorage.setItem(CHIAVE_CFG, JSON.stringify(cfg)); }catch(e){}
+    salvaCfgSw();
     document.getElementById("cfgScrim").classList.remove("on");
     toast("Collegato al foglio");
     refresh(); drena();
@@ -1243,8 +1123,8 @@ document.getElementById("brand").onclick = () => apriImpostazioni();
 
 /* ══════════ vibrazione e avvisi di budget ══════════ */
 const CHIAVE_PREF = "spese:pref", CHIAVE_BUDGET = "spese:budget";
-let pref = (() => { try { return Object.assign({vibra:true, notif:false, tema:"system"}, JSON.parse(localStorage.getItem(CHIAVE_PREF))); }
-                    catch(e){ return {vibra:true, notif:false, tema:"system"}; } })();
+let pref = (() => { try { return Object.assign({vibra:true, notif:false, badge:true, tema:"system"}, JSON.parse(localStorage.getItem(CHIAVE_PREF))); }
+                    catch(e){ return {vibra:true, notif:false, badge:true, tema:"system"}; } })();
 function salvaPref(){ try{ localStorage.setItem(CHIAVE_PREF, JSON.stringify(pref)); }catch(e){} }
 
 /* Tema: "system" segue il telefono, "light"/"dark" lo forzano.
@@ -1253,7 +1133,7 @@ function applicaTema(t){
   const r = document.documentElement;
   if(t === "light" || t === "dark") r.setAttribute("data-theme", t); else r.removeAttribute("data-theme");
   const scuro = t === "dark" || (t !== "light" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
-  document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute("content", scuro ? "#141311" : "#F3EEE5"));
+  document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute("content", scuro ? "#0A0B0D" : "#F4F5F7"));
 }
 applicaTema(pref.tema);
 
@@ -1447,14 +1327,16 @@ function caricaCoda(){
 }
 
 /* ── dialog M3 al posto del confirm() del browser ── */
-function chiedi(titolo, testo, icona, conferma){
+function chiedi(titolo, testo, icona, conferma, altro){
   return new Promise(ok => {
     $("dlgt").textContent = titolo; $("dlgp").textContent = testo;
     $("dlgic").textContent = icona || "help"; $("dlgsi").textContent = conferma || "Conferma";
+    const alt = $("dlgalt"); alt.hidden = !altro; alt.textContent = altro || "";   // terza scelta: risponde "alt"
     const s = $("scrim"); s.classList.add("on");
-    const chiudi = r => { s.classList.remove("on"); $("dlgsi").onclick = $("dlgno").onclick = s.onclick = null; ok(r); };
+    const chiudi = r => { s.classList.remove("on"); $("dlgsi").onclick = $("dlgno").onclick = alt.onclick = s.onclick = null; ok(r); };
     $("dlgsi").onclick = () => chiudi(true);
     $("dlgno").onclick = () => chiudi(false);
+    alt.onclick = () => chiudi("alt");
     s.onclick = e => { if(e.target === s) chiudi(false); };
   });
 }
@@ -2134,6 +2016,7 @@ const walletNota = w => (w.esercente || "") +
   (walletCb(w) ? " · cashback " + it(walletCb(w)*100).replace(/,?0+$/, "") + "% su " + it(w.importo) : "");
 
 function renderWallet(){
+  sicuro(aggiornaBadge);
   const box = $("walletBox"); if(!box) return;
   const lista = wallet.filter(w => !walletInCoda(w.id));
   if(walletCorrente && !lista.some(w => w.id === walletCorrente)) walletCorrente = null;
@@ -2226,6 +2109,201 @@ $("walletBox").addEventListener("keydown", e => {
   if((e.key === "Enter" || e.key === " ") && e.target.matches("[data-w]")){ e.preventDefault(); compilaWallet(e.target.dataset.w); }
 });
 
+/* ══════════ RICORRENTI ══════════
+   Le spese che tornano ogni mese (abbonamenti, telefono…) le trova il foglio
+   (Ricorrenti.gs) guardando i mesi scorsi. Qui compaiono quando arriva il loro
+   giorno solito: ✓ le registra con importo e conto dell'ultima volta, il tocco
+   sulla riga compila il modulo (per cambiare l'importo), ✕ le salta.
+   Se lo script non ha ancora la funzione «ricorrenti» non compare niente. */
+let ricorrenti = [], ricAttive = true, ricAperte = false;
+const ricK = s => String(s == null ? "" : s).trim().toLowerCase();
+const ricInCoda = r => {
+  const n = new Date();
+  return coda.some(c => c.spesa && ricK(c.spesa.desc) === ricK(r.voce) &&
+    c.spesa.m === n.getMonth()+1 && c.spesa.a === n.getFullYear());
+};
+const ricVisibili = () => ricorrenti.filter(r => !ricInCoda(r));
+const ricDovute = () => { const g = new Date().getDate(); return ricVisibili().filter(r => r.giorno <= g); };
+const ricTrova = v => ricorrenti.find(r => ricK(r.voce) === ricK(v));
+const ricData = r => { const n = new Date(); return { d: Math.min(r.giorno, n.getDate()), m: n.getMonth()+1, a: n.getFullYear() }; };
+
+function caricaRicorrenti(){
+  if(!ricAttive || !cfg.url || !cfg.pin) return;
+  api("ricorrenti", ["lista"]).then(r => {
+    if(r && Array.isArray(r.lista)){ ricorrenti = r.lista; renderRicorrenti(); }
+  }, err => {
+    // script non ancora aggiornato: non riprova a ogni apertura
+    if(/sconosciuta/i.test(String(err && err.message))) ricAttive = false;
+  });
+}
+
+function renderRicorrenti(){
+  sicuro(aggiornaBadge);
+  const box = $("ricBox"); if(!box) return;
+  const g = new Date().getDate();
+  const dovute = ricDovute(), poi = ricVisibili().filter(r => r.giorno > g);
+  if(!dovute.length && !poi.length){ box.innerHTML = ""; return; }
+  const riga = r => {
+    const voce = voceDaNome(r.voce);
+    const pronta = !!(voce && r.importo > 0 && r.conto && conti.indexOf(r.conto) !== -1);
+    return `<div class="riga" data-r="${esc(r.voce)}" role="button" tabindex="0">` + icona(r.primary) +
+      `<span class="tx"><div class="t1">${esc(r.voce)}</div>
+        <div class="t2">${r.giorno <= g ? "di solito il " + r.giorno : "attesa il " + r.giorno} · ${esc(r.conto || "conto?")}</div></span>
+      <span class="v">${it(r.importo)}</span>` +
+      (pronta ? `<button type="button" class="tondo ok rip" data-rok="${esc(r.voce)}" aria-label="Registra"><span class="ms">check</span></button>` : "") +
+      `<button type="button" class="tondo rip" data-rno="${esc(r.voce)}" aria-label="Salta"><span class="ms">close</span></button></div>`;
+  };
+  box.innerHTML = `<div class="lista"><div class="wal-t"><b><span class="ms">autorenew</span>Ricorrenti di ${MESI[new Date().getMonth()].toLowerCase()}</b>` +
+    `<span>${dovute.length ? dovute.length + " da registrare" : "nessuna per ora"}</span></div>` +
+    dovute.map(riga).join("") + (ricAperte ? poi.map(riga).join("") : "") +
+    (poi.length ? `<button type="button" class="ric-poi rip" data-rpoi aria-expanded="${ricAperte}"><span>${ricAperte ? "Nascondi quelle più avanti"
+        : "Più avanti: " + poi.map(r => esc(r.voce) + " il " + r.giorno).join(", ")}</span><span class="ms">${ricAperte ? "expand_less" : "expand_more"}</span></button>` : "") +
+    `</div>`;
+}
+
+/* Tocco sulla riga: compila il modulo, così puoi correggere importo o conto. */
+function compilaRic(v){
+  const r = ricTrova(v); if(!r) return;
+  vibra("tap");
+  if(walletCorrente){ walletCorrente = null; renderWallet(); }
+  espr = it(r.importo);
+  $("desc").value = r.voce; $("note").value = "";
+  if(r.conto && conti.indexOf(r.conto) !== -1){ broker = r.conto; renderConti(); }
+  const q = ricData(r); impostaData(q.d, q.m, q.a);
+  paint();
+  toast("Controlla l'importo e premi Aggiungi");
+}
+
+/* ✓: registra subito con l'importo e il conto dell'ultima volta. */
+function confermaRic(v){
+  const r = ricTrova(v); if(!r) return;
+  const voce = voceDaNome(r.voce);
+  if(!voce || !(r.importo > 0) || conti.indexOf(r.conto) === -1){ compilaRic(v); return; }
+  const q = ricData(r), cid = Date.now() + "-" + Math.random().toString(36).slice(2,7);
+  coda.push({ id: cid, stato: "attesa", primary: voce.primary, secondary: voce.secondary,
+    spesa: { idem: cid, a: q.a, m: q.m, d: q.d, desc: voce.entry, v: r.importo, broker: r.conto, note: "ricorrente" } });
+  salvaCoda();
+  if(q.m === parseInt($("mm").value,10) && q.a === getAnno()) totali.totale = (totali.totale||0) + r.importo;
+  invalida("sum", "year");
+  vibra("invio");
+  renderRicorrenti(); paint(); drena();
+}
+
+/* ✕: per questo mese no, oppure mai più (abbonamento disdetto). */
+async function saltaRic(v){
+  const r = ricTrova(v); if(!r) return;
+  const s = await chiedi("Saltare «" + r.voce + "»?",
+    "Per questo mese non te la ripropongo. Se l'hai disdetta, scegli «Non proporla più».",
+    "event_busy", "Salta il mese", "Non proporla più");
+  if(!s) return;
+  ricorrenti = ricorrenti.filter(x => x !== r);
+  renderRicorrenti();
+  api("ricorrenti", [s === "alt" ? "mai" : "salta", r.voce]).then(res => {
+    if(res && res.ok === false) toast(res.errore || "Non riuscito", true);
+    else toast(s === "alt" ? "«" + r.voce + "» non la propongo più" : "«" + r.voce + "» saltata per questo mese");
+  }, err => { toast(String(err.message||err), true); caricaRicorrenti(); });
+}
+
+/* Spesa scritta nel foglio (da qui o dal modulo): se era una ricorrente, esce dall'elenco. */
+function ricRegistrata(sp){
+  const n = new Date();
+  if(!sp || sp.m !== n.getMonth()+1) return;
+  ricorrenti = ricorrenti.filter(r => ricK(r.voce) !== ricK(sp.desc));
+  renderRicorrenti();
+}
+
+$("ricBox").onclick = e => {
+  const ok = e.target.closest("[data-rok]"), no = e.target.closest("[data-rno]"),
+        poi = e.target.closest("[data-rpoi]"), riga = e.target.closest("[data-r]");
+  if(poi){ ricAperte = !ricAperte; renderRicorrenti(); return; }
+  if(no){ saltaRic(no.dataset.rno); return; }
+  if(ok){ confermaRic(ok.dataset.rok); return; }
+  if(riga) compilaRic(riga.dataset.r);
+};
+$("ricBox").addEventListener("keydown", e => {
+  if((e.key === "Enter" || e.key === " ") && e.target.matches("[data-r]")){ e.preventDefault(); compilaRic(e.target.dataset.r); }
+});
+
+/* ══════════ NUMERO SULL'ICONA ══════════
+   Conta quello che aspetta te: pagamenti Wallet da confermare e ricorrenti
+   arrivate al loro giorno.
+   - Su PC (Chrome/Edge) il numero si scrive direttamente sull'icona.
+   - Su Android un sito non può scriverlo: l'icona mostra il numero delle
+     notifiche dell'app. Quindi una notifica silenziosa per ogni cosa da
+     confermare, che sparisce da sola appena la registri o la scarti.
+     Le notifiche si aggiornano quando esci dall'app e, quando Android lo
+     concede, anche in sottofondo (vedi sw.js). */
+function daConfermareOra(){
+  const out = [];
+  wallet.filter(w => !walletInCoda(w.id)).forEach(w => out.push({ tag: "dc-w-" + w.id,
+    titolo: "Da confermare · " + (w.importo != null ? eur(w.importo) : "pagamento"),
+    testo: (w.esercente || "Pagamento") + (w.conto ? " · " + w.conto : "") }));
+  ricDovute().forEach(r => out.push({ tag: "dc-r-" + ricK(r.voce),
+    titolo: "Ricorrente · " + r.voce + " " + eur(r.importo),
+    testo: "Di solito il " + r.giorno + (r.conto ? " · " + r.conto : "") }));
+  return out;
+}
+const badgeAttivo = () => !!pref.badge && "Notification" in window && Notification.permission === "granted";
+
+function aggiornaBadge(){
+  const lista = daConfermareOra(), n = lista.length;
+  try{
+    if(navigator.setAppBadge){ (n ? navigator.setAppBadge(n) : navigator.clearAppBadge()).catch(() => {}); }
+  }catch(e){}
+  if(!("serviceWorker" in navigator) || !("Notification" in window) || Notification.permission !== "granted") return;
+  const attivo = badgeAttivo(), nascosta = document.visibilityState !== "visible";
+  navigator.serviceWorker.ready.then(reg => reg.getNotifications().then(aperte => {
+    const voluti = {}; if(attivo) lista.forEach(x => { voluti[x.tag] = true; });
+    const gia = {};
+    aperte.forEach(nf => {
+      if(!/^dc-/.test(nf.tag || "")) return;
+      if(voluti[nf.tag]) gia[nf.tag] = true; else nf.close();      // registrata o scartata: via
+    });
+    // quelle nuove si aggiungono solo quando l'app non è davanti: mentre la usi le vedi già qui
+    if(!attivo || !nascosta) return;
+    lista.forEach(x => { if(!gia[x.tag]) reg.showNotification(x.titolo, { body: x.testo, tag: x.tag, silent: true,
+      icon: "icon-192.png", badge: "icon-192.png", data: { url: "./" } }); });
+  })).catch(() => {});
+}
+document.addEventListener("visibilitychange", () => { if(document.visibilityState === "hidden") sicuro(aggiornaBadge); });
+
+/* URL, PIN e interruttore in un posto che anche il service worker può leggere. */
+function salvaCfgSw(){
+  if(!("caches" in window) || !cfg.url || !cfg.pin) return;
+  caches.open("spese-cfg").then(c => c.put("./__cfg", new Response(JSON.stringify({
+    url: cfg.url, pin: cfg.pin, badge: !!pref.badge }), { headers: { "Content-Type": "application/json" } }))).catch(() => {});
+}
+
+/* Controllo in sottofondo: Android decide lui ogni quanto (di solito non più
+   di un paio di volte al giorno, e solo per le app installate che usi spesso). */
+function attivaControlloInSottofondo(){
+  if(!("serviceWorker" in navigator)) return;
+  navigator.serviceWorker.ready.then(async reg => {
+    if(!("periodicSync" in reg)) return;
+    try{
+      if(!badgeAttivo()){ await reg.periodicSync.unregister("da-confermare"); return; }
+      const p = await navigator.permissions.query({ name: "periodic-background-sync" });
+      if(p.state === "granted") await reg.periodicSync.register("da-confermare", { minInterval: 3 * 60 * 60 * 1000 });
+    }catch(e){}
+  }).catch(() => {});
+}
+
+(function(){
+  const b = $("optBadge");
+  const sincronizza = () => { b.checked = badgeAttivo(); };
+  sincronizza();
+  $("brand").addEventListener("click", sincronizza);
+  b.onchange = async () => {
+    if(b.checked){
+      if(!("Notification" in window)){ b.checked = false; toast("Notifiche non supportate qui", true); return; }
+      const p = await Notification.requestPermission();
+      pref.badge = p === "granted";
+      if(!pref.badge) toast("Permesso negato: riattivalo dalle impostazioni di Android", true);
+    } else pref.badge = false;
+    salvaPref(); sincronizza(); salvaCfgSw(); attivaControlloInSottofondo(); aggiornaBadge();
+  };
+})();
+
 function showErr(m){ $("errbox").innerHTML = `<div class="err"><span>${esc(m)}</span></div>`; }
 function showNota(m){ $("errbox").innerHTML = `<div class="avv"><span class="ms">account_balance_wallet</span><span>${esc(m)}</span></div>`; }
 function clearErr(){ $("errbox").innerHTML = ""; }
@@ -2289,6 +2367,7 @@ function drena(){
         invalida("sum", "year");
         if(!coda.some(c => c.stato==="attesa")) precaricaTutto();
         if(item.spesa.walletId){ wallet = wallet.filter(w => w.id !== item.spesa.walletId); renderWallet(); }
+        ricRegistrata(item.spesa);
         toast("Riga " + res.riga + " · " + res.secondary + testoLiquidita(res.liquidita));
         vibra("ok");
         controllaBudget(res, Number(item.spesa.v) || 0);
@@ -2330,6 +2409,7 @@ async function annulla(){
       // presa da Wallet: il pagamento torna fra quelli da confermare
       if(e.walletId) google.script.run.withSuccessHandler(() => caricaWallet())
         .withFailureHandler(() => {}).riapriWallet(e.walletId);
+      caricaRicorrenti();   // se era una ricorrente, torna fra quelle da registrare
       toast("Riga " + e.riga + " annullata" + (res.liquidita && res.liquidita.fatto ? " · saldo ripristinato" : ""));
     })
     .withFailureHandler(err => toast(String(err.message||err), true))
@@ -2354,6 +2434,7 @@ function refresh(){
       ultime=(st.ultime||[]).map(e => Object.assign({a: anno}, e));
       if(st.conti && st.conti.length){ conti = st.conti; renderConti(); }
       if(Array.isArray(st.wallet)){ wallet = st.wallet; renderWallet(); }
+      caricaRicorrenti();
       // voci e conti ricordati: servono per registrare spese anche offline
       // e totali/ultime spese del mese: alla prossima apertura si vedono subito,
       // mentre il foglio risponde in sottofondo
@@ -4014,6 +4095,7 @@ document.addEventListener("visibilitychange", () => {
   caricaPortafoglio(true, vista!=="port");
   caricaAcquisto(true, vista!=="buy");
   caricaWallet();   // i pagamenti arrivati mentre l'app era chiusa
+  caricaRicorrenti();
   if(vista==="port" && pagPort===0 && !setDati) caricaSettimana();
   if(vista==="port" && pagPort===1 && !portLibero()) caricaPortaLock();
   const n = new Date();
@@ -4047,7 +4129,7 @@ try{
 sicuro(ruotaMesi);
 sicuro(ruotaGiorni);
 sicuro(paint);
-if(cfg.url && cfg.pin){ sicuro(refresh); sicuro(drena); precaricaTutto(); }
+if(cfg.url && cfg.pin){ sicuro(refresh); sicuro(drena); precaricaTutto(); sicuro(salvaCfgSw); sicuro(attivaControlloInSottofondo); }
 else apriImpostazioni();
 
 /* Scorciatoie sull'icona (tenendola premuta): aprono direttamente una scheda. */
