@@ -804,6 +804,41 @@ body{font-feature-settings:"ss01","cv11";letter-spacing:-.005em}
 .st-verd{font-family:var(--f-ui);font-size:17px;line-height:23px;font-weight:600;letter-spacing:-.01em}
 .st-prox b{font-size:16px;line-height:20px;letter-spacing:-.01em}
 .st-fine b{font-size:22px;line-height:28px;letter-spacing:-.03em}
+
+/* ═══════════ OGGI + foglio «Nuova spesa» (novembre 2026) ═══════════
+   La prima scheda mostra solo: quanto resta oggi, cosa aspetta una conferma,
+   le spese registrate. Il modulo sale dal basso. */
+#errbox:not(:empty){margin-top:12px}
+#walletBox:not(:empty){margin-top:12px}
+.foglio{position:fixed;inset:0;z-index:150;background:var(--scrim);display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;visibility:hidden;pointer-events:none;transition:opacity .22s var(--ease),visibility 0s linear .22s}
+.foglio.on{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .22s var(--ease)}
+.foglio-in{width:100%;max-width:560px;max-height:calc(100dvh - 28px - env(safe-area-inset-top));overflow-y:auto;overscroll-behavior:contain;
+  background:var(--paper);border-radius:28px 28px 0 0;padding:0 16px;box-shadow:var(--sh-3);
+  transform:translateY(100%);transition:transform .34s var(--ease-emph);scrollbar-width:none}
+.foglio-in::-webkit-scrollbar{display:none}
+.foglio.on .foglio-in{transform:none}
+.foglio-t{position:sticky;top:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin:0 -16px;padding:18px 16px 10px;background:var(--paper)}
+.foglio-t b{font-size:19px;line-height:24px;font-weight:700;letter-spacing:-.02em}
+.foglio-man{position:absolute;left:50%;top:7px;width:36px;height:4px;margin-left:-18px;border-radius:2px;background:var(--rule-2)}
+.foglio .importo{margin-top:2px}
+.foglio .tiles{margin-left:-16px;margin-right:-16px}
+.foglio-cta{position:sticky;bottom:0;z-index:3;margin:16px -16px 0;padding:10px 16px calc(14px + env(safe-area-inset-bottom));
+  background:linear-gradient(transparent,var(--paper) 22%)}
+body.foglio-aperto{overflow:hidden}
+.cta-bar .cta{background:var(--hl);color:var(--on-hl)}
+@media (min-width:980px){
+  /* su PC il modulo resta in pagina, a sinistra, come prima */
+  .foglio{position:static;opacity:1;visibility:visible;pointer-events:auto;background:none;display:block;z-index:auto;transition:none}
+  .foglio-in{max-width:none;max-height:none;overflow:visible;background:none;border-radius:0;padding:0;box-shadow:none;transform:none;transition:none}
+  .foglio-t{display:none}
+  .foglio .importo{margin-top:12px}
+  .foglio .tiles{margin-left:-4px;margin-right:-4px}
+  .foglio-cta{position:static;margin:16px 0 0;padding:0;background:none}
+  #ctaBar{display:none!important}
+  body.con-cta{padding-bottom:calc(96px + env(safe-area-inset-bottom))}
+}
 </style>
 </head>
 <body>
@@ -811,7 +846,7 @@ body{font-feature-settings:"ss01","cv11";letter-spacing:-.005em}
   <header class="testa" id="appbar">
     <div class="t-sx">
       <div class="t-sopra"><span class="rete" id="netDot" title="Online"></span><span id="tsopra">—</span></div>
-      <div class="t-tit" id="ptitle">Nuova spesa</div>
+      <div class="t-tit" id="ptitle">Oggi</div>
     </div>
     <button type="button" class="ico-btn rip" id="brand" aria-label="Impostazioni"><span class="ms">tune</span></button>
   </header>
@@ -821,7 +856,11 @@ body{font-feature-settings:"ss01","cv11";letter-spacing:-.005em}
     <div class="inch quota" id="qcard"></div>
     <div id="walletBox"></div>
     <div id="ricBox"></div>
+    <div id="errbox"></div>
 
+    <div class="foglio" id="foglio" aria-hidden="true"><div class="foglio-in" role="dialog" aria-modal="true" aria-labelledby="foglioTit">
+    <div class="foglio-t"><span class="foglio-man" aria-hidden="true"></span><b id="foglioTit">Nuova spesa</b>
+      <button type="button" class="ico-btn rip" id="foglioX" aria-label="Chiudi"><span class="ms">close</span></button></div>
     <div class="importo">
       <div class="imp-row">
         <button type="button" class="pm rip" id="meno1" aria-label="Meno un euro"><span class="ms">remove</span></button>
@@ -862,7 +901,8 @@ body{font-feature-settings:"ss01","cv11";letter-spacing:-.005em}
       <div class="det-r"><span class="ms">edit_note</span><input type="text" id="note" placeholder="Nota (facoltativa)" autocomplete="off"></div>
     </div>
     <input type="hidden" id="dd"><input type="hidden" id="mm"><input type="hidden" id="yy">
-    <div id="errbox"></div>
+    <div class="foglio-cta"><button class="cta rip" id="fab" disabled><span class="ms">add</span><span id="fabtxt">Aggiungi al foglio</span></button></div>
+    </div></div>
 
     <section class="sez">
       <div class="sez-t"><b>Registrate</b><span id="codainfo"></span></div>
@@ -956,11 +996,11 @@ body{font-feature-settings:"ss01","cv11";letter-spacing:-.005em}
 </div>
 
 <div class="cta-bar" id="ctaBar">
-  <button class="cta rip" id="fab" disabled><span class="ms">add</span><span id="fabtxt">Aggiungi al foglio</span></button>
+  <button class="cta rip" id="apriFoglio"><span class="ms">add</span><span>Nuova spesa</span></button>
 </div>
 
 <nav class="nav" aria-label="Schede"><div class="in" id="nav"><span class="nav-ind" id="navInd" aria-hidden="true"></span>
-  <button class="on" data-v="add" aria-current="page"><span class="ms">add_circle</span><span class="t">Aggiungi</span></button>
+  <button class="on" data-v="add" aria-current="page"><span class="ms">today</span><span class="t">Oggi</span></button>
   <button data-v="sum"><span class="ms">calendar_month</span><span class="t">Mese</span></button>
   <button data-v="year"><span class="ms">bar_chart</span><span class="t">Anno</span></button>
   <button data-v="port"><span class="ms">monitoring</span><span class="t">Portafoglio</span></button>
@@ -1348,7 +1388,7 @@ function aggiornaTesta(){
   const m = parseInt($("mm").value,10) || n.getMonth()+1, a = getAnno();
   const oggiLungo = GIORNI[n.getDay()] + " " + n.getDate() + " " + MESI[n.getMonth()].toLowerCase();
   const t = {
-    add:  ["Nuova spesa", oggiLungo],
+    add:  ["Oggi", oggiLungo],
     sum:  [MESI[m-1] + (a !== n.getFullYear() ? " " + a : ""), "Riepilogo del mese"],
     year: [annoSel ? String(annoSel) : "Anno", "Spese per anno"],
     port: pagPort === 0 ? ["Portafoglio", setDati ? "Riepilogo del weekend" : "Riepilogo: sabato e domenica"]
@@ -1375,6 +1415,7 @@ $("nav").onclick = e => {
   // il pulsante Aggiungi fisso in basso esiste solo nella scheda Aggiungi
   $("ctaBar").hidden = vista !== "add";
   document.body.classList.toggle("con-cta", vista === "add");
+  chiudiFoglio();
   window.scrollTo({top:0});
   sicuro(aggiornaTesta);
   sicuro(() => {
@@ -1629,6 +1670,7 @@ function ripeti(e){
   if(e.broker && conti.indexOf(e.broker) !== -1){ broker = e.broker; renderConti(); }
   paint();
   window.scrollTo({ top: 0, behavior: "smooth" });
+  apriFoglio();
   toast("Compilata come «" + e.desc + "»: controlla la data e premi Aggiungi");
 }
 $("list").addEventListener("click", ev => {
@@ -2063,6 +2105,7 @@ function compilaWallet(id){
   if(w.conto && conti.indexOf(w.conto) !== -1){ broker = w.conto; renderConti(); }
   impostaData(w.d, w.m, w.a);
   renderWallet(); paint();
+  apriFoglio();
   toast(voce ? "Controlla e premi Aggiungi" : "Scegli la voce e premi Aggiungi");
 }
 
@@ -2171,6 +2214,7 @@ function compilaRic(v){
   if(r.conto && conti.indexOf(r.conto) !== -1){ broker = r.conto; renderConti(); }
   const q = ricData(r); impostaData(q.d, q.m, q.a);
   paint();
+  apriFoglio();
   toast("Controlla l'importo e premi Aggiungi");
 }
 
@@ -2304,6 +2348,45 @@ function attivaControlloInSottofondo(){
   };
 })();
 
+/* ══════════ FOGLIO «NUOVA SPESA» ══════════
+   Sul telefono il modulo (importo, voce, tastierino, conto, data, nota) non sta
+   più in pagina: sale dal basso quando serve. Lo aprono il tasto «Nuova spesa»,
+   il tocco su un pagamento Wallet, su una ricorrente o su una spesa già
+   registrata. Il tasto Indietro di Android lo chiude. Su PC resta in pagina. */
+const foglioLargo = () => window.matchMedia && matchMedia("(min-width:980px)").matches;
+function apriFoglio(){
+  const f = $("foglio");
+  if(foglioLargo() || f.classList.contains("on")) return;
+  f.classList.add("on"); f.setAttribute("aria-hidden", "false");
+  document.body.classList.add("foglio-aperto");
+  f.querySelector(".foglio-in").scrollTop = 0;
+  try{ history.pushState({ foglio: true }, ""); }catch(e){}
+}
+function chiudiFoglio(daIndietro){
+  const f = $("foglio");
+  if(!f || !f.classList.contains("on")) return;
+  f.classList.remove("on"); f.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("foglio-aperto");
+  if(!daIndietro){ try{ if(history.state && history.state.foglio) history.back(); }catch(e){} }
+}
+window.addEventListener("popstate", () => chiudiFoglio(true));
+/* Sul telefono il foglio sta fuori dalle schede (figlio diretto della pagina), così copre
+   anche la barra in basso; su PC torna dentro la scheda Oggi, prima delle spese registrate. */
+function collocaFoglio(){
+  const f = $("foglio"), v = $("viewAdd"), dentro = f.parentNode === v;
+  if(foglioLargo() && !dentro){ chiudiFoglio(); v.insertBefore(f, v.querySelector("section.sez")); }
+  else if(!foglioLargo() && dentro) document.body.appendChild(f);
+}
+collocaFoglio();
+if(window.matchMedia){
+  const mqF = matchMedia("(min-width:980px)");
+  if(mqF.addEventListener) mqF.addEventListener("change", collocaFoglio); else if(mqF.addListener) mqF.addListener(collocaFoglio);
+}
+$("apriFoglio").onclick = () => { vibra("tap"); apriFoglio(); };
+$("foglioX").onclick = () => chiudiFoglio();
+$("foglio").addEventListener("click", e => { if(e.target === $("foglio")) chiudiFoglio(); });
+document.addEventListener("keydown", e => { if(e.key === "Escape") chiudiFoglio(); });
+
 function showErr(m){ $("errbox").innerHTML = `<div class="err"><span>${esc(m)}</span></div>`; }
 function showNota(m){ $("errbox").innerHTML = `<div class="avv"><span class="ms">account_balance_wallet</span><span>${esc(m)}</span></div>`; }
 function clearErr(){ $("errbox").innerHTML = ""; }
@@ -2333,6 +2416,7 @@ $("fab").onclick = () => {
   invalida("sum", "year");
   vibra("invio");
   fabOk.fino = Date.now() + 1100; fabOk.testo = eur(v);
+  setTimeout(chiudiFoglio, 650);   // il tempo di vedere la conferma sul tasto
   setTimeout(paint, 1150);
   paint(); drena();
 };

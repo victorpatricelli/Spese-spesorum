@@ -5,7 +5,7 @@
      salvata se c'è, altrimenti dalla rete.
    - Le chiamate al foglio (script.google.com) non passano mai dalla cache.
    Se cambi questo file, alza VERSIONE. */
-const VERSIONE = "spese-v11";
+const VERSIONE = "spese-v12";
 const CFG = "spese-cfg";   // URL, PIN e interruttore del numero sull'icona: li scrive l'app
 const GUSCIO = ["./", "./index.html", "./manifest.json", "./icon-192.png", "./icon-512.png"];
 
