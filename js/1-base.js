@@ -146,7 +146,7 @@ function applicaTema(t){
   const r = document.documentElement;
   if(t === "light" || t === "dark") r.setAttribute("data-theme", t); else r.removeAttribute("data-theme");
   const scuro = t === "dark" || (t !== "light" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
-  document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute("content", scuro ? "#0A0B0D" : "#F4F5F7"));
+  document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute("content", scuro ? "#080D19" : "#F4F6FB"));
 }
 applicaTema(pref.tema);
 
@@ -287,7 +287,7 @@ function leggiPalette(){
   P = {
     testo:v("--ink"), testo2:v("--ink-2"), testo3:v("--ink-3"), bordo:v("--rule"),
     superficie:v("--sheet"), carta:v("--sheet"), fondo:v("--paper"),
-    primario:v("--ink"), evid:v("--hl"),
+    primario:v("--pri") || v("--ink"), evid:v("--hl"),
     bene:v("--good"), attenzione:v("--warn"), male:v("--error") || v("--bad"),
     griglia:v("--rule"), budget:v("--ink-3"), concesso:v("--ink-3"),
     inv:v("--card"), invTesto:v("--card-text"),

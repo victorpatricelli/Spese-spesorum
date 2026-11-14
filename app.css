@@ -1,76 +1,85 @@
 /* ═══════════════════════════════════════════════════════════════
-   GRAFITE
-   Superfici neutre e pulite, testo quasi nero, una sola tinta d'accento
-   (lime) per ciò che è scelto o "adesso". Le cifre sono sempre tabellari.
-   Il colore vero resta per i dati (categorie) e per lo stato
-   (bene / attenzione / sforato). Niente trame, niente filtri.
+   BLU NOTTE  ·  design system (novembre 2026)
+   Blu «fiducia» per ciò che è scelto o si può toccare, verde per ciò che
+   va bene, rosso per ciò che sfora. Superfici chiare e pulite, la scheda
+   dei numeri grandi in blu notte. Testo IBM Plex Sans, cifre tabellari.
+   Ogni coppia testo/fondo rispetta il contrasto 4,5:1, in chiaro e in scuro.
+   I nomi delle variabili sono quelli di sempre: li legge anche il codice.
    ═══════════════════════════════════════════════════════════════ */
 :root{
   color-scheme:light;
-  --paper:#F4F5F7;          /* fondo */
+  --paper:#F4F6FB;          /* fondo */
   --sheet:#FFFFFF;          /* schede */
-  --sheet-2:#ECEEF2;        /* campi, tasti, incassi */
-  --sheet-3:#DFE2E8;        /* tasti premuti, tracce */
-  --rule:#E3E6EB;           /* righe sottili */
-  --rule-2:#C9CED6;
-  --ink:#0E1014;            /* testo */
-  --ink-2:#454B55;          /* testo secondario */
-  --ink-3:#666D78;          /* testo tenue */
-  --hl:#C9F35C;             /* accento */
-  --on-hl:#10140A;
-  --card:#0F1115;           /* scheda scura (i numeri grandi) */
-  --card-2:#1C1F25;
-  --card-rule:#2B2F37;
-  --card-text:#F5F7FA;
-  --card-text-2:#A6ADB8;
-  --good:#15784A;--good-s:#DCF3E5;--on-good-s:#0A2A18;
-  --warn:#955800;--warn-s:#FBEACB;--on-warn-s:#3A2400;
-  --bad:#C4281C; --bad-s:#FCE3E0; --on-bad-s:#4A0E08;
-  /* sulla scheda scura gli stati vanno schiariti */
-  --good-c:#7EE0A5;--warn-c:#F2C46D;--bad-c:#FF9F95;
-  /* categorie: le prime sette hanno un colore, le altre il grigio «altro» */
-  --c1:#2a78d6;--c2:#eb6834;--c3:#1baf7a;--c4:#eda100;--c5:#e87ba4;--c6:#008300;--c7:#6250d6;--c-altro:#9AA1AC;
-  --scrim:rgba(14,16,20,.46);
-  --sh-1:0 1px 2px rgba(16,18,24,.04);
-  --sh-2:0 1px 2px rgba(16,18,24,.05),0 10px 28px rgba(16,18,24,.07);
-  --sh-3:0 8px 20px rgba(16,18,24,.16),0 24px 48px rgba(16,18,24,.18);
-  --f-ui:"Geist","Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --f-num:"Geist","Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --sheet-2:#EBEFF6;        /* campi, tasti, incassi */
+  --sheet-3:#D9E0EC;        /* tasti premuti, tracce */
+  --rule:#E1E7F0;           /* righe sottili */
+  --rule-2:#C3CCDB;
+  --ink:#0B1324;            /* testo */
+  --ink-2:#3B4760;          /* testo secondario */
+  --ink-3:#5A6781;          /* testo tenue */
+  --hl:#1D4ED8;             /* accento pieno: scelte, pulsante principale */
+  --on-hl:#FFFFFF;
+  --hl-s:#E0E9FF;           /* accento tenue: fondi */
+  --hl-t:#1D4ED8;           /* accento come testo */
+  --hl-c:#8DB4FF;           /* accento sulla scheda scura */
+  --pri:#1D4ED8;            /* linee e barre dei grafici */
+  --card:#0F1B3D;           /* scheda scura (i numeri grandi) */
+  --card-2:#1B2A55;
+  --card-rule:#2A3B6B;
+  --card-text:#F5F8FF;
+  --card-text-2:#AEBBD9;
+  --card-bg:linear-gradient(150deg,#1E3A8A 0%,#122256 48%,#0B1533 100%);--card-edge:transparent;
+  --good:#047857;--good-s:#D8F3E7;--on-good-s:#06301F;
+  --warn:#A15400;--warn-s:#FCEBCB;--on-warn-s:#3A2400;
+  --bad:#C81E1E; --bad-s:#FDE4E2; --on-bad-s:#4A0E08;
+  --good-c:#6EE7B0;--warn-c:#F6C768;--bad-c:#FFA199;
+  --c1:#2a78d6;--c2:#eb6834;--c3:#1baf7a;--c4:#eda100;--c5:#e87ba4;--c6:#008300;--c7:#6250d6;--c-altro:#9AA3B5;
+  --scrim:rgba(11,19,36,.48);
+  --sh-1:0 1px 2px rgba(11,19,36,.04),0 4px 14px rgba(11,19,36,.04);
+  --sh-2:0 1px 2px rgba(11,19,36,.05),0 10px 28px rgba(11,19,36,.08);
+  --sh-3:0 8px 20px rgba(11,19,36,.14),0 24px 48px rgba(11,19,36,.16);
+  --sh-cta:0 10px 26px rgba(29,78,216,.32);
+  --f-ui:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-num:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --f-mano:var(--f-num);
   --ease:cubic-bezier(.2,0,0,1);--ease-emph:cubic-bezier(.05,.7,.1,1);
-  --r:20px;
+  --r:18px;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    color-scheme:dark;
-    --paper:#0A0B0D;--sheet:#131518;--sheet-2:#1C1F23;--sheet-3:#292D33;--rule:#212429;--rule-2:#3A3F47;
-    --ink:#F3F5F8;--ink-2:#B1B7C1;--ink-3:#8B929D;
-    --hl:#C9F35C;--on-hl:#10140A;
-    --card:#181B1F;--card-2:#23272D;--card-rule:#333840;--card-text:#F5F7FA;--card-text-2:#A6ADB8;
-    --good:#6FD899;--good-s:#12301F;--on-good-s:#DDF3E6;
-    --warn:#F0BC62;--warn-s:#3B2C10;--on-warn-s:#FBEACB;
-    --bad:#FF8F85; --bad-s:#451818; --on-bad-s:#FCE3E0;
-    --c1:#3987e5;--c2:#d95926;--c3:#199e70;--c4:#c98500;--c5:#d55181;--c6:#2f9a2f;--c7:#9085e9;--c-altro:#676D77;
-    --scrim:rgba(0,0,0,.62);
-    --sh-1:0 0 0 1px rgba(255,255,255,.02) inset;
-    --sh-2:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.28);
-    --sh-3:0 10px 28px rgba(0,0,0,.55);
+  color-scheme:dark;
+  --paper:#080D19;--sheet:#111A2C;--sheet-2:#19243A;--sheet-3:#26334D;--rule:#1C2740;--rule-2:#35435E;
+  --ink:#F1F5FB;--ink-2:#B5C0D4;--ink-3:#8B98B0;
+  --hl:#5B93FF;--on-hl:#06122B;--hl-s:#172A52;--hl-t:#8DB4FF;--hl-c:#8DB4FF;--pri:#6FA1FF;
+  --card:#121F40;--card-2:#1D2D58;--card-rule:#2C3E6E;--card-text:#F5F8FF;--card-text-2:#AEBBD9;
+  --card-bg:linear-gradient(150deg,#1B3275 0%,#111E45 52%,#0C1530 100%);--card-edge:rgba(255,255,255,.07);
+  --good:#5FD9A0;--good-s:#0F2E22;--on-good-s:#D5F5E6;
+  --warn:#F2BE62;--warn-s:#3A2B0F;--on-warn-s:#FBEACB;
+  --bad:#FF8F85; --bad-s:#431A1A; --on-bad-s:#FCE3E0;
+  --c1:#3987e5;--c2:#d95926;--c3:#199e70;--c4:#c98500;--c5:#d55181;--c6:#2f9a2f;--c7:#9085e9;--c-altro:#5F6B82;
+  --scrim:rgba(2,6,16,.66);
+  --sh-1:0 0 0 1px rgba(255,255,255,.02) inset;
+  --sh-2:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.3);
+  --sh-3:0 12px 32px rgba(0,0,0,.55);
+  --sh-cta:0 10px 26px rgba(40,90,220,.38);
   }
 }
 :root[data-theme="dark"]{
   color-scheme:dark;
-  --paper:#0A0B0D;--sheet:#131518;--sheet-2:#1C1F23;--sheet-3:#292D33;--rule:#212429;--rule-2:#3A3F47;
-  --ink:#F3F5F8;--ink-2:#B1B7C1;--ink-3:#8B929D;
-  --hl:#C9F35C;--on-hl:#10140A;
-  --card:#181B1F;--card-2:#23272D;--card-rule:#333840;--card-text:#F5F7FA;--card-text-2:#A6ADB8;
-  --good:#6FD899;--good-s:#12301F;--on-good-s:#DDF3E6;
-  --warn:#F0BC62;--warn-s:#3B2C10;--on-warn-s:#FBEACB;
-  --bad:#FF8F85; --bad-s:#451818; --on-bad-s:#FCE3E0;
-  --c1:#3987e5;--c2:#d95926;--c3:#199e70;--c4:#c98500;--c5:#d55181;--c6:#2f9a2f;--c7:#9085e9;--c-altro:#676D77;
-  --scrim:rgba(0,0,0,.62);
+  --paper:#080D19;--sheet:#111A2C;--sheet-2:#19243A;--sheet-3:#26334D;--rule:#1C2740;--rule-2:#35435E;
+  --ink:#F1F5FB;--ink-2:#B5C0D4;--ink-3:#8B98B0;
+  --hl:#5B93FF;--on-hl:#06122B;--hl-s:#172A52;--hl-t:#8DB4FF;--hl-c:#8DB4FF;--pri:#6FA1FF;
+  --card:#121F40;--card-2:#1D2D58;--card-rule:#2C3E6E;--card-text:#F5F8FF;--card-text-2:#AEBBD9;
+  --card-bg:linear-gradient(150deg,#1B3275 0%,#111E45 52%,#0C1530 100%);--card-edge:rgba(255,255,255,.07);
+  --good:#5FD9A0;--good-s:#0F2E22;--on-good-s:#D5F5E6;
+  --warn:#F2BE62;--warn-s:#3A2B0F;--on-warn-s:#FBEACB;
+  --bad:#FF8F85; --bad-s:#431A1A; --on-bad-s:#FCE3E0;
+  --c1:#3987e5;--c2:#d95926;--c3:#199e70;--c4:#c98500;--c5:#d55181;--c6:#2f9a2f;--c7:#9085e9;--c-altro:#5F6B82;
+  --scrim:rgba(2,6,16,.66);
   --sh-1:0 0 0 1px rgba(255,255,255,.02) inset;
-  --sh-2:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.28);
-  --sh-3:0 10px 28px rgba(0,0,0,.55);
+  --sh-2:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.3);
+  --sh-3:0 12px 32px rgba(0,0,0,.55);
+  --sh-cta:0 10px 26px rgba(40,90,220,.38);
 }
 :root[data-theme="light"]{color-scheme:light}
 
@@ -739,8 +748,7 @@ body.con-cta .toast{bottom:calc(160px + env(safe-area-inset-bottom))}
   #viewBuy{max-width:600px;margin:0 auto}
 }
 
-/* ═══════════ GRAFITE · rifiniture ═══════════ */
-body{font-feature-settings:"ss01","cv11";letter-spacing:-.005em}
+/* ═══════════ rifiniture ═══════════ */
 .t-tit,.sez-t b,.inch-big,.amt .nm,.key,.riga .v,.st-num,.busta .quando{font-variant-numeric:tabular-nums}
 .ric-poi{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;border:none;border-top:1px solid var(--rule);
   background:transparent;padding:10px 14px;font-size:12.5px;line-height:17px;color:var(--ink-3);text-align:left;cursor:pointer}
@@ -800,3 +808,111 @@ body.foglio-aperto{overflow:hidden}
 .vai-acq small{display:block;font-size:12px;line-height:16px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .vai-acq .ms{font-size:22px;color:var(--ink-2);flex:0 0 auto}
 .torna{margin:-4px 0 10px -10px}
+
+/* ═══════════════════════════════════════════════════════════════
+   BLU NOTTE · i componenti (novembre 2026)
+   Tutto ciò che si tocca è alto almeno 44 px. L'accento blu segna
+   una cosa sola: ciò che è scelto, o l'azione principale della schermata.
+   ═══════════════════════════════════════════════════════════════ */
+body{font-size:15px;line-height:22px}
+button,.chip,.tile,.key,.riga{touch-action:manipulation}
+button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.t-tit,.sez-t b,.inch-big,.amt .nm,.key,.riga .v,.st-num,.busta .quando,.libro .v,.q-v,.pf-delta{font-variant-numeric:tabular-nums}
+
+/* testata */
+.testa{background:color-mix(in srgb,var(--paper) 84%,transparent);backdrop-filter:blur(16px) saturate(1.3);-webkit-backdrop-filter:blur(16px) saturate(1.3)}
+.t-sopra{font-size:12.5px;font-weight:500;letter-spacing:0}
+.t-tit{font-size:28px;line-height:34px;font-weight:600;letter-spacing:-.02em}
+.ico-btn{width:44px;height:44px;border-radius:14px}
+
+/* barra in basso: vetro chiaro, la scheda attiva in blu */
+.nav .in{background:color-mix(in srgb,var(--sheet) 86%,transparent);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);
+  border:1px solid var(--rule);border-radius:22px;padding:5px;box-shadow:var(--sh-2)}
+.nav button{color:var(--ink-3);font:600 11px/13px var(--f-ui);letter-spacing:0;border-radius:17px}
+.nav button.on{color:var(--hl-t)}
+.nav-ind{background:var(--hl-s);border-radius:17px}
+
+/* schede */
+.sez-t b{font-size:18px;font-weight:600;letter-spacing:-.01em}
+.carta-t b{font-weight:600}
+.inch{--hl:var(--hl-c);--hl-s:rgba(141,180,255,.26);border-radius:24px;border:1px solid var(--card-edge);
+  background:radial-gradient(120% 90% at 100% 0%,rgba(122,162,255,.26),transparent 62%),var(--card-bg)}
+.inch-sopra{font-weight:500;letter-spacing:0}
+.inch-big{font-weight:600;letter-spacing:-.03em}
+.inch-bar{background:rgba(255,255,255,.14)}
+.inch .pill.neu{background:rgba(255,255,255,.1)}
+.q-v{font-weight:600}
+.hl{background:linear-gradient(transparent 55%,var(--hl-s) 55%,var(--hl-s) 94%,transparent 94%)}
+.pill{border-radius:9px;font-weight:600}
+
+/* pulsanti */
+.btn{height:44px;border-radius:14px}
+.btn.pieno{background:var(--hl);border-color:var(--hl);color:var(--on-hl)}
+.btn.testo{height:44px;color:var(--hl-t)}
+.cta{height:56px;border-radius:18px;background:var(--hl);color:var(--on-hl);font-weight:600;box-shadow:var(--sh-cta)}
+.cta-bar .cta{box-shadow:var(--sh-cta)}
+.link{color:var(--hl-t);font-weight:600;text-decoration:none;min-height:44px;padding:6px 10px}
+.pm,.frec,.tondo{width:44px;height:44px}
+.tondo.ok{background:var(--hl);color:var(--on-hl)}
+.svuota{height:36px}
+
+/* chip e segmenti */
+.chip{height:36px}
+.chip.on{background:var(--hl-s);border-color:var(--hl-t);color:var(--hl-t)}
+.rapidi .chip{height:36px;padding:0 13px;background:var(--sheet);border-color:var(--rule)}
+.seg button,.seg .chip{height:38px}
+.seg button.on,.seg .chip.on{box-shadow:0 1px 3px rgba(11,19,36,.14)}
+.temi span{height:40px}
+.temi input:checked + span{box-shadow:0 1px 3px rgba(11,19,36,.14)}
+.temi input:focus-visible + span{outline-color:var(--pri)}
+
+/* campi */
+.campo input{border-radius:14px}
+.campo input:focus{border-color:var(--pri);box-shadow:0 0 0 3px var(--hl-s)}
+.bedit input{height:44px}
+.bedit input:focus,.pf-in:focus-within{border-color:var(--pri)}
+.opz{min-height:44px;margin-top:6px}
+.opz input{width:22px;height:22px;accent-color:var(--pri)}
+
+/* liste */
+.riga .v,.crow .vl b{font-weight:600}
+.giorno{font-weight:600;letter-spacing:0}
+#walletBox .riga.sel{box-shadow:inset 3px 0 0 var(--pri);background:var(--hl-s)}
+.libro .v{font-size:22px;font-weight:600}
+.trk .tk,.pf-tick{background:var(--ink-2)}
+
+/* foglio «Nuova spesa» */
+.importo{border-radius:22px}
+.amt .nm{font-weight:600;letter-spacing:-.035em}
+.amt .cursor{background:var(--pri)}
+.amt .espr{background:var(--hl-s);color:var(--hl-t);font-weight:600}
+.tile{border-radius:14px;min-height:48px}
+.tile .n{font-weight:600}
+.key{height:54px;border:1px solid var(--rule);box-shadow:none;font-weight:500}
+.key.op{background:var(--hl-s);color:var(--hl-t);border-color:transparent}
+.key.fn{border-color:transparent}
+.wopt.sel{font-weight:600}
+
+/* mese e anno */
+.barre i.sel{background:var(--pri)}
+.barre i.corso.sel{background:repeating-linear-gradient(135deg,var(--pri) 0 3px,var(--sheet-3) 3px 6px)}
+.mesi12 span.on{color:var(--hl-t)}
+
+/* portafoglio, settimana, acquisto */
+.pg-dots i.on{background:var(--pri)}
+.sett-giorni span.oggi{background:var(--hl);color:var(--on-hl)}
+.busta-ic::before{background:linear-gradient(150deg,var(--hl),var(--pri))}
+.st-mesi i.ora{background:var(--pri)}
+.st-leg i{background:var(--pri)}
+.passo-n i{width:26px;height:26px;background:var(--hl-s);color:var(--hl-t)}
+.passo-n b{font-weight:600;letter-spacing:-.01em}
+.acq-tit .chip{height:44px}
+.vai-acq .ms:first-child{color:var(--hl-t)}
+.pf-ref{width:44px;height:44px;background:rgba(255,255,255,.12)}
+
+/* avvisi e finestre */
+.toast .ms{color:var(--hl-c)}
+.dialog{border-radius:24px}
+.dialog .dic{background:var(--hl-s);color:var(--hl-t)}
+.dialog h3{font-size:22px;line-height:28px;font-weight:600}
+.avviso .x{min-width:44px;min-height:44px;margin:-10px -8px -10px auto;display:flex;align-items:center;justify-content:center}
