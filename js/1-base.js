@@ -146,7 +146,7 @@ function applicaTema(t){
   const r = document.documentElement;
   if(t === "light" || t === "dark") r.setAttribute("data-theme", t); else r.removeAttribute("data-theme");
   const scuro = t === "dark" || (t !== "light" && window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
-  document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute("content", scuro ? "#080D19" : "#F4F6FB"));
+  document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute("content", scuro ? "#0F1711" : "#EFF4EA"));
 }
 applicaTema(pref.tema);
 
